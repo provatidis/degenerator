@@ -16,7 +16,7 @@ export async function resultCardBlob(input, siteURL) {
   text('Degenerator', 60, 70, 32, '#c1df9b', 600);
   text('YOUR DEFI PLAYGROUND', 60, 108, 16, '#a2b1a5');
   const gap = Math.abs(result.difference);
-  text(gap < 0.005 ? 'A draw, under these assumptions.' : result.difference > 0 ? 'Liquidity wins this round.' : 'HODL wins this round.', 60, 182, 46, '#edf1e9', 600);
+  text(gap < 0.005 ? 'Values differ by less than $0.01' : result.difference > 0 ? 'LP value is higher than holding' : 'Holding value is higher than LP', 60, 182, 46, '#edf1e9', 600);
   ctx.fillStyle = '#1b251d'; ctx.fillRect(60, 220, 510, 150); ctx.fillRect(600, 220, 540, 150);
   text('KEEP THE ORIGINAL TOKENS', 84, 259, 16, '#a2b1a5');
   text(usd(result.holdValue), 84, 325, 45);

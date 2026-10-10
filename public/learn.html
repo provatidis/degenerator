@@ -12,7 +12,7 @@
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" sizes="180x180">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Learn liquidity by doing · Degenerator">
-  <meta property="og:description" content="Six practical lessons. Predict an outcome, run an experiment and build your DeFi judgment.">
+  <meta property="og:description" content="Six practical lessons. Predict an outcome, run an experiment and check the result.">
   <meta property="og:url" content="https://provatidis.github.io/degenerator/learn.html">
   <meta property="og:image" content="https://provatidis.github.io/degenerator/assets/social-preview.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -31,15 +31,15 @@
   <main id="main-content" tabindex="-1">
     <noscript><div class="notice"><p>JavaScript is needed for the interactive lessons and progress. Enable it to predict, run and check your experiments. <a href="./">Open Playground →</a></p></div></noscript>
     <section class="intro learn-intro">
-      <div><p class="eyebrow">LEARN BY DOING</p><h1>Liquidity essentials.</h1><p class="subtitle">Make a prediction. Run an experiment. Build your judgment.</p></div>
-      <button type="button" id="learn-resume" class="button secondary">Jump into the lesson ↓</button>
+      <div><p class="eyebrow">LEARN BY DOING</p><h1>Liquidity essentials</h1><p class="subtitle">Explore swaps, pool ownership, fees and price ranges with interactive examples.</p></div>
+      <button type="button" id="learn-resume" class="button secondary">Continue to the lesson ↓</button>
     </section>
-    <div class="learn-meta"><span>6 lessons + a final challenge</span><span>Open any topic</span><span id="learn-storage" role="status">Progress saves in this browser.</span></div>
+    <div class="learn-meta"><span>6 lessons + a final challenge</span> <span>Open any topic</span> <span id="learn-storage" role="status">Progress saves in this browser.</span></div>
     <div id="learn-route-note" class="notice" role="status" hidden><p>That lesson link could not be opened. Your last lesson is shown below; choose any topic from the chapter.</p></div>
     <div id="learn-workspace" class="learn-workspace">
       <aside class="learn-sidebar">
         <details id="learn-course" class="card learn-course" open>
-          <summary><span>YOUR CHAPTER</span><strong id="learn-progress-count">0 of 7 checked</strong><span class="learn-course-chevron">⌄</span></summary>
+          <summary><span>YOUR CHAPTER</span> <strong id="learn-progress-count">0 of 7 checked</strong> <span class="learn-course-chevron">⌄</span></summary>
           <progress id="learn-progress" max="7" value="0" aria-label="0 of 7 exercises checked"></progress>
           <p id="learn-course-status" class="fine-print">Six lessons and a final challenge. Open any topic.</p>
           <nav aria-label="Liquidity essentials lessons"><ol id="learn-lesson-list"></ol></nav>
@@ -49,7 +49,7 @@
       </aside>
       <article class="learn-lesson" aria-labelledby="learn-lesson-title">
         <div class="learn-lesson-heading"><p id="learn-lesson-number" class="eyebrow">LESSON 1 OF 6</p><span id="learn-concept" class="small-badge">Swaps</span><button type="button" id="learn-topics" class="learn-text-button">All topics ↑</button></div>
-        <h2 id="learn-lesson-title" tabindex="-1">Small swap. Big difference.</h2>
+        <h2 id="learn-lesson-title" tabindex="-1">Trade size and execution price</h2>
         <p id="learn-skill" class="learn-skill"></p>
         <p id="learn-intro" class="learn-reading">A larger swap moves further along the pool’s curve. Predict what happens, then try it.</p>
         <section class="card learn-experiment" aria-labelledby="learn-experiment-title">
@@ -62,7 +62,7 @@
           <div class="learn-experiment-footer"><span id="learn-variation-label">Variation 1 of 3</span><span id="learn-model">Illustrative inputs · USDC = $1</span></div>
         </section>
         <section id="learn-results" class="card learn-results" hidden aria-labelledby="learn-results-title">
-          <p class="eyebrow">02 · OBSERVE</p><h3 id="learn-results-title" tabindex="-1">Follow what changed.</h3>
+          <p class="eyebrow">02 · OBSERVE</p><h3 id="learn-results-title" tabindex="-1">Experiment results</h3>
           <p id="learn-prediction-feedback" class="learn-prediction-feedback" role="status"></p>
           <div id="learn-metrics" class="learn-metrics"></div>
           <div id="learn-visual" class="learn-visual"></div>
@@ -70,7 +70,7 @@
           <a id="learn-explore" class="learn-explore" href="./" target="_blank" rel="noopener noreferrer">Explore in Playground ↗</a>
           <p id="learn-explore-note" class="fine-print"></p>
           <details id="learn-deeper" class="learn-deeper">
-            <summary><span><strong>Go deeper</strong><span class="learn-deeper-subtitle">Mechanics, a worked example &amp; primary sources</span></span><span class="learn-deeper-optional">Optional</span><span class="learn-deeper-icon" aria-hidden="true">+</span></summary>
+            <summary><span><strong>Go deeper</strong> <span class="learn-deeper-subtitle">Mechanics, a worked example &amp; primary sources</span></span> <span class="learn-deeper-optional">Optional</span> <span class="learn-deeper-icon" aria-hidden="true">+</span></summary>
             <div class="learn-deeper-content">
               <h4 id="learn-deeper-title"></h4>
               <div id="learn-deeper-body"></div>
@@ -82,19 +82,19 @@
           </details>
         </section>
         <section id="learn-assessment" class="card learn-assessment" hidden aria-labelledby="learn-check-title">
-          <p class="eyebrow">03 · CHECK YOUR UNDERSTANDING</p><h3 id="learn-check-title">Put a number to your reasoning.</h3>
+          <p class="eyebrow">03 · CHECK YOUR UNDERSTANDING</p><h3 id="learn-check-title">Check the calculation and explanation</h3>
           <form id="learn-assessment-form" novalidate>
             <label id="learn-question" for="learn-answer" class="learn-answer-label"></label>
             <input id="learn-answer" class="learn-answer" type="number" step="any" inputmode="decimal" autocomplete="off" aria-describedby="learn-question learn-feedback-copy">
             <fieldset class="learn-fieldset"><legend id="learn-reason-question"></legend><div id="learn-reasons" class="learn-choices"></div></fieldset>
             <details id="learn-hint" class="learn-hint"><summary>Need a hint?</summary><p id="learn-hint-text"></p></details>
-            <button id="learn-check" class="button primary" type="submit">Check my understanding →</button>
+            <button id="learn-check" class="button primary" type="submit">Check answers →</button>
           </form>
           <div id="learn-feedback" class="learn-feedback" role="status" hidden><strong id="learn-feedback-title"></strong><p id="learn-feedback-copy"></p></div>
           <div id="learn-continue" class="learn-continue" hidden><a id="learn-next" class="button secondary" href="#lesson=pool-share">Next lesson →</a><button id="learn-fresh" class="learn-text-button" type="button">Test a fresh variation ↻</button></div>
         </section>
         <section id="learn-share" class="card learn-share" hidden aria-labelledby="learn-share-title">
-          <p class="eyebrow">KEEP YOUR EXPERIMENT</p><h3 id="learn-share-title">Show the assumptions behind your verdict.</h3>
+          <p class="eyebrow">KEEP YOUR EXPERIMENT</p><h3 id="learn-share-title">Save or share this scenario</h3>
           <p class="body-copy">Share the model inputs or download a result card. Your answers and learning progress stay in this browser.</p>
           <div class="learn-share-actions"><button id="learn-create-card" class="button secondary" type="button">Create result card</button><button id="learn-copy" class="button secondary" type="button">Copy scenario link</button></div>
           <label class="sr-only" for="learn-share-url">Reproducible playground scenario link</label><input id="learn-share-url" class="learn-share-url" type="text" readonly>

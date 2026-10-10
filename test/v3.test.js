@@ -77,9 +77,9 @@ test('closed, dust and unsupported-size positions remain inspectable but cannot 
   const closed={...recorded,position:{...recorded.position,liquidity:'0',tokensOwed0:'123'},principal:{amount0Raw:'0',amount1Raw:'0'}};
   assert.equal(positionSnapshotView(closed).state,'inactive');
   assert.equal(validatePositionSnapshot(closed).position.tokensOwed0,'123');
-  assert.throws(()=>positionScenario(closed),/no active liquidity/);
+  assert.throws(()=>positionScenario(closed),/no liquidity/);
   const tiny={...recorded,position:{...recorded.position,liquidity:'1'},principal:{amount0Raw:'0',amount1Raw:'920'}};
-  assert.throws(()=>positionScenario(tiny),/supported inputs|no active liquidity/);
+  assert.throws(()=>positionScenario(tiny),/supported inputs|no liquidity/);
 });
 test('position IDs retain uint256 precision and reject invalid inputs before chain reads', () => {
   const largest=((1n<<256n)-1n).toString();

@@ -89,8 +89,8 @@ export function positionSnapshotView(input) {
 }
 export function positionScenario(input) {
   const view = positionSnapshotView(input);
-  if (view.state === 'inactive') throw new Error('This NFT has no active liquidity to explore. Its snapshot remains available.');
-  if (view.principalUSD <= 0) throw new Error('The active principal rounds to zero token base units. Its snapshot remains available.');
+  if (view.state === 'inactive') throw new Error('This NFT has no liquidity to explore. Its snapshot remains available.');
+  if (view.principalUSD <= 0) throw new Error('The position principal rounds to zero token base units. Its snapshot remains available.');
   try {
     return validateRange({
       investment: view.principalUSD, initialPrice: view.ethPrice, futurePrice: view.ethPrice,

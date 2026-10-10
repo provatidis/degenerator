@@ -1,3 +1,4 @@
+import { quoteSwap } from '../public/amm.js';
 import { DEEPER_READING } from '../public/learning/deeper-reading.js';
 import { lessonWalkthrough } from '../public/lib/lesson-walkthrough.js';
 import test from 'node:test';
@@ -25,6 +26,19 @@ test('swap lesson reproduces the reference 1 ETH quote and larger orders get gre
   assert.ok(large.out / 10 < small.out);
   assert.equal(large.afterEth, 110);
   close(large.afterUsdc + large.out, 200000);
+});
+test('lessons and playground agree on swap output and fee-excluded impact across trade sizes', () => {
+  for (let variant = 0; variant < VARIANTS; variant++) {
+    const setup = lessonSetup('swap-impact', variant);
+    for (const amount of [1, setup.amount, setup.reserveEth / 2]) {
+      const lesson = runLesson('swap-impact', { amount }, variant);
+      const sandbox = quoteSwap({ eth: setup.reserveEth, usdc: setup.reserveEth * setup.initialPrice, supply: 1 }, 'eth', amount);
+      assert.ok(sandbox.output >= lesson.out && sandbox.output - lesson.out < 1e-6, 'Integer output floors to the nearest USDC base unit.');
+      close(lesson.impact, sandbox.priceImpact, 1e-10);
+      const effectiveSpotQuote = amount * 0.997 * setup.initialPrice;
+      close(lesson.impact, (1 - sandbox.output / effectiveSpotQuote) * 100, 1e-10);
+    }
+  }
 });
 test('pool ownership includes the new deposit in both reserves', () => {
   const r = runLesson('pool-share', { depositEth: 5 });

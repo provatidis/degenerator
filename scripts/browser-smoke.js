@@ -99,7 +99,7 @@ try {
     base = `http://127.0.0.1:${port}/`;
     const missing = await fetch(base + 'missing');
     assert.equal(missing.status, 404);
-    assert.ok((await missing.text()).includes('This page is out of range.'));
+    assert.ok((await missing.text()).includes('Page not found'));
     assert.equal((await fetch(base + 'degenerator/favicon.svg')).status, 200);
     assert.equal((await fetch(base + 'degenerator/styles/errors.css')).status, 200);
     const missingHead = await fetch(base + 'missing', { method: 'HEAD' });

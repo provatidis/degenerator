@@ -74,7 +74,7 @@ export async function checkPositions({ base, call, evaluate, click, fill, text, 
   const closedPath = join(profile,'closed-position.json');
   await writeFile(closedPath,JSON.stringify({...recorded,position:{...recorded.position,liquidity:'0',tokensOwed0:'123'},principal:{amount0Raw:'0',amount1Raw:'0'}}));
   await loadFile(closedPath); await waitStatus('Position saved');
-  assert.equal(await text('position-state'),'No active liquidity');
+  assert.equal(await text('position-state'),'No liquidity');
   assert.equal(await evaluate("document.getElementById('position-apply').disabled"),true);
   assert.equal(await evaluate("document.getElementById('position-allocation-bar').hidden"),true);
   assert.equal(await text('position-owed0'),'0.000123 USDC');

@@ -110,7 +110,7 @@ export function initFullRangeLab({ navigation }) {
       $('scenario-lp-return').textContent = `${percent(result.lpReturn)} vs. initial investment`;
       const magnitude = Math.abs(result.difference);
       $('scenario-verdict').textContent = magnitude < 0.005
-        ? 'Liquidity and holding finish at the same value under these assumptions.'
+        ? 'Liquidity and holding differ by less than half a cent under these assumptions.'
         : `Liquidity finishes ${usd(magnitude)} (${fmt(Math.abs(result.differencePercent))}%) ${result.difference > 0 ? 'ahead of' : 'behind'} holding under these assumptions.`;
       $('scenario-verdict').className = `scenario-verdict ${result.difference >= 0 ? 'gain' : 'loss'}`;
       $('scenario-il').textContent = percent(result.impermanentLoss);

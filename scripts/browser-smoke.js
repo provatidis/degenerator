@@ -99,7 +99,7 @@ try {
     base = `http://127.0.0.1:${port}/`;
     const missing = await fetch(base + 'missing');
     assert.equal(missing.status, 404);
-    assert.ok((await missing.text()).includes('This page is out of range.'));
+    assert.ok((await missing.text()).includes('Page not found'));
     assert.equal((await fetch(base + 'degenerator/favicon.svg')).status, 200);
     assert.equal((await fetch(base + 'degenerator/styles/errors.css')).status, 200);
     const missingHead = await fetch(base + 'missing', { method: 'HEAD' });
@@ -208,7 +208,7 @@ try {
   await evaluate("document.querySelector('[data-experiment=half]').click()");
   assert.equal(await text('scenario-hold-value'), '$3,750.00');
   await evaluate("document.querySelector('[data-experiment=break-even]').click()");
-  assert.match(await text('scenario-verdict'), /same value/);
+  assert.match(await text('scenario-verdict'), /differ by less than half a cent/);
   await click('pool-example');
   await evaluate("new Promise((resolve, reject) => { const deadline = Date.now() + 10000; const check = () => { if (!document.getElementById('pool-result').hidden) resolve(); else if (Date.now() > deadline) reject(new Error('Snapshot did not load')); else setTimeout(check, 50); }; check(); })");
   assert.match(await text('pool-evidence'), /Recorded example/);
@@ -325,7 +325,7 @@ try {
   assert.equal(await text('cl-asset-state'), 'All USDC');
   await fill('cl-future', '9');
   await click('cl-match-fees');
-  assert.match(await text('cl-verdict'), /same value/);
+  assert.match(await text('cl-verdict'), /differ by less than half a cent/);
   assert.ok(Math.abs(await evaluate("Number(document.getElementById('cl-fees').value)") - 1500) < 1e-8);
   await fill('cl-fees', '100');
   await fill('cl-full-fees', '300');

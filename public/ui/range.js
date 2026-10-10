@@ -162,7 +162,7 @@ export function initRangeLab({ navigation }) {
       $('cl-fees-note').textContent = 'Includes ' + usd(result.fees) + ' assumed cash fees';
       const magnitude = Math.abs(result.difference);
       $('cl-verdict').textContent = magnitude < 0.005
-        ? 'Your range and holding its starting tokens finish at the same value under these assumptions.'
+        ? 'Your range and holding its starting tokens differ by less than half a cent under these assumptions.'
         : 'Your range finishes ' + usd(magnitude) + ' (' + fmt(Math.abs(result.differencePercent)) + '%) ' + (result.difference > 0 ? 'ahead of' : 'behind') + ' holding its starting tokens.';
       $('cl-verdict').className = 'scenario-verdict ' + (result.difference >= 0 ? 'gain' : 'loss');
       $('cl-initial-assets').textContent = assetAmounts(result.initial);

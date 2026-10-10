@@ -52,9 +52,9 @@ USDC is token 0 and WETH token 1. Raw ticks therefore quote WETH per USDC; the d
 
 Position JSON retains schema version/kind, manager/factory/pool, NFT ID, fee tier, ticks, liquidity, stored fee-growth/owed fields, sqrtPriceX96, exact principal, token metadata, block and capture provenance. Opening files validates structure, integer bounds, tick/price consistency and principal arithmetic; it does not authenticate their chain origin. Unknown fields are removed. The latest position uses a separate degenerator-v3-position-snapshot-v1 storage key and does not overwrite pool snapshots or virtual balances.
 
-**Explore this position’s range** explicitly starts a new cl-range-v1 experiment from the snapshot’s active principal value, price and bounds, with zero assumed fees and an unchanged future price. It does not reconstruct the mint deposit or historical return. The captured principal is exact; subsequent lab projections use the existing continuous model. The source label clears when its budget, starting price or range changes. Closed, dust and out-of-limit positions remain inspectable/exportable even when they cannot seed the lab. On mobile a loaded position collapses its refresh/import controls, keeping outcomes within reach.
+**Explore this position’s range** explicitly starts a new cl-range-v1 experiment from the snapshot’s position principal value, price and bounds, with zero assumed fees and an unchanged future price. It does not reconstruct the mint deposit or historical return. The captured principal is exact; subsequent lab projections use the existing continuous model. The source label clears when its budget, starting price or range changes. Closed, dust and out-of-limit positions remain inspectable/exportable even when they cannot seed the lab. On mobile a loaded position collapses its refresh/import controls, keeping outcomes within reach.
 
-**Load recorded position** opens public position #37 from a completed contract check at block 26162627. Its recorded active principal is 0 USDC and 9999999999999133 WETH base units (0.009999999999999133 WETH). This fixture is a repeatable historical snapshot, not current market data.
+**Load recorded position** opens public position #37 from a completed contract check at block 26162627. Its recorded position principal is 0 USDC and 9999999999999133 WETH base units (0.009999999999999133 WETH). This fixture is a repeatable historical snapshot, not current market data.
 
 For a live read-only integration check:
 
@@ -86,7 +86,7 @@ Switch between **Full-range 50/50** and **Concentrated liquidity** without reset
 
 An asymmetric range, or an out-of-range starting price, can require a mix other than 50/50. Range IL and break-even fees therefore use the range's own initial tokens as the holding benchmark. The full-range comparison displays its separate 50/50 holding benchmark. These are equal-budget strategy comparisons, with each starting composition visible.
 
-Tight (±5%), Balanced (±10%) and Wide (±50%) presets center a range on the starting price. The future price input, keyboard-accessible slider, chart selection, exact boundary checkpoints and comparison rows all update the same scenario. The slider's domain stays stable while dragging. Allocation bars show how the position moves between ETH and USDC; below the range it is all ETH, and above it all USDC. Exact edges receive distinct labels.
+Tight (±5%), Moderate (±10%) and Wide (±50%) presets center a range on the starting price. The future price input, keyboard-accessible slider, chart selection, exact boundary checkpoints and comparison rows all update the same scenario. The slider's domain stays stable while dragging. Allocation bars show how the position moves between ETH and USDC; below the range it is all ETH, and above it all USDC. Exact edges receive distinct labels.
 
 Each LP strategy has its own optional total cash fee assumption. Fees remain fixed across displayed prices and never compound or alter token quantities. Being out of range at the final price does not imply the position earned no fees earlier; this endpoint model does not reconstruct a trading path or estimate fee income.
 

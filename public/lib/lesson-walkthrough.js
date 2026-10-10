@@ -7,7 +7,7 @@ export function lessonWalkthrough(id, outcome) {
     ['Start with the reserves', fmt(s.reserveEth, 0) + ' ETH and ' + fmt(s.reserveEth * s.initialPrice, 0) + ' USDC imply a spot price of ' + usd(s.initialPrice) + ' per ETH.'],
     ['Apply the input fee', fmt(s.amount, 0) + ' ETH × 0.997 = ' + fmt(s.amount * 0.997, 3) + ' effective ETH for the output calculation. The full input is retained in the pool.'],
     ['Quote the trade', 'The reserve formula returns ' + fmt(outcome.out, 2) + ' USDC, rounded down in integer token units before display.'],
-    ['Compare execution with spot', fmt(outcome.out, 2) + ' ÷ ' + s.amount + ' = ' + usd(outcome.out / s.amount) + ' per ETH, including the fee. Curve impact before that fee is ' + fmt(outcome.impact, 2) + '%.'],
+    ['Compare execution with spot', fmt(outcome.out, 2) + ' ÷ ' + s.amount + ' = ' + usd(outcome.out / s.amount) + ' per ETH, including the fee. Price impact excluding the fee is ' + fmt(outcome.impact, 2) + '%.'],
   ];
   if (id === 'pool-share') return [
     ['Match the pool ratio', fmt(s.depositEth, 0) + ' ETH × ' + usd(s.initialPrice) + ' per ETH requires ' + fmt(outcome.usdcDeposit, 0) + ' USDC.'],
@@ -47,7 +47,7 @@ export function lessonWalkthrough(id, outcome) {
   if (id === 'final-challenge') return [
     ['Use the same starting tokens', usd(s.investment) + ' buys ' + fmt(r.held.eth, 6) + ' ETH + ' + fmt(r.held.usdc, 2) + ' USDC. Holding those amounts at the selected price is worth ' + usd(r.holdValue) + '.'],
     ['Account for principal and assumed income', usd(r.lpBeforeFees) + ' LP principal + ' + usd(s.fees) + ' assumed fees = ' + usd(r.lpValue) + '.'],
-    ['State the verdict', 'LP total − holding = ' + signedUSD(r.difference) + '. ' + (Math.abs(r.difference) < 0.005 ? 'They match at the displayed precision.' : r.difference > 0 ? 'The LP finishes ahead under these assumptions.' : 'Holding finishes ahead under these assumptions.')],
+    ['Compare the final values', 'LP total − holding = ' + signedUSD(r.difference) + '. ' + (Math.abs(r.difference) < 0.005 ? 'They differ by less than half a cent.' : r.difference > 0 ? 'The LP finishes ahead under these assumptions.' : 'Holding finishes ahead under these assumptions.')],
     ['Calculate the additional hurdle', 'max(0, ' + usd(r.holdValue) + ' − ' + usd(r.lpValue) + ') = ' + usd(Math.max(0, -r.difference)) + ' additional assumed fees. This is a target before costs, not a forecast.'],
   ];
   throw new Error('Choose a supported lesson walkthrough.');

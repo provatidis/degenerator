@@ -7,7 +7,7 @@ export async function checkLearning({ evaluate, click, fill, text, navigate, rel
   const pool = await evaluate("localStorage.getItem('degenerator-pool-snapshot-v1')");
   const position = await evaluate("localStorage.getItem('degenerator-v3-position-snapshot-v1')");
   await navigate(base + 'learn.html#lesson=range-boundaries');
-  assert.equal(await text('learn-lesson-title'), 'At the edge of your range.');
+  assert.equal(await text('learn-lesson-title'), 'Token balances at range boundaries');
   assert.equal(await text('learn-progress-count'), '0 of 7 checked');
   assert.equal(await evaluate("document.querySelector('.product-nav a[aria-current=page]').textContent"), 'Learn');
   assert.equal(await evaluate("document.querySelectorAll('[data-lesson-id]').length"), 7);
@@ -35,6 +35,7 @@ export async function checkLearning({ evaluate, click, fill, text, navigate, rel
     const beforeReading = await evaluate("localStorage.getItem('degenerator-learning-liquidity-v1')");
     await evaluate("document.querySelector('#learn-deeper > summary').click()");
     assert.equal(await evaluate("document.querySelectorAll('#learn-worked-steps li').length"),4);
+    assert.equal(await evaluate("Array.from(document.querySelectorAll('.learn-metric, .learn-step-copy, #learn-worked-steps li, #learn-sources li')).every(el => { const text = el.textContent; return Array.from(el.children).slice(1).every(child => { const previous = child.previousElementSibling; const boundary = previous.textContent + child.textContent; return !text.includes(boundary); }); })"), true, 'Labels, values and explanation paragraphs must remain separate in copied and accessible text.');
     assert.equal(await evaluate("document.querySelectorAll('#learn-sources a').length"),2);
     assert.equal(await evaluate("Array.from(document.querySelectorAll('#learn-sources a')).every(a=>a.href.startsWith('https:')&&a.target==='_blank'&&a.rel.includes('noopener'))"),true);
     await evaluate("document.querySelector('#learn-math > summary').click()");
@@ -56,7 +57,7 @@ export async function checkLearning({ evaluate, click, fill, text, navigate, rel
       await choose('learn-reason', reason);
     }
     await click('learn-check');
-    assert.equal(await text('learn-feedback-title'), 'Checked. You can explain this.');
+    assert.equal(await text('learn-feedback-title'), 'Both answers are correct.');
     assert.equal(await evaluate("document.getElementById('learn-continue').hidden"), false);
     await reload();
     assert.equal(await evaluate("document.getElementById('learn-answer').value"), answer);
@@ -70,7 +71,7 @@ export async function checkLearning({ evaluate, click, fill, text, navigate, rel
     }
   }
   assert.equal(await text('learn-progress-count'), '7 of 7 checked');
-  assert.match(await text('learn-course-status'), /Chapter complete/);
+  assert.match(await text('learn-course-status'), /All exercises checked/);
   assert.equal(await evaluate("document.getElementById('learn-share').hidden"), false);
   await evaluate("Object.defineProperty(navigator, 'clipboard', { configurable:true, value:{writeText:async value=>{window.learningCopied=value}} });");
   await click('learn-copy');
@@ -102,7 +103,7 @@ export async function checkLearning({ evaluate, click, fill, text, navigate, rel
   assert.equal(await text('learn-variation-label'), 'Variation 2 of 3');
   await navigate(base + 'learn.html#lesson=not-a-lesson');
   assert.equal(await evaluate("document.getElementById('learn-route-note').hidden"), false);
-  assert.equal(await text('learn-lesson-title'), 'Put your judgment to work.');
+  assert.equal(await text('learn-lesson-title'), 'Compare liquidity with holding');
   const savedLearn = await evaluate("localStorage.getItem('degenerator-learning-liquidity-v1')");
   await evaluate("Storage.prototype.setItem=function(){throw new DOMException('Full','QuotaExceededError')}");
   await click('learn-variation');
@@ -127,7 +128,7 @@ export async function checkMobileLearning({ evaluate, click, fill, text, navigat
   assert.equal(await evaluate('document.documentElement.scrollWidth <= innerWidth'), true);
   await evaluate("document.querySelector('#learn-course summary').click()");
   await evaluate("document.querySelector('[data-lesson-id=pool-share]').click()");
-  assert.equal(await text('learn-lesson-title'), 'Own a share, not a promise.');
+  assert.equal(await text('learn-lesson-title'), 'Ownership after a liquidity deposit');
   assert.equal(await evaluate("document.getElementById('learn-course').open"), false);
   await navigate(base + 'learn.html#lesson=range-boundaries');
   await evaluate("document.querySelector('input[name=learn-prediction][value=usdc]').click()");
@@ -140,7 +141,7 @@ export async function checkMobileLearning({ evaluate, click, fill, text, navigat
   await fill('learn-answer','0');
   await evaluate("document.querySelector('input[name=learn-reason][value=path]').click()");
   await click('learn-check');
-  assert.equal(await text('learn-feedback-title'),'Checked. You can explain this.');
+  assert.equal(await text('learn-feedback-title'),'Both answers are correct.');
   assert.equal(await evaluate('document.documentElement.scrollWidth <= innerWidth'),true);
   await navigate(base);
   assert.equal(await evaluate("getComputedStyle(document.querySelector('.product-nav')).display"), 'flex');

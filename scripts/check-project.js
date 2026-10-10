@@ -25,10 +25,10 @@ for (const file of files.filter(file => file.endsWith('.js'))) {
     dependencies.get(file).push(target);
     const targetLayer = relative(root, target).replaceAll('\\', '/').split('/')[0];
     if (layer === 'models') assert.equal(targetLayer, 'models', path + ': calculation models may only depend on models.');
-    if (['data', 'lib'].includes(layer)) assert.ok(['data', 'models', 'lib'].includes(targetLayer), path + ': domain and utility modules must not depend on UI.');
+    if (['data', 'lib', 'learning'].includes(layer)) assert.ok(['data', 'models', 'lib'].includes(targetLayer), path + ': domain and utility modules must not depend on UI.');
     if (layer === 'ui') assert.notEqual(targetLayer, 'ui', path + ': compose UI controllers through main.js and injected interfaces.');
   }
-  if (['models', 'data'].includes(layer)) assert.doesNotMatch(source, /\b(?:document|window)\s*\./, path + ': keep DOM code in UI.');
+  if (['models', 'data', 'learning'].includes(layer)) assert.doesNotMatch(source, /\b(?:document|window)\s*\./, path + ': keep DOM code in UI.');
   if (layer === 'models') assert.doesNotMatch(source, /\bfetch\s*\(/, path + ': calculation models must not read the network.');
 }
 const visited = new Set(), active = new Set();
@@ -58,7 +58,7 @@ async function checkAsset(source) {
   assert.ok(!relative(root, path).startsWith('..'));
   await access(path);
 }
-for (const document of ['index.html', '404.html']) {
+for (const document of ['index.html', 'learn.html', '404.html']) {
   const markup = await readFile(resolve(root, document), 'utf8');
   const ids = [...markup.matchAll(/\bid="([^"]+)"/g)].map(match => match[1]);
   assert.equal(new Set(ids).size, ids.length, document + ': HTML IDs must be unique.');
@@ -105,4 +105,9 @@ for(let i=0;i<3;i++){
 assert.match(html,/<a class="skip-link" href="#main-content">/);
 assert.match(html,/<main id="main-content" tabindex="-1">/);
 assert.match(html,/<noscript>/);
+const learn = await readFile(resolve(root, 'learn.html'), 'utf8');
+assert.match(learn, /<script type=\"module\" src=\"learn-main.js\">/);
+assert.match(learn, /id=\"learn-lesson-list\"/);
+assert.match(learn, /href=\"learn.html\" aria-current=\"page\"/);
+assert.match(html, /href=\"learn.html\"/);
 console.log('PASS: module boundaries, assets, metadata, icon dimensions, manifest scope and accessible entry points');

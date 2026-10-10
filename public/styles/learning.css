@@ -1,0 +1,127 @@
+/* Learning shares calculation models and visual primitives with the playground. */
+.product-nav{display:flex;align-items:center;gap:4px;padding:4px;background:var(--surface);border:1px solid var(--border);border-radius:10px}
+.product-nav a{padding:8px 12px;border-radius:6px;color:var(--muted);font-weight:600;font-size:12px}
+.product-nav a[aria-current=page]{background:#2b3a25;color:var(--accent)}
+.learn-intro{margin-bottom:16px}
+.learn-meta{display:flex;flex-wrap:wrap;gap:10px 24px;color:var(--muted);font-size:11px;margin:0 0 32px}
+.learn-meta>span+span:before{content:"·";margin-right:20px;color:#61765e}
+.learn-workspace{display:grid;grid-template-columns:280px minmax(0,1fr);gap:48px;align-items:start;scroll-margin-top:24px}
+.learn-sidebar{position:sticky;top:24px;min-width:0}
+.learn-course{padding:20px}
+.learn-course summary{list-style:none;display:flex;align-items:center;gap:8px;cursor:pointer;font-size:10px;color:var(--muted);letter-spacing:.8px}
+.learn-course summary::-webkit-details-marker{display:none}
+.learn-course summary strong{margin-left:auto;color:var(--accent);font-weight:500;font-size:11px;letter-spacing:0}
+.learn-course-chevron{font-size:16px}
+.learn-course[open] .learn-course-chevron{transform:rotate(180deg)}
+.learn-course progress{display:block;width:100%;height:5px;margin:18px 0 0;border:0;border-radius:4px;overflow:hidden;accent-color:var(--accent)}
+.learn-course progress::-webkit-progress-bar{background:#2a392e}
+.learn-course progress::-webkit-progress-value{background:var(--accent)}
+.learn-course progress::-moz-progress-bar{background:var(--accent)}
+#learn-lesson-list{list-style:none;padding:0;margin:20px -6px 12px}
+#learn-lesson-list a{display:flex;gap:12px;align-items:center;border:1px solid transparent;padding:12px 8px;border-radius:10px}
+#learn-lesson-list a:hover{background:var(--surface)}
+#learn-lesson-list a[aria-current=step]{background:#22301f;border-color:#44563b}
+.learn-step-number{display:grid;place-items:center;flex:0 0 30px;height:30px;border:1px solid var(--border);border-radius:8px;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.learn-step-copy{display:grid;gap:5px}
+.learn-step-copy strong{font-size:12px;font-weight:500}
+.learn-step-state{font-size:10px;color:var(--muted)}
+.learn-step-done .learn-step-number{border-color:#5b7640;color:var(--accent)}
+.learn-step-done .learn-step-state{color:var(--accent)}
+.learn-sidebar-link{display:block;padding:14px 0 0;border-top:1px solid var(--border);color:var(--accent);font-size:11px;line-height:1.8}
+.learn-independence{font-size:11px;line-height:1.8;color:var(--muted);margin:16px 8px}
+.learn-lesson{min-width:0;max-width:850px}
+.learn-lesson-heading{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.learn-lesson-heading .eyebrow{margin:0}
+.learn-lesson-heading .small-badge{padding:6px 10px;font-size:10px}
+#learn-lesson-title{font-size:clamp(26px,3vw,34px);letter-spacing:-1px;line-height:1.18;margin:20px 0 12px;scroll-margin-top:24px}
+.learn-skill{font-size:12px;color:var(--accent);margin:0 0 18px}
+.learn-reading{font-size:14px;color:var(--muted);line-height:1.85;margin:0 0 24px;max-width:700px}
+.learn-experiment,.learn-results,.learn-assessment,.learn-share{margin-top:20px}
+.learn-experiment .card-heading{gap:12px}
+.learn-text-button{background:none;border:0;padding:8px 0;color:var(--accent);font-size:11px;text-align:left}
+.learn-setup{font-size:12px;line-height:1.9;color:var(--muted);margin:16px 0 24px}
+.learn-controls{display:grid;gap:24px;margin-bottom:26px}
+.learn-control-label{display:flex;justify-content:space-between;gap:12px;font-size:12px;margin-bottom:16px}
+.learn-control output{color:var(--accent);font-variant-numeric:tabular-nums}
+.learn-control input{height:8px;margin:0}
+.learn-width{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:12px}
+.learn-width select{background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:10px}
+.learn-fieldset{border:0;padding:0;margin:24px 0}
+.learn-fieldset legend{font-size:13px;line-height:1.7;padding:0;margin-bottom:14px;font-weight:500}
+.learn-stage{color:var(--accent);font-size:10px;margin-right:8px}
+.learn-choices{display:grid;gap:9px}
+.learn-choice{display:flex;align-items:flex-start;gap:12px;padding:13px 15px;border:1px solid var(--border);border-radius:10px;background:var(--surface);cursor:pointer;font-size:12px;line-height:1.7}
+.learn-choice:has(input:checked){border-color:#6c854b;background:#22301f}
+.learn-choice input{accent-color:var(--accent);margin:4px 0 0;flex-shrink:0}
+.learn-experiment-footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:10px;color:var(--muted);border-top:1px solid var(--border);padding-top:16px;margin-top:16px}
+.learn-results h3,.learn-assessment h3,.learn-share h3{font-size:20px;letter-spacing:-.5px;scroll-margin-top:24px}
+.learn-prediction-feedback{font-size:12px;line-height:1.8;color:var(--accent);margin:14px 0 22px}
+.learn-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.learn-metric{min-width:0}
+.learn-metric strong{display:block;margin:12px 0 8px;font-size:clamp(18px,2vw,24px);font-weight:500;letter-spacing:-.5px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.learn-metric .label{font-size:11px;line-height:1.6}
+.learn-metric-note{font-size:10px;line-height:1.7;color:var(--muted)}
+.learn-visual{display:grid;gap:18px;margin:24px 0;padding:22px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.learn-bar-label{display:flex;justify-content:space-between;gap:12px;align-items:center;font-size:11px;color:var(--muted);margin-bottom:10px}
+.learn-bar-label span:last-child{color:var(--text);font-variant-numeric:tabular-nums}
+.learn-bar{height:8px;border-radius:5px;background:#2b392f;overflow:hidden}
+.learn-bar>span{display:block;height:100%;border-radius:5px;background:var(--accent)}
+.learn-bar-row:first-child .learn-bar>span{background:#a9c7f5}
+.learn-results .learn-reading{font-size:13px;margin:0 0 16px}
+.learn-explore{font-size:12px;color:var(--accent);font-weight:500}
+.learn-answer-label{display:block;font-size:13px;line-height:1.8;color:var(--muted);margin:20px 0 12px}
+.learn-answer,.learn-share-url{width:100%;border:1px solid #42513f;background:var(--surface);color:var(--text);border-radius:9px;padding:13px 15px;font-size:16px}
+.learn-answer[aria-invalid=true]{border-color:var(--error)}
+.learn-hint{margin:0 0 20px;border-top:1px solid var(--border);padding-top:14px;font-size:12px}
+.learn-hint summary{color:var(--accent);cursor:pointer}
+.learn-hint p{color:var(--muted);line-height:1.8}
+.learn-feedback{margin-top:20px;padding:18px;border:1px solid var(--border);border-radius:10px;line-height:1.8}
+.learn-feedback strong{font-weight:500;font-size:14px}
+.learn-feedback p{margin:8px 0 0;font-size:12px;color:var(--muted)}
+.learn-pass{background:#20311c;border-color:#4c6538}
+.learn-pass strong{color:var(--accent)}
+.learn-retry{background:#2c251a;border-color:#625333}
+.learn-retry strong{color:#e5bd85}
+.learn-continue{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:20px}
+.learn-continue .button{font-size:12px;white-space:normal}
+.learn-share-actions{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0 16px}
+.learn-share-url{font-size:12px}
+#learn-card-image{display:block;width:100%;height:auto;margin:20px 0}
+#learn-card-download{display:inline-block;font-size:12px}
+@media(max-width:1000px){.learn-workspace{grid-template-columns:235px minmax(0,1fr);gap:28px}.learn-course{padding:16px}.learn-metrics{gap:12px}.product-nav a{padding:8px}}
+@media(max-width:750px){
+ .site-nav .sandbox-badge{display:none}
+ .site-nav{gap:0}
+ .product-nav a{padding:8px 10px;font-size:11px}
+ .learn-intro{gap:16px}
+ .learn-meta{gap:8px 16px;font-size:10px;margin-bottom:24px}
+ .learn-meta>span+span:before{margin-right:12px}
+ .learn-meta>span:last-child{flex-basis:100%}
+ .learn-meta>span:last-child:before{content:none}
+ .learn-workspace{grid-template-columns:1fr;gap:24px}
+ .learn-sidebar{position:static}
+ .learn-course{padding:17px}
+ .learn-independence{display:none}
+ .learn-lesson-heading{gap:8px}
+ #learn-lesson-title{margin-top:16px;font-size:28px}
+ .learn-reading{font-size:13px;line-height:1.85}
+ .learn-experiment,.learn-results,.learn-assessment,.learn-share{padding:20px}
+ .learn-metrics{grid-template-columns:1fr;gap:0}
+ .learn-metric{display:grid;grid-template-columns:1fr auto;gap:5px 12px;padding:13px 0;border-bottom:1px solid var(--border)}
+ .learn-metric:first-child{padding-top:0}
+ .learn-metric:last-child{border:0;padding-bottom:0}
+ .learn-metric strong{margin:0;font-size:21px;text-align:right}
+ .learn-metric-note{grid-column:1/-1}
+ .learn-setup{font-size:11px}
+ .learn-width{align-items:flex-start;flex-direction:column}
+ .learn-width select{width:100%}
+ .learn-bar-label{font-size:10px}
+ .learn-continue{align-items:flex-start;flex-direction:column}
+ .learn-text-button{font-size:11px}
+}
+.playground-learn-link{display:block;color:var(--accent);font-size:12px;margin:-4px 0 24px;line-height:1.7}
+
+.learn-results,.learn-course{scroll-margin-top:24px}
+#learn-concept{margin-left:auto}
+#learn-topics{display:none}
+@media(max-width:750px){#learn-topics{display:block}.learn-lesson-heading{flex-wrap:wrap}}

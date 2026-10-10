@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101714">
+  <meta name="description" content="Learn liquidity by doing. Predict, experiment and check your understanding through six practical DeFi lessons and a final challenge.">
+  <title>Liquidity essentials · Degenerator Learn</title>
+  <link rel="canonical" href="https://provatidis.github.io/degenerator/learn.html">
+  <link rel="icon" href="favicon.ico" sizes="16x16 32x32 48x48">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" sizes="any">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" sizes="180x180">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Learn liquidity by doing · Degenerator">
+  <meta property="og:description" content="Six practical lessons. Predict an outcome, run an experiment and build your DeFi judgment.">
+  <meta property="og:url" content="https://provatidis.github.io/degenerator/learn.html">
+  <meta property="og:image" content="https://provatidis.github.io/degenerator/assets/social-preview.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Learn liquidity by doing · Degenerator">
+  <meta name="twitter:description" content="Six practical lessons and a final challenge, with virtual funds and immediate feedback.">
+  <meta name="twitter:image" content="https://provatidis.github.io/degenerator/assets/social-preview.png">
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="learn-main.js"></script>
+</head>
+<body class="learning-page">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="Degenerator home"><span class="brand-icon"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" fill="none" stroke="currentColor" stroke-width="2"/></svg></span> Degenerator</a>
+    <nav class="site-nav" aria-label="Degenerator"><div class="product-nav"><a href="./">Playground</a><a href="learn.html" aria-current="page">Learn</a></div><span class="sandbox-badge"><span class="status-dot"></span> Virtual funds</span></nav>
+  </header>
+  <main id="main-content" tabindex="-1">
+    <noscript><div class="notice"><p>JavaScript is needed for the interactive lessons and progress. Enable it to predict, run and check your experiments. <a href="./">Open Playground →</a></p></div></noscript>
+    <section class="intro learn-intro">
+      <div><p class="eyebrow">LEARN BY DOING</p><h1>Liquidity essentials.</h1><p class="subtitle">Make a prediction. Run an experiment. Build your judgment.</p></div>
+      <button type="button" id="learn-resume" class="button secondary">Jump into the lesson ↓</button>
+    </section>
+    <div class="learn-meta"><span>6 lessons + a final challenge</span><span>Open any topic</span><span id="learn-storage" role="status">Progress saves in this browser.</span></div>
+    <div id="learn-route-note" class="notice" role="status" hidden><p>That lesson link could not be opened. Your last lesson is shown below; choose any topic from the chapter.</p></div>
+    <div id="learn-workspace" class="learn-workspace">
+      <aside class="learn-sidebar">
+        <details id="learn-course" class="card learn-course" open>
+          <summary><span>YOUR CHAPTER</span><strong id="learn-progress-count">0 of 7 checked</strong><span class="learn-course-chevron">⌄</span></summary>
+          <progress id="learn-progress" max="7" value="0" aria-label="0 of 7 exercises checked"></progress>
+          <p id="learn-course-status" class="fine-print">Six lessons and a final challenge. Open any topic.</p>
+          <nav aria-label="Liquidity essentials lessons"><ol id="learn-lesson-list"></ol></nav>
+          <a class="learn-sidebar-link" href="./">Have your own question? Open Playground ↗</a>
+        </details>
+        <p class="learn-independence">These exercises have their own inputs. Your playground experiments and virtual balances stay separate.</p>
+      </aside>
+      <article class="learn-lesson" aria-labelledby="learn-lesson-title">
+        <div class="learn-lesson-heading"><p id="learn-lesson-number" class="eyebrow">LESSON 1 OF 6</p><span id="learn-concept" class="small-badge">Swaps</span><button type="button" id="learn-topics" class="learn-text-button">All topics ↑</button></div>
+        <h2 id="learn-lesson-title" tabindex="-1">Small swap. Big difference.</h2>
+        <p id="learn-skill" class="learn-skill"></p>
+        <p id="learn-intro" class="learn-reading">A larger swap moves further along the pool’s curve. Predict what happens, then try it.</p>
+        <section class="card learn-experiment" aria-labelledby="learn-experiment-title">
+          <div class="card-heading"><h3 id="learn-experiment-title">Your experiment</h3><button id="learn-variation" class="learn-text-button" type="button">Try another variation ↻</button></div>
+          <p id="learn-setup" class="learn-setup"></p>
+          <div id="learn-controls" class="learn-controls"></div>
+          <fieldset class="learn-fieldset"><legend><span class="learn-stage">01</span> <span id="learn-prediction-question">Make your prediction.</span></legend><div id="learn-predictions" class="learn-choices"></div></fieldset>
+          <button id="learn-run" type="button" class="button primary" disabled>Run experiment →</button>
+          <p id="learn-input-status" class="fine-print" role="status"></p>
+          <div class="learn-experiment-footer"><span id="learn-variation-label">Variation 1 of 3</span><span id="learn-model">Illustrative inputs · USDC = $1</span></div>
+        </section>
+        <section id="learn-results" class="card learn-results" hidden aria-labelledby="learn-results-title">
+          <p class="eyebrow">02 · OBSERVE</p><h3 id="learn-results-title" tabindex="-1">Follow what changed.</h3>
+          <p id="learn-prediction-feedback" class="learn-prediction-feedback" role="status"></p>
+          <div id="learn-metrics" class="learn-metrics"></div>
+          <div id="learn-visual" class="learn-visual"></div>
+          <p id="learn-explanation" class="learn-reading"></p>
+          <a id="learn-explore" class="learn-explore" href="./" target="_blank" rel="noopener noreferrer">Explore in Playground ↗</a>
+          <p id="learn-explore-note" class="fine-print"></p>
+        </section>
+        <section id="learn-assessment" class="card learn-assessment" hidden aria-labelledby="learn-check-title">
+          <p class="eyebrow">03 · CHECK YOUR UNDERSTANDING</p><h3 id="learn-check-title">Put a number to your reasoning.</h3>
+          <form id="learn-assessment-form" novalidate>
+            <label id="learn-question" for="learn-answer" class="learn-answer-label"></label>
+            <input id="learn-answer" class="learn-answer" type="number" step="any" inputmode="decimal" autocomplete="off" aria-describedby="learn-question learn-feedback-copy">
+            <fieldset class="learn-fieldset"><legend id="learn-reason-question"></legend><div id="learn-reasons" class="learn-choices"></div></fieldset>
+            <details id="learn-hint" class="learn-hint"><summary>Need a hint?</summary><p id="learn-hint-text"></p></details>
+            <button id="learn-check" class="button primary" type="submit">Check my understanding →</button>
+          </form>
+          <div id="learn-feedback" class="learn-feedback" role="status" hidden><strong id="learn-feedback-title"></strong><p id="learn-feedback-copy"></p></div>
+          <div id="learn-continue" class="learn-continue" hidden><a id="learn-next" class="button secondary" href="#lesson=pool-share">Next lesson →</a><button id="learn-fresh" class="learn-text-button" type="button">Test a fresh variation ↻</button></div>
+        </section>
+        <section id="learn-share" class="card learn-share" hidden aria-labelledby="learn-share-title">
+          <p class="eyebrow">KEEP YOUR EXPERIMENT</p><h3 id="learn-share-title">Show the assumptions behind your verdict.</h3>
+          <p class="body-copy">Share the model inputs or download a result card. Your answers and learning progress stay in this browser.</p>
+          <div class="learn-share-actions"><button id="learn-create-card" class="button secondary" type="button">Create result card</button><button id="learn-copy" class="button secondary" type="button">Copy scenario link</button></div>
+          <label class="sr-only" for="learn-share-url">Reproducible playground scenario link</label><input id="learn-share-url" class="learn-share-url" type="text" readonly>
+          <p id="learn-card-status" class="fine-print" role="status"></p>
+          <div id="learn-card-preview" hidden><img id="learn-card-image" alt="Final challenge result card with inputs, holding and LP values, assumed fees and model limitations."><a id="learn-card-download" class="button secondary" download="degenerator-learning-challenge-cp50-v1.png">Download PNG</a></div>
+        </section>
+        <p id="learn-takeaway" class="learn-takeaway" hidden></p>
+      </article>
+    </div>
+    <footer><span>Degenerator · Your DeFi playground</span><span>Illustrative experiments · Virtual funds · No wallet connection</span></footer>
+  </main>
+</body>
+</html>

@@ -2,6 +2,16 @@
 
 Your DeFi playground. Degenerator is a browser-based lab for reproducible liquidity scenarios and virtual pool experiments. Compare full-range and concentrated ETH/USDC liquidity, import public pool and position snapshots, share assumptions, export results, and explore swaps without connecting a wallet.
 
+## Learn: Liquidity essentials
+
+Open [Learn](https://provatidis.github.io/degenerator/learn.html) for six independent lessons and a final challenge. Every topic is available directly, including shareable lesson fragments such as learn.html#lesson=range-boundaries. Exercises ask for a prediction, show the calculated outcome, and require both a numeric answer and sound reasoning. Hints and three repeatable variations support practice; completion records understanding checks, not simulated profit.
+
+The lessons cover swap impact, proportional pool ownership, changing token balances, impermanent loss versus dollar profit, fee break-even, and concentrated range boundaries. The final challenge compares the same starting tokens, differentiates additional fees from the total break-even target, and can export a PNG result card and a reproducible playground link.
+
+Lesson inputs and answers are stored under degenerator-learning-liquidity-v1, independently of sandbox balances, snapshot imports and playground controllers. Reopening restores the last lesson and validated exercise draft. Damaged drafts are ignored; unavailable or full storage leaves learning usable in the current tab. Playground links open a separate tab. Price/range lessons carry their exact model assumptions; swap/ownership lessons open the existing swap sandbox without replacing its saved pool or wallet.
+
+Content lives in public/learning/, pure experiment/assessment logic in public/models/lesson-experiments.js, progress persistence in public/data/learning-progress.js, and the controller in public/ui/learning.js. The learning document has its own composition root, public/learn-main.js, and shares the existing calculator models and styles. No backend, account, network request or new runtime dependency is required.
+
 ## Pool snapshots
 
 The pool lab reads one supported deployment: Ethereum mainnet Uniswap v2 WETH/USDC. **Fetch latest snapshot** contacts [PublicNode](https://ethereum.publicnode.com/) and reads a finalized block. Every contract read uses that block number, and the block hash is checked again before accepting the result.

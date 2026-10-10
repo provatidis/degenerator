@@ -101,7 +101,7 @@ try {
     console.log('PASS: missing resources, methods, and directory isolation');
   }
   if (!base.endsWith('/')) base += '/';
-  for (const path of ['', 'app.js', 'amm.js', 'storage.js', 'scenario.js', 'scenario-app.js', 'styles.css']) assert.equal((await fetch(base + path)).status, 200);
+  for (const path of ['', 'app.js', 'amm.js', 'storage.js', 'scenario.js', 'scenario-app.js', 'pool-app.js', 'models/cp50-v1.js', 'data/uniswap-v2.js', 'data/snapshot.js', 'lib/result-card.js', 'examples/uniswap-v2-mainnet.json', 'styles.css']) assert.equal((await fetch(base + path)).status, 200);
   console.log('PASS: HTTP assets');
 
   const devtools = await start(process.env.CHROMIUM_BIN || 'chromium', ['--headless', '--no-sandbox', '--disable-dev-shm-usage', '--remote-debugging-port=0', `--user-data-dir=${profile}`, 'about:blank'], { stdio: ['ignore', 'pipe', 'pipe'] }, /DevTools listening on (ws:\/\/[^\s]+)/);
@@ -182,6 +182,67 @@ try {
   assert.ok(csv.startsWith('model,investment_usd,'));
   assert.ok(csv.includes('cp50-v1,5000,2000,3000,250,'));
   console.log('PASS: scenario reference values, presets, comparisons, validation, chart updates, share copy, and CSV download');
+  await evaluate("document.querySelector('[data-experiment=double]').click()");
+  assert.equal(await evaluate("document.getElementById('scenario-fees').value"), '0');
+  assert.equal(await text('scenario-lp-value'), '$7,071.07');
+  await evaluate("document.querySelector('[data-experiment=half]').click()");
+  assert.equal(await text('scenario-hold-value'), '$3,750.00');
+  await evaluate("document.querySelector('[data-experiment=break-even]').click()");
+  assert.match(await text('scenario-verdict'), /same value/);
+  await click('pool-example');
+  await evaluate("new Promise((resolve, reject) => { const deadline = Date.now() + 10000; const check = () => { if (!document.getElementById('pool-result').hidden) resolve(); else if (Date.now() > deadline) reject(new Error('Snapshot did not load')); else setTimeout(check, 50); }; check(); })");
+  assert.match(await text('pool-evidence'), /Recorded example/);
+  const snapshotPrice = await text('pool-price');
+  await click('pool-apply');
+  assert.match(await text('scenario-origin'), /Ethereum block/);
+  assert.equal(await evaluate("document.getElementById('scenario-fees').value"), '0');
+
+  async function downloadFile(id) {
+    const begun = nextEvent('Browser.downloadWillBegin');
+    const finished = new Promise((resolve, reject) => {
+      const timer = setTimeout(() => { socket.removeEventListener('message', listener); reject(new Error('Download timed out: ' + id)); }, 15000);
+      const listener = ({ data }) => {
+        const message = JSON.parse(data);
+        if (message.method !== 'Browser.downloadProgress' || message.params.state !== 'completed') return;
+        clearTimeout(timer); socket.removeEventListener('message', listener); resolve();
+      };
+      socket.addEventListener('message', listener);
+    });
+    await click(id);
+    const info = await begun;
+    await finished;
+    return join(profile, info.suggestedFilename);
+  }
+  const snapshotPath = await downloadFile('pool-export');
+  const exportedSnapshot = JSON.parse(await readFile(snapshotPath, 'utf8'));
+  assert.equal(exportedSnapshot.chainId, 1);
+  assert.ok(exportedSnapshot.block.hash.startsWith('0x'));
+  await click('scenario-image');
+  await evaluate("new Promise((resolve, reject) => { const deadline = Date.now() + 10000; const check = () => { if (!document.getElementById('scenario-card-preview').hidden) resolve(); else if (Date.now() > deadline) reject(new Error('Card did not render')); else setTimeout(check, 50); }; check(); })");
+  const card = await readFile(await downloadFile('scenario-image-download'));
+  assert.equal(card.subarray(0, 8).toString('hex'), '89504e470d0a1a0a');
+  assert.equal(card.readUInt32BE(16), 1200);
+  assert.equal(card.readUInt32BE(20), 720);
+  await fill('scenario-fees', '5');
+  assert.equal(await evaluate("document.getElementById('scenario-card-preview').hidden"), true);
+  await reload();
+  assert.equal(await text('pool-price'), snapshotPrice);
+  assert.match(await text('pool-evidence'), /not been rechecked/);
+  const doc = await call('DOM.getDocument');
+  const fileInput = await call('DOM.querySelector', { nodeId: doc.root.nodeId, selector: '#pool-file' });
+  const badFile = join(profile, 'bad-snapshot.json');
+  await writeFile(badFile, JSON.stringify({ ...exportedSnapshot, version: 99 }));
+  await call('DOM.setFileInputFiles', { nodeId: fileInput.nodeId, files: [badFile] });
+  await evaluate("new Promise((resolve, reject) => { const deadline = Date.now() + 10000; const check = () => { if (document.getElementById('pool-status').textContent.includes('not a supported')) resolve(); else if (Date.now() > deadline) reject(new Error('Invalid file was not rejected')); else setTimeout(check, 50); }; check(); })");
+  assert.equal(await text('pool-price'), snapshotPrice);
+  await call('DOM.setFileInputFiles', { nodeId: fileInput.nodeId, files: [snapshotPath] });
+  await evaluate("new Promise((resolve, reject) => { const deadline = Date.now() + 10000; const check = () => { if (document.getElementById('pool-status').textContent.includes('Snapshot saved')) resolve(); else if (Date.now() > deadline) reject(new Error('Saved file did not restore')); else setTimeout(check, 50); }; check(); })");
+  assert.equal(await text('pool-price'), snapshotPrice);
+  await click('scenario-reset');
+  await fill('scenario-future', '3000');
+  await fill('scenario-fees', '250');
+  console.log('PASS: guided experiments, recorded snapshot, explicit price application, JSON export/import, reload, invalid files and PNG download');
+
   await click('swap-button');
   assert.equal(await text('eth-reserve'), '101.0000');
   assert.equal(await text('activity-count'), '1 action');

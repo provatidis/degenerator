@@ -2,6 +2,38 @@
 
 Your DeFi playground. Degenerator is a browser-based lab for reproducible liquidity scenarios and virtual pool experiments. Compare holding with a 50/50 ETH/USDC position, share your assumptions, export results, and explore swaps without connecting a wallet.
 
+## Pool snapshots
+
+The pool lab reads one supported deployment: Ethereum mainnet Uniswap v2 WETH/USDC. **Fetch latest snapshot** contacts [PublicNode](https://ethereum.publicnode.com/) and reads a finalized block. Every contract read uses that block number, and the block hash is checked again before accepting the result.
+
+The adapter verifies the canonical factory's pair, the pair's factory/token order, and USDC/WETH decimals. It preserves integer reserves and compares an exact integer 1 WETH quote against the supported Uniswap v2 router at the same block. This is a recorded quote, not an executable current trade. The 0.3% swap fee is separate from assumed position fee income.
+
+Snapshots retain their schema version, protocol, chain, pool/factory, block number/hash/timestamp, token addresses/order/decimals, raw reserves, fee formula, router quote, capture time, and provider. **Export snapshot** saves JSON; **Open snapshot file** restores it locally. Files are limited to 64 KB and validated before use. File validation checks structure and internal arithmetic; it cannot authenticate supplied chain data. Saved and imported files are labelled as not rechecked. **Load recorded example** opens a bundled snapshot from a completed contract check.
+
+Loading never changes the calculator or swap wallet automatically. **Use this starting price** explicitly applies the WETH/USDC reserve ratio, assuming USDC = $1, to the theoretical cp50-v1 lab. It retains the investment, sets the future price to 2x and assumed cash fees to zero. The reserve ratio is not an oracle or a general market-price feed. Scenario links continue to share only model assumptions; export the snapshot separately to retain chain provenance.
+
+Only the latest snapshot is saved under the degenerator-pool-snapshot-v1 key, separate from the existing sandbox storage. Unavailable storage and failed providers leave loaded data usable. No RPC credentials or wallet are required. Adding arbitrary pools, chains, or concentrated-liquidity contracts requires another explicitly supported and validated adapter.
+
+For a manual live integration check:
+
+~~~sh
+npm run check:pool
+~~~
+
+To capture a new bundled example:
+
+~~~sh
+node scripts/check-pool.js public/examples/uniswap-v2-mainnet.json
+~~~
+
+The integer quote formula follows the [Uniswap v2 periphery library](https://github.com/Uniswap/v2-periphery/blob/master/contracts/libraries/UniswapV2Library.sol), with deployments documented by [Uniswap](https://developers.uniswap.org/docs/protocols/v2/deployments).
+
+## Guided experiments and result cards
+
+The Pump and The Dump keep the current investment/starting price, set ETH to 2x or 0.5x, and clear assumed fees. The Harvest sets assumed fee income to the break-even amount for the current future price; it does not estimate yield.
+
+**Create result card** previews a downloadable 1200x720 PNG with the four assumptions, model version, holding/LP outcomes, before-fee IL, break-even fees, and model limitations. Input changes invalidate the preview so a card cannot silently describe an older scenario.
+
 ## Liquidity scenario lab
 
 Enter an initial investment, starting ETH price, future ETH price, and an optional total dollar amount of fee income earned by the position. Results include:
@@ -35,7 +67,7 @@ IL before fees  = (LP before fees / holding value − 1) × 100%
 break-even fees = holding value − LP before fees
 ```
 
-Fee income is an explicit assumption added as separate USD cash at the end; it does not compound or change the token amounts. It is held fixed across comparison rows and chart prices. The calculator does not estimate fees from volume, volatility, pool share, or a time horizon. Gas costs, incentives, depegging, and concentrated liquidity are excluded. These are hypothetical outcomes, not forecasts. Reference tests cover unchanged, falling, doubled, and quadrupled prices, asset-product preservation, fee break-even, input bounds, versioned links, and CSV output. Real pool imports and protocol-specific validation are future work.
+Fee income is an explicit assumption added as separate USD cash at the end; it does not compound or change the token amounts. It is held fixed across comparison rows and chart prices. The calculator does not estimate fees from volume, volatility, pool share, or a time horizon. Gas costs, incentives, depegging, and concentrated liquidity are excluded. These are hypothetical outcomes, not forecasts. Reference tests cover unchanged, falling, doubled, and quadrupled prices, asset-product preservation, fee break-even, input bounds, versioned links, and CSV output. The separate pool adapter validates recorded swap arithmetic against its supported protocol; this theoretical endpoint LP model is not a protocol-specific return forecast.
 
 ## Online preview with GitHub Pages
 
@@ -110,7 +142,7 @@ Pool reserves, virtual wallet balances, and the latest 50 activity entries are s
 
 Saved data is versioned and validated before use. Invalid or incompatible sessions fall back to the starting sandbox. If browser storage is unavailable or full, the app remains usable and displays a notice that changes may not survive refresh. Storage is specific to this browser and site; it does not sync across devices. Open tabs keep their own in-memory state, and the last successful save wins. Clearing browser data removes the saved session. No credentials or real assets are stored.
 
-Calculations use JavaScript floating-point numbers for learning, not production financial accounting. There are no real funds, live data, smart contracts, persistent accounts, or investment recommendations.
+Calculations use JavaScript floating-point numbers for learning, not production financial accounting. Pool snapshots read existing contracts through a public provider. There are no real-fund transactions, user accounts, or investment recommendations.
 
 ## Project structure
 
@@ -122,3 +154,18 @@ Calculations use JavaScript floating-point numbers for learning, not production 
 - `public/index.html`, `public/styles.css`: responsive interface.
 - `server.js`: dependency-free static HTTP server.
 - `test/`: Node calculation, storage, and scenario suites.
+
+## Architecture and extension policy
+
+The static app remains dependency-free and deployable on GitHub Pages. Calculation models, transport/adapters, versioned persistence, exports and DOM controllers have separate responsibilities:
+
+- public/models/: pure theoretical scenario calculations, guided experiments, and exact protocol arithmetic.
+- public/data/: deployment configuration, read-only RPC transport, the Uniswap v2 adapter, snapshot schemas and storage.
+- public/lib/: formatting, compatible scenario links, CSV output, download handling and result-card rendering.
+- public/scenario-app.js, public/pool-app.js, public/app.js: interface controllers.
+- public/scenario.js: compatibility exports for existing integrations and tests.
+- public/examples/: recorded chain fixtures that work without an RPC request.
+
+New financial models get their own versioned module and reference/invariant tests. New protocols get a deployment definition, adapter, exact token-unit handling and contract validation. Preserve old model links and storage keys; introduce explicit migrations when schemas change. Unit and desktop/mobile browser tests run before deployment.
+
+The next milestones are a separately validated concentrated-liquidity lab and further research examples. A backend becomes useful for private provider credentials, shared caching, scheduled snapshots or account synchronization. Each can be added behind the data layer without rewriting the calculation models or existing labs.

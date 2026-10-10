@@ -4,7 +4,7 @@ import { dirname, resolve, sep, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), 'public');
-const types = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.svg': 'image/svg+xml' };
+const types = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.svg': 'image/svg+xml', '.json': 'application/json' };
 const server = http.createServer(async (request, response) => {
   if (!['GET', 'HEAD'].includes(request.method)) {
     response.writeHead(405, { Allow: 'GET, HEAD' }).end('Method not allowed');
@@ -22,7 +22,7 @@ const server = http.createServer(async (request, response) => {
       'Content-Type': `${types[extname(file)] || 'application/octet-stream'}; charset=utf-8`,
       'Cache-Control': 'no-store',
       'X-Content-Type-Options': 'nosniff',
-      'Content-Security-Policy': "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; frame-ancestors 'none'",
+      'Content-Security-Policy': "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; connect-src 'self' https://ethereum-rpc.publicnode.com; base-uri 'none'; frame-ancestors 'none'",
     });
     response.end(request.method === 'HEAD' ? undefined : body);
   } catch (error) {

@@ -1,13 +1,16 @@
 {
   "name": "degenerator",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "type": "module",
   "description": "A DeFi playground for reproducible liquidity scenarios and virtual pool experiments",
   "scripts": {
     "start": "node server.js",
     "test": "node --test",
-    "test:browser": "node scripts/browser-smoke.js"
+    "test:browser": "node scripts/browser-smoke.js",
+    "check:pool": "node scripts/check-pool.js"
   },
-  "engines": { "node": ">=22" }
+  "engines": {
+    "node": ">=22"
+  }
 }

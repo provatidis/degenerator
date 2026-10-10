@@ -1,13 +1,17 @@
-import { DEFAULT_SCENARIO, LIMITS, calculateScenario, comparisonScenarios, scenarioHash, scenarioFromHash, scenarioCSV } from './scenario.js';
+import { DEFAULT_SCENARIO, LIMITS, validateScenario, calculateScenario, comparisonScenarios } from './models/cp50-v1.js';
+import { scenarioHash, scenarioFromHash } from './lib/scenario-links.js';
+import { scenarioCSV } from './lib/scenario-csv.js';
+import { experimentScenario } from './models/experiments.js';
+import { fmt, usd, signedUSD, percent, compactUSD } from './lib/format.js';
+import { downloadBlob } from './lib/download.js';
+import { resultCardBlob } from './lib/result-card.js';
 
 const $ = (id) => document.getElementById(id);
 const fields = { investment: 'scenario-investment', initialPrice: 'scenario-start', futurePrice: 'scenario-future', fees: 'scenario-fees' };
-const fmt = (value, digits = 2) => value.toLocaleString('en-US', { minimumFractionDigits: digits, maximumFractionDigits: digits });
-const usd = (value) => `$${fmt(value)}`;
-const signedUSD = (value) => `${value < -0.005 ? '−' : value > 0.005 ? '+' : ''}${usd(Math.abs(value))}`;
-const percent = (value) => `${value < -0.005 ? '−' : value > 0.005 ? '+' : ''}${fmt(Math.abs(value))}%`;
-const compactUSD = (value) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', notation: 'compact', maximumFractionDigits: 1 }).format(value);
 let current = null;
+let startingSource = null;
+let cardURL = null;
+let cardGeneration = 0;
 
 function readInputs() {
   return Object.fromEntries(Object.entries(fields).map(([key, id]) => [key, key === 'fees' && !$(id).value.trim() ? 0 : $(id).value.trim() ? Number($(id).value) : NaN]));
@@ -73,6 +77,11 @@ function renderTable(result) {
 }
 
 function render() {
+  cardGeneration++;
+  if (cardURL) { URL.revokeObjectURL(cardURL); cardURL = null; }
+  $('scenario-card-preview').hidden = true;
+  $('scenario-image-status').textContent = '';
+  $('experiment-status').textContent = '';
   const inputs = readInputs();
   for (const [key, id] of Object.entries(fields)) {
     const { min, max } = LIMITS[key];
@@ -83,12 +92,15 @@ function render() {
   try {
     const result = calculateScenario(inputs);
     current = result;
+    $('scenario-origin').textContent = startingSource && result.initialPrice === startingSource.price ? startingSource.label : '';
+    $('scenario-origin').hidden = !$('scenario-origin').textContent;
     $('scenario-error').textContent = '';
     $('scenario-results').hidden = false;
     $('scenario-comparison-card').hidden = false;
     $('scenario-invalid').hidden = true;
     $('scenario-share').disabled = false;
     $('scenario-export').disabled = false;
+    $('scenario-image').disabled = false;
     $('scenario-hold-value').textContent = usd(result.holdValue);
     $('scenario-lp-value').textContent = usd(result.lpValue);
     $('scenario-hold-return').textContent = `${percent(result.holdReturn)} vs. initial investment`;
@@ -122,6 +134,8 @@ function render() {
     $('scenario-invalid').hidden = false;
     $('scenario-share').disabled = true;
     $('scenario-export').disabled = true;
+    $('scenario-image').disabled = true;
+    $('scenario-origin').hidden = true;
   }
 }
 
@@ -134,6 +148,7 @@ for (const button of document.querySelectorAll('[data-price-multiple]')) button.
   render();
 });
 $('scenario-reset').addEventListener('click', () => {
+  startingSource = null;
   fillInputs(DEFAULT_SCENARIO);
   if (location.hash.startsWith('#scenario=')) history.replaceState(null, '', location.pathname + location.search);
   render();
@@ -154,24 +169,54 @@ $('scenario-share').addEventListener('click', async () => {
   }
 });
 $('scenario-export').addEventListener('click', () => {
-  if (!current) return;
-  const url = URL.createObjectURL(new Blob([scenarioCSV(current)], { type: 'text/csv;charset=utf-8' }));
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = 'degenerator-liquidity-scenarios-cp50-v1.csv';
-  document.body.append(link);
-  link.click();
-  link.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  if (current) downloadBlob(new Blob([scenarioCSV(current)], { type: 'text/csv;charset=utf-8' }), 'degenerator-liquidity-scenarios-cp50-v1.csv');
 });
+
+$('scenario-image').addEventListener('click', async () => {
+  if (!current) return;
+  const generation = cardGeneration;
+  $('scenario-image-status').textContent = 'Creating your result card…';
+  try {
+    const blob = await resultCardBlob(current, new URL(location.pathname, location.origin).href);
+    if (generation !== cardGeneration) return;
+    if (cardURL) URL.revokeObjectURL(cardURL);
+    cardURL = URL.createObjectURL(blob);
+    $('scenario-card-image').src = cardURL;
+    $('scenario-image-download').href = cardURL;
+    $('scenario-card-preview').hidden = false;
+    $('scenario-card-preview').open = true;
+    $('scenario-image-status').textContent = 'Card ready. Download the image below; share the scenario link to reproduce its inputs.';
+  } catch (error) { if (generation === cardGeneration) $('scenario-image-status').textContent = error.message; }
+});
+
+for (const button of document.querySelectorAll('[data-experiment]')) button.addEventListener('click', () => {
+  try {
+    fillInputs(experimentScenario(readInputs(), button.dataset.experiment));
+    render();
+    $('experiment-status').textContent = button.dataset.experiment === 'break-even'
+      ? 'Fee income now equals the amount needed to match holding. This is a target assumption, not a yield estimate.'
+      : 'Price experiment loaded with your current investment and starting price. Assumed fee income is $0.';
+  } catch (error) { $('experiment-status').textContent = error.message; }
+});
+
+export function setStartingPrice(price, label) {
+  const input = readInputs();
+  const investment = Number.isFinite(input.investment) && input.investment >= LIMITS.investment.min && input.investment <= LIMITS.investment.max
+    ? input.investment : DEFAULT_SCENARIO.investment;
+  const scenario = validateScenario({ investment, initialPrice: price, futurePrice: price * 2, fees: 0 });
+  startingSource = { price, label };
+  fillInputs(scenario);
+  render();
+}
 
 function loadShared() {
   try {
     const shared = scenarioFromHash(location.hash);
-    if (shared) fillInputs(shared);
+    if (shared) { startingSource = null; fillInputs(shared); }
     render();
     if (shared) $('scenario-link-status').textContent = 'Shared scenario loaded. Your saved swap sandbox is unchanged.';
   } catch (error) {
+    startingSource = null;
     fillInputs(DEFAULT_SCENARIO);
     render();
     $('scenario-link-status').textContent = `${error.message} Showing the default scenario.`;

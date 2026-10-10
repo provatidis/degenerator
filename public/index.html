@@ -9,22 +9,66 @@
   <link rel="stylesheet" href="styles.css">
   <script type="module" src="app.js"></script>
   <script type="module" src="scenario-app.js"></script>
+  <script type="module" src="pool-app.js"></script>
 </head>
 <body>
   <header class="topbar">
     <a class="brand" href="./" aria-label="Degenerator home"><span class="brand-icon"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" fill="none" stroke="currentColor" stroke-width="2"/></svg></span> Degenerator</a>
-    <nav class="site-nav" aria-label="Experiments"><a href="#lp-lab">Liquidity lab</a><a href="#swap-sandbox">Swap sandbox</a><span class="sandbox-badge"><span class="status-dot"></span> Virtual funds</span></nav>
+    <nav class="site-nav" aria-label="Experiments"><a href="#pool-lab">Pool snapshots</a><a href="#lp-lab">Liquidity lab</a><a href="#swap-sandbox">Swap sandbox</a><span class="sandbox-badge"><span class="status-dot"></span> Virtual funds</span></nav>
   </header>
   <main>
     <section class="intro">
       <div><p class="eyebrow">EXPERIMENT. UNDERSTAND. SHARE.</p><h1>Understand your liquidity.</h1><p class="subtitle">Compare holding with providing liquidity, under assumptions you can inspect.</p></div>
     </section>
-    <div class="notice"><span class="notice-icon">i</span><p>All funds are virtual. No wallet connection, blockchain transactions, or live prices. <span id="storage-status" role="status">Your sandbox is saved in this browser. Reset clears the saved session.</span></p></div>
+    <div class="notice"><span class="notice-icon">i</span><p>All experiments use virtual funds. Pool imports read public blockchain data. No wallet connection or transactions. <span id="storage-status" role="status">Your sandbox is saved in this browser. Reset clears the saved session.</span></p></div>
+    <section id="pool-lab" class="pool-section card" aria-labelledby="pool-heading">
+      <div class="pool-layout">
+        <div>
+          <p class="eyebrow">RESEARCH STARTS WITH A SNAPSHOT</p>
+          <h2 id="pool-heading">A real pool. A repeatable experiment.</h2>
+          <p class="body-copy">Capture the Ethereum Uniswap v2 WETH/USDC pool at a finalized block, or reopen a saved snapshot.</p>
+          <div class="pool-buttons">
+            <button id="pool-fetch" class="button primary" type="button">Fetch latest snapshot</button>
+            <button id="pool-example" class="button secondary" type="button">Load recorded example</button>
+            <label class="button secondary file-button" for="pool-file">Open snapshot file<input id="pool-file" type="file" accept=".json,application/json" aria-label="Open snapshot file"></label>
+          </div>
+          <p class="fine-print">Fetching contacts PublicNode for public chain data. Saved files open locally. WETH is wrapped ETH; the calculator assumes USDC = $1.</p>
+          <p id="pool-status" class="pool-status" role="status"></p>
+        </div>
+        <div>
+          <div id="pool-empty" class="pool-empty"><p>Bring the lab a starting point.</p><p class="fine-print">Your snapshot keeps its block, token amounts and recorded quote. Loading it leaves your calculator and virtual wallet unchanged until you apply its price.</p></div>
+          <div id="pool-result" hidden>
+            <div class="pool-result-heading"><span class="small-badge">Ethereum · Uniswap v2</span><a id="pool-block" target="_blank" rel="noopener noreferrer"></a></div>
+            <p class="label">WETH price from pool reserves · USDC = $1</p>
+            <strong id="pool-price" class="pool-price"></strong>
+            <div class="pool-reserves"><span id="pool-reserve-eth"></span><span id="pool-reserve-usdc"></span></div>
+            <p id="pool-quote" class="fine-print"></p>
+            <p id="pool-evidence" class="fine-print"></p>
+            <div class="pool-buttons"><button id="pool-apply" class="button primary" type="button" disabled>Use this starting price</button><button id="pool-export" class="button secondary" type="button" disabled>Export snapshot</button></div>
+          </div>
+        </div>
+      </div>
+      <details class="snapshot-details"><summary>Inspect the snapshot</summary><dl>
+        <dt>Pool contract</dt><dd id="pool-address">—</dd>
+        <dt>Block hash</dt><dd id="pool-hash">—</dd>
+        <dt>Token 0 · USDC</dt><dd id="pool-token0">—</dd>
+        <dt>Token 1 · WETH</dt><dd id="pool-token1">—</dd>
+        <dt>USDC reserve · base units</dt><dd id="pool-raw0">—</dd>
+        <dt>WETH reserve · base units</dt><dd id="pool-raw1">—</dd>
+        <dt>Captured at</dt><dd id="pool-captured">—</dd>
+      </dl><p class="fine-print">The recorded 1 WETH quote is checked using exact integer arithmetic against the Uniswap v2 router at the same block. It describes that snapshot, not an executable live trade. Fee income in the lab remains your own assumption.</p></details>
+    </section>
     <section id="lp-lab" class="scenario-section" aria-labelledby="scenario-heading">
       <div class="lab-heading"><div><p class="eyebrow">A QUESTION WORTH EXPLORING</p><h2 id="scenario-heading">Provide liquidity, or hold?</h2><p class="body-copy">See dollar outcomes for a full-range 50/50 ETH/USDC position.</p></div><span class="small-badge">Constant-product model · v1</span></div>
+      <div class="guided-experiments" aria-label="Guided experiments">
+        <button type="button" class="experiment-card" data-experiment="double"><span class="eyebrow">01 · THE PUMP</span><strong>ETH doubles. Who wins?</strong><span>Start with zero fees and see how the tokens rebalance.</span></button>
+        <button type="button" class="experiment-card" data-experiment="half"><span class="eyebrow">02 · THE DUMP</span><strong>ETH halves. What changes?</strong><span>Both strategies fall in value. Compare the size of the gap.</span></button>
+        <button type="button" class="experiment-card" data-experiment="break-even"><span class="eyebrow">03 · THE HARVEST</span><strong>Can fees close the gap?</strong><span>Set assumed fee income to the amount needed to match holding.</span></button>
+      </div>
+      <p id="experiment-status" class="fine-print" role="status"></p>
       <div class="scenario-layout">
         <div class="card scenario-controls">
-          <h3>Your assumptions</h3><p class="body-copy">Start with equal dollar amounts of ETH and USDC.</p>
+          <h3>Your assumptions</h3><p class="body-copy">Start with equal dollar amounts of ETH and USDC.</p><p id="scenario-origin" class="fine-print" hidden></p>
           <form id="scenario-form">
             <div class="scenario-field"><label for="scenario-investment">Initial investment <span>USD</span></label><input id="scenario-investment" type="number" min="1" max="1000000000" step="any" value="5000" required aria-describedby="scenario-error"></div>
             <div class="scenario-field"><label for="scenario-start">Starting ETH price <span>USD</span></label><input id="scenario-start" type="number" min="0.01" max="10000000" step="any" value="2000" required aria-describedby="scenario-error"></div>
@@ -34,7 +78,9 @@
             <p id="scenario-error" class="form-error" role="status"></p>
           </form>
           <button id="scenario-share" class="button primary" type="button">Copy scenario link <span>→</span></button>
-          <div class="scenario-actions"><button id="scenario-export" class="button secondary" type="button">Export CSV</button><button id="scenario-reset" class="text-button" type="button">Reset scenario</button></div>
+          <div class="scenario-actions"><button id="scenario-export" class="button secondary" type="button">Export CSV</button><button id="scenario-image" class="button secondary" type="button">Create result card</button><button id="scenario-reset" class="text-button" type="button">Reset scenario</button></div>
+          <p id="scenario-image-status" class="fine-print" role="status"></p>
+          <details id="scenario-card-preview" class="result-card-preview" hidden><summary>Your result card</summary><img id="scenario-card-image" alt="Scenario card with investment, ETH prices, assumed fees and holding versus liquidity outcomes."><a id="scenario-image-download" class="button secondary" download="degenerator-scenario-cp50-v1.png">Download PNG</a></details>
           <div id="scenario-share-wrap" class="share-wrap" hidden><p id="scenario-share-status" role="status"></p><label class="sr-only" for="scenario-share-url">Scenario link</label><input id="scenario-share-url" type="text" readonly></div>
           <p id="scenario-link-status" class="fine-print" role="status"></p>
           <p class="fine-print">This lab is independent of your saved swap sandbox.</p>

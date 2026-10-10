@@ -6,3 +6,49 @@
 @media(max-width:1000px){.scenario-layout{grid-template-columns:290px minmax(0,1fr);gap:18px}.scenario-totals{grid-template-columns:1fr}.scenario-metrics{grid-template-columns:1fr 1fr}.site-nav{gap:15px}.scenario-totals strong{font-size:29px}.scenario-chart-heading{align-items:flex-start;flex-direction:column}}
 @media(max-width:750px){.site-nav>a{display:none}.scenario-layout{grid-template-columns:1fr}.scenario-totals{grid-template-columns:1fr 1fr;gap:12px}.scenario-totals>div{padding:14px}.scenario-totals strong{font-size:25px}.scenario-totals .label{font-size:10px;line-height:1.6}.scenario-metrics{grid-template-columns:1fr 1fr;gap:16px}.scenario-assets{gap:14px}.lab-heading{align-items:flex-start;flex-wrap:wrap}.comparison-card{padding:22px}.scenario-section{margin-bottom:35px}.sandbox-heading .secondary{font-size:12px;padding:10px 12px}}
 .scenario-field input[aria-invalid=true]{border-color:var(--error)}
+
+/* Pool research and guided experiments */
+.pool-section { margin-bottom: 38px; scroll-margin-top: 24px; }
+.pool-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; }
+.pool-layout h2 { max-width: 410px; line-height: 1.3; }
+.pool-layout .body-copy { line-height: 1.8; }
+.pool-buttons { display: flex; gap: 10px; flex-wrap: wrap; margin: 18px 0 12px; }
+.pool-buttons .button { font-size: 12px; padding: 11px 14px; }
+.file-button { position: relative; overflow: hidden; cursor: pointer; }
+.file-button input { position: absolute; inset: 0; opacity: 0; width: 100%; cursor: pointer; }
+.file-button:focus-within { outline: 2px solid var(--accent); outline-offset: 3px; }
+.pool-status { font-size: 12px; line-height: 1.8; color: var(--accent); }
+.pool-empty { display: flex; flex-direction: column; justify-content: center; height: 100%; min-height: 220px; border: 1px dashed var(--border); border-radius: 12px; padding: 24px; }
+.pool-empty > p:first-child { font-size: 21px; color: var(--text); }
+.pool-result-heading { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 22px; }
+.pool-result-heading a { font-size: 11px; color: var(--muted); text-decoration: underline; overflow-wrap: anywhere; line-height: 1.7; }
+.pool-price { display: block; font-size: 38px; font-weight: 500; margin: 8px 0 16px; letter-spacing: -1px; color: var(--accent); overflow-wrap: anywhere; }
+.pool-reserves { display: flex; flex-wrap: wrap; gap: 16px; font-size: 12px; color: var(--muted); }
+.snapshot-details { border-top: 1px solid var(--border); padding-top: 16px; margin-top: 18px; font-size: 12px; color: var(--muted); line-height: 1.8; }
+.snapshot-details summary { cursor: pointer; color: var(--text); }
+.snapshot-details dl { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 10px 20px; }
+.snapshot-details dd { margin: 0; overflow-wrap: anywhere; font-family: ui-monospace, monospace; }
+.guided-experiments { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-bottom: 18px; }
+.experiment-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; text-align: left; color: var(--text); }
+.experiment-card:hover { border-color: var(--accent); }
+.experiment-card .eyebrow { display: block; margin-bottom: 12px; }
+.experiment-card strong { display: block; font-size: 16px; line-height: 1.5; margin-bottom: 10px; }
+.experiment-card > span:last-child { font-size: 12px; line-height: 1.8; color: var(--muted); }
+#scenario-origin { border-left: 2px solid var(--accent); padding-left: 12px; }
+.scenario-actions { flex-wrap: wrap; justify-content: flex-start; gap: 10px; }
+.result-card-preview { margin: 18px 0; font-size: 12px; color: var(--text); }
+.result-card-preview summary { cursor: pointer; margin-bottom: 12px; }
+.result-card-preview img { display: block; width: 100%; border-radius: 9px; border: 1px solid var(--border); }
+.result-card-preview a { display: inline-block; margin-top: 12px; }
+button:focus-visible, a:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+@media (max-width: 1000px) { .pool-layout { gap: 22px; } .guided-experiments { gap: 10px; } .experiment-card { padding: 16px; } }
+@media (max-width: 750px) {
+  .pool-layout { grid-template-columns: 1fr; gap: 22px; }
+  .pool-section { margin-bottom: 28px; }
+  .pool-empty { min-height: 130px; }
+  .guided-experiments { grid-template-columns: 1fr; }
+  .snapshot-details dl { grid-template-columns: 1fr; gap: 5px; }
+  .snapshot-details dd { margin-bottom: 10px; }
+  .pool-result-heading { gap: 8px; }
+  .pool-price { font-size: 34px; }
+}

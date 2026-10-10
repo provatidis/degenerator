@@ -22,8 +22,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
-      - name: Test pool calculations, browser storage, and scenarios
+      - name: Test calculation models, snapshots, and browser storage
         run: npm test
+      - name: Test desktop and mobile interactions and downloads
+        env:
+          CHROMIUM_BIN: /usr/bin/google-chrome
+        run: npm run test:browser
 
   deploy:
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'

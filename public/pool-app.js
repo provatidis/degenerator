@@ -2,6 +2,8 @@ import { fetchPoolSnapshot } from './data/uniswap-v2.js';
 import { parseSnapshot, snapshotJSON, snapshotView, readSavedSnapshot, saveSnapshot, MAX_SNAPSHOT_BYTES } from './data/snapshot.js';
 import { LIMITS } from './models/cp50-v1.js';
 import { setStartingPrice } from './scenario-app.js';
+import { setRangeStartingPrice } from './range-app.js';
+import { LIMITS as RANGE_LIMITS } from './models/cl-range-v1.js';
 import { fmt, usd } from './lib/format.js';
 import { downloadBlob } from './lib/download.js';
 
@@ -14,7 +16,8 @@ function controls() {
   $('pool-file').disabled = busy;
   $('pool-export').disabled = busy || !current;
   const price = current ? snapshotView(current).ethPrice : 0;
-  $('pool-apply').disabled = busy || !current || price < LIMITS.initialPrice.min || price > LIMITS.initialPrice.max;
+  $('pool-apply').disabled = busy || !current || price < LIMITS.initialPrice.min || price * 2 > LIMITS.futurePrice.max;
+  $('pool-apply-range').disabled = busy || !current || price < RANGE_LIMITS.initialPrice.min || price > RANGE_LIMITS.initialPrice.max;
   $('pool-lab').setAttribute('aria-busy', String(busy));
 }
 function display(snapshot, evidence) {
@@ -80,7 +83,13 @@ $('pool-apply').addEventListener('click', () => {
   try {
     setStartingPrice(snapshotView(current).ethPrice, 'Starting price from the saved WETH/USDC pool at Ethereum block ' + current.block.number + '. USDC is assumed to be $1; this is a pool reserve ratio, not an external price feed.');
     $('pool-status').textContent = 'Snapshot price applied. Future ETH price is set to 2× and assumed fee income to $0. Your virtual swap balances are unchanged.';
-    document.getElementById('lp-lab').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } catch (error) { $('pool-status').textContent = error.message; }
+});
+$('pool-apply-range').addEventListener('click', () => {
+  if (!current) return;
+  try {
+    setRangeStartingPrice(snapshotView(current).ethPrice, 'Starting price from the saved Uniswap v2 WETH/USDC snapshot at Ethereum block ' + current.block.number + '. This seeds a hypothetical range position; the reserve ratio assumes USDC = $1.');
+    $('pool-status').textContent = 'Snapshot price applied to the range lab with a fresh range and zero assumed fees. Your saved swap sandbox is unchanged.';
   } catch (error) { $('pool-status').textContent = error.message; }
 });
 const restored = readSavedSnapshot();

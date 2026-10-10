@@ -178,14 +178,19 @@ Calculations use JavaScript floating-point numbers for learning, not production 
 
 ## Project structure
 
-- `public/amm.js`: pure pool and wallet calculations.
-- `public/app.js`: interactions and presentation.
-- `public/storage.js`: versioned, validated browser persistence.
-- `public/scenario.js`: documented cp50-v1 model, link encoding, and CSV output.
-- `public/scenario-app.js`: scenario controls, chart, comparisons, and sharing.
-- `public/index.html`, `public/styles.css`: responsive interface.
-- `server.js`: dependency-free static HTTP server.
-- `test/`: Node calculation, storage, and scenario suites.
+- public/main.js: the single composition root. It initializes each UI controller and supplies the lab interfaces they need.
+- public/ui/: explicit initializers for the sandbox, full-range lab, range lab, pool snapshots and navigation. Importing a controller does not start it.
+- public/models/: pure calculations and protocol arithmetic. They do not read the DOM, browser storage or network.
+- public/data/: chain deployment configuration, read-only RPC adapters, snapshot schemas and persistence.
+- public/lib/: scenario links, exports, formatting and rendering utilities.
+- public/styles/: shared foundation followed by feature styles. public/styles.css preserves the existing cascade order.
+- public/index.html: semantic, static markup. Each feature owns its IDs; the structure check rejects duplicates.
+- scripts/: development, integration and browser checks; test/: reference calculations and adapter/storage contracts.
+- server.js: a local static server; GitHub Pages deploys public/ directly.
+
+Run npm run check to verify module paths, architectural boundaries, stylesheet imports, unique HTML IDs and the single entry point. CI runs this before calculation and browser tests. Existing scenario.js, amm.js and storage.js exports and storage keys remain compatible.
+
+The structure review keeps the current dependency-free deployment. Explicit startup removes cross-controller import side effects; feature styles reduce collisions as labs grow. Static HTML remains appropriate at this size. Split markup or add a build step when repeated page layouts actually need it. A framework, database or application backend is not needed for read-only, public-chain imports.
 
 ## Architecture and extension policy
 
@@ -194,7 +199,7 @@ The static app remains dependency-free and deployable on GitHub Pages. Calculati
 - public/models/: pure theoretical scenario calculations, guided experiments, and exact protocol arithmetic.
 - public/data/: deployment configuration, read-only RPC transport, the Uniswap v2 adapter, snapshot schemas and storage.
 - public/lib/: formatting, compatible scenario links, CSV output, download handling and result-card rendering.
-- public/scenario-app.js, public/pool-app.js, public/app.js: interface controllers.
+- public/ui/: interface controllers, composed by public/main.js.
 - public/scenario.js: compatibility exports for existing integrations and tests.
 - public/examples/: recorded chain fixtures that work without an RPC request.
 

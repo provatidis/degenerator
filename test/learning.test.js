@@ -1,3 +1,5 @@
+import { DEEPER_READING } from '../public/learning/deeper-reading.js';
+import { lessonWalkthrough } from '../public/lib/lesson-walkthrough.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { LESSON_IDS, VARIANTS, lessonSetup, runLesson, checkLesson, validateLessonInputs } from '../public/models/lesson-experiments.js';
@@ -108,4 +110,44 @@ test('progress uses its own key and storage failures leave the exercises usable'
   assert.equal(saveProgress(progress,blocked),false);
   assert.equal(saveProgress(progress,()=>({setItem(){throw new Error('Full')}})),false);
   assert.deepEqual(readProgress(()=>({getItem:()=>'{broken'})).progress,emptyProgress());
+});
+
+test('worked examples distinguish dollar profit, total fee targets and additional hurdles', () => {
+  const loss = JSON.stringify(lessonWalkthrough('loss-vs-profit', runLesson('loss-vs-profit', lessonSetup('loss-vs-profit'))));
+  assert.ok(loss.includes('+$2,071.07') && loss.includes('$428.93') && loss.includes('−5.72%'));
+  const fees = JSON.stringify(lessonWalkthrough('fee-break-even', runLesson('fee-break-even', lessonSetup('fee-break-even'))));
+  assert.ok(fees.includes('$428.93') && fees.includes('$328.93'));
+  const final = JSON.stringify(lessonWalkthrough('final-challenge', runLesson('final-challenge', lessonSetup('final-challenge'))));
+  assert.ok(final.includes('−$328.93'));
+});
+test('worked examples refresh edited fees and a falling-price variation without mutating inputs', () => {
+  const inputs = { ...lessonSetup('final-challenge'), fees:500 }, before = {...inputs};
+  const steps = lessonWalkthrough('final-challenge', runLesson('final-challenge',inputs));
+  assert.ok(steps[1][1].includes('$500.00'));
+  assert.ok(steps[3][1].includes('$0.00 additional'));
+  assert.deepEqual(inputs,before);
+  const alternate = lessonWalkthrough('final-challenge',runLesson('final-challenge',lessonSetup('final-challenge',1),1));
+  assert.ok(alternate[0][1].includes('$2,250.00'));
+  assert.ok(alternate[1][1].includes('$2,121.32'));
+  assert.ok(alternate[3][1].includes('$78.68 additional'));
+});
+test('each subject has complete optional reading and supported primary-source links', () => {
+  assert.deepEqual(Object.keys(DEEPER_READING),LESSON_IDS);
+  for (const id of LESSON_IDS) {
+    const entry=DEEPER_READING[id];
+    assert.ok(entry.title && entry.paragraphs.length >= 2 && entry.misconception.text && entry.math.formula);
+    assert.equal(entry.sources.length,2);
+    for(const source of entry.sources){
+      const url=new URL(source.url);
+      assert.equal(url.protocol,'https:');
+      assert.ok(['developers.uniswap.org','docs.uniswap.org','blog.uniswap.org','app.uniswap.org','github.com'].includes(url.hostname));
+      assert.ok(source.title && source.detail);
+    }
+    for(let variant=0;variant<VARIANTS;variant++) {
+      const steps=lessonWalkthrough(id,runLesson(id,lessonSetup(id,variant),variant));
+      assert.equal(steps.length,4);
+      assert.doesNotMatch(JSON.stringify(steps),/NaN|Infinity|undefined/);
+    }
+  }
+  assert.throws(()=>lessonWalkthrough('unknown',{setup:{}}));
 });

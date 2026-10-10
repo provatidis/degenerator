@@ -1,3 +1,5 @@
+import { DEEPER_READING } from '../learning/deeper-reading.js';
+import { lessonWalkthrough } from '../lib/lesson-walkthrough.js';
 import { LESSONS } from '../learning/liquidity-essentials.js';
 import { LESSON_IDS, VARIANTS, lessonSetup, runLesson, checkLesson } from '../models/lesson-experiments.js';
 import { readProgress, saveProgress } from '../data/learning-progress.js';
@@ -128,6 +130,31 @@ export function initLearning() {
     const fill = document.createElement('span'); fill.style.width = Math.max(0, Math.min(100, percentValue)) + '%'; rail.append(fill);
     row.append(heading, rail); return row;
   }
+  function renderDeeper() {
+    const reading = DEEPER_READING[lesson.id];
+    $('learn-deeper-title').textContent = reading.title;
+    $('learn-deeper-body').replaceChildren(...reading.paragraphs.map(text => {
+      const paragraph = document.createElement('p'); paragraph.textContent = text; return paragraph;
+    }));
+    $('learn-worked-steps').replaceChildren(...lessonWalkthrough(lesson.id, outcome).map(([title, text]) => {
+      const step = document.createElement('li');
+      const heading = document.createElement('strong'); heading.textContent = title;
+      const paragraph = document.createElement('p'); paragraph.textContent = text;
+      step.append(heading, paragraph); return step;
+    }));
+    $('learn-misconception-title').textContent = reading.misconception.title;
+    $('learn-misconception-copy').textContent = reading.misconception.text;
+    $('learn-math-intro').textContent = reading.math.introduction;
+    $('learn-math-formula').textContent = reading.math.formula;
+    $('learn-math-note').textContent = reading.math.note;
+    $('learn-sources').replaceChildren(...reading.sources.map(source => {
+      const item = document.createElement('li');
+      const link = document.createElement('a'); link.href = source.url; link.target = '_blank'; link.rel = 'noopener noreferrer';
+      link.textContent = source.title + ' ↗';
+      const description = document.createElement('p'); description.textContent = source.detail;
+      item.append(link, description); return item;
+    }));
+  }
   function renderResults() {
     outcome = runLesson(lesson.id, draft.inputs, draft.variant);
     const s = outcome.setup, r = outcome.result, metrics = [], visual = [];
@@ -158,6 +185,7 @@ export function initLearning() {
     const predicted = lesson.predictions.find(([id]) => id === outcome.prediction)?.[1];
     $('learn-prediction-feedback').textContent = draft.prediction === outcome.prediction ? 'Your prediction matches the result.' : 'A useful surprise: ' + predicted + '. Compare it with your prediction.';
     $('learn-explanation').textContent = lesson.explanation;
+    renderDeeper();
     $('learn-results').hidden = false; $('learn-assessment').hidden = false;
     $('learn-run').textContent = 'Run again →';
     $('learn-input-status').textContent = '';
@@ -191,6 +219,7 @@ export function initLearning() {
     $('learn-intro').textContent = lesson.intro; $('learn-prediction-question').textContent = lesson.prediction;
     $('learn-question').textContent = lesson.question; $('learn-reason-question').textContent = lesson.reasoning;
     $('learn-hint-text').textContent = lesson.hint; $('learn-hint').open = false;
+    $('learn-deeper').open = false; $('learn-math').open = false;
     $('learn-takeaway').textContent = lesson.takeaway;
     $('learn-results').hidden = true; $('learn-assessment').hidden = true; $('learn-feedback').hidden = true; $('learn-share').hidden = true; $('learn-continue').hidden = true;
     $('learn-input-status').textContent = ''; $('learn-run').disabled = !draft.prediction; $('learn-run').textContent = 'Run experiment →';

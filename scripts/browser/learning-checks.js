@@ -30,6 +30,18 @@ export async function checkLearning({ evaluate, click, fill, text, navigate, rel
     await choose('learn-prediction', prediction);
     await click('learn-run');
     assert.equal(await evaluate("document.getElementById('learn-results').hidden"), false);
+    assert.equal(await evaluate("document.getElementById('learn-deeper').open"),false);
+    assert.equal(await evaluate("document.getElementById('learn-math').open"),false);
+    const beforeReading = await evaluate("localStorage.getItem('degenerator-learning-liquidity-v1')");
+    await evaluate("document.querySelector('#learn-deeper > summary').click()");
+    assert.equal(await evaluate("document.querySelectorAll('#learn-worked-steps li').length"),4);
+    assert.equal(await evaluate("document.querySelectorAll('#learn-sources a').length"),2);
+    assert.equal(await evaluate("Array.from(document.querySelectorAll('#learn-sources a')).every(a=>a.href.startsWith('https:')&&a.target==='_blank'&&a.rel.includes('noopener'))"),true);
+    await evaluate("document.querySelector('#learn-math > summary').click()");
+    assert.equal(await evaluate("document.getElementById('learn-math').open"),true);
+    assert.equal(await evaluate("localStorage.getItem('degenerator-learning-liquidity-v1')"),beforeReading,'Reading cannot mark exercises complete or change their answers.');
+    if(id==='fee-break-even') assert.match(await text('learn-worked-steps'),/428.93[\s\S]*328.93/);
+    if(id==='range-boundaries') assert.match(await text('learn-worked-steps'),/5,116.06/);
     await fill('learn-answer', answer);
     await choose('learn-reason', reason);
     if (id === 'swap-impact') {
@@ -78,6 +90,10 @@ export async function checkLearning({ evaluate, click, fill, text, navigate, rel
   assert.equal(await evaluate("document.getElementById('learn-card-preview').hidden"), true);
   assert.equal(await evaluate("document.getElementById('learn-share').hidden"), true);
   assert.equal(await evaluate("document.getElementById('learn-answer').value"), '');
+  await click('learn-run');
+  assert.match(await text('learn-worked-steps'),/500.00/);
+  assert.match(await text('learn-worked-steps'),/0.00 additional/);
+
   await click('learn-variation');
   assert.equal(await text('learn-variation-label'), 'Variation 2 of 3');
   assert.equal(await evaluate("document.getElementById('learn-run').disabled"), true);
@@ -102,7 +118,7 @@ export async function checkLearning({ evaluate, click, fill, text, navigate, rel
   assert.equal(await text('scenario-lp-value'), '$7,171.07');
   assert.equal(await evaluate("localStorage.getItem('defi-sandbox-v1')"), sandbox);
   await navigate(base);
-  console.log('PASS: all learning assessments, feedback, progress restoration, deep links, state isolation, card/download, stale-result invalidation and full storage');
+  console.log('PASS: optional deeper reading, current-input walkthroughs, math disclosures, source links, all learning assessments, feedback, progress restoration, deep links, state isolation, card/download, stale-result invalidation and full storage');
 }
 
 export async function checkMobileLearning({ evaluate, click, fill, text, navigate, base }) {
@@ -117,6 +133,10 @@ export async function checkMobileLearning({ evaluate, click, fill, text, navigat
   await evaluate("document.querySelector('input[name=learn-prediction][value=usdc]').click()");
   await click('learn-run');
   assert.equal(await evaluate('document.documentElement.scrollWidth <= innerWidth'), true);
+  await evaluate("document.querySelector('#learn-deeper > summary').click()");
+  await evaluate("document.querySelector('#learn-math > summary').click()");
+  assert.equal(await evaluate("document.getElementById('learn-deeper').open && document.getElementById('learn-math').open"),true);
+  assert.equal(await evaluate('document.documentElement.scrollWidth <= innerWidth'),true);
   await fill('learn-answer','0');
   await evaluate("document.querySelector('input[name=learn-reason][value=path]').click()");
   await click('learn-check');

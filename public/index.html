@@ -4,17 +4,42 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#101714">
-  <meta name="description" content="Explore full-range and concentrated liquidity, reproducible pool snapshots and virtual swaps in Degenerator, your DeFi playground.">
+  <meta name="description" content="Explore full-range and concentrated liquidity, import pool and position snapshots, and experiment with virtual swaps in Degenerator.">
   <title>Degenerator · Your DeFi playground</title>
+  <meta name="application-name" content="Degenerator">
+  <meta name="apple-mobile-web-app-title" content="Degenerator">
+  <meta name="color-scheme" content="dark">
+  <link rel="canonical" href="https://provatidis.github.io/degenerator/">
+  <link rel="icon" href="favicon.ico" sizes="16x16 32x32 48x48">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" sizes="any">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" sizes="180x180">
+  <link rel="manifest" href="site.webmanifest">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Degenerator">
+  <meta property="og:title" content="Degenerator · Your DeFi playground">
+  <meta property="og:description" content="Explore full-range and concentrated liquidity, import pool and position snapshots, and experiment with virtual swaps in Degenerator.">
+  <meta property="og:url" content="https://provatidis.github.io/degenerator/">
+  <meta property="og:image" content="https://provatidis.github.io/degenerator/assets/social-preview.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Degenerator. Understand your liquidity. Real snapshots, repeatable experiments and virtual funds.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Degenerator · Your DeFi playground">
+  <meta name="twitter:description" content="Explore full-range and concentrated liquidity, import pool and position snapshots, and experiment with virtual swaps in Degenerator.">
+  <meta name="twitter:image" content="https://provatidis.github.io/degenerator/assets/social-preview.png">
+  <meta name="twitter:image:alt" content="Degenerator. Understand your liquidity. Real snapshots, repeatable experiments and virtual funds.">
   <link rel="stylesheet" href="styles.css">
   <script type="module" src="main.js"></script>
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <header class="topbar">
     <a class="brand" href="./" aria-label="Degenerator home"><span class="brand-icon"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" fill="none" stroke="currentColor" stroke-width="2"/></svg></span> Degenerator</a>
     <nav class="site-nav" aria-label="Experiments"><a href="#pool-lab">Snapshots</a><a href="#lp-lab">Liquidity lab</a><a href="#range-lab">Range lab</a><a href="#swap-sandbox">Swap sandbox</a><span class="sandbox-badge"><span class="status-dot"></span> Virtual funds</span></nav>
   </header>
-  <main>
+  <main id="main-content" tabindex="-1">
+    <noscript><div class="notice"><p>JavaScript is needed for the calculators and snapshot imports. Enable it to use the playground.</p></div></noscript>
     <section class="intro">
       <div><p class="eyebrow">EXPERIMENT. UNDERSTAND. SHARE.</p><h1>Understand your liquidity.</h1><p class="subtitle">Compare holding with providing liquidity, under assumptions you can inspect.</p></div><a class="button secondary intro-range-link" href="#position-lab"><span>New</span> Explore a v3 position →</a>
     </section>

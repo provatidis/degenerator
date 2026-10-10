@@ -1,3 +1,4 @@
+import { checkLearning, checkMobileLearning } from './browser/learning-checks.js';
 import { checkPositions, checkMobilePositions } from './browser/position-checks.js';
 // Optional real-browser smoke test, using Chromium's DevTools protocol and Node built-ins.
 import assert from 'node:assert/strict';
@@ -477,6 +478,8 @@ try {
   await click('scenario-reset');
   console.log('PASS: impermanent-loss scenarios, reset, and desktop layout');
 
+  await checkLearning({ evaluate, click, fill, text, navigate, reload, base, downloadFile });
+
   if (process.env.SCREENSHOT_PATH) {
     const screenshot = await call('Page.captureScreenshot', { format: 'png', captureBeyondViewport: true });
     await writeFile(process.env.SCREENSHOT_PATH, Buffer.from(screenshot.data, 'base64'));
@@ -510,6 +513,7 @@ try {
   await click('lab-full-tab');
   console.log('PASS: mobile range setup disclosure, price checkpoints, sharing and lab switching');
   await checkMobilePositions({ evaluate, click, fill, text });
+  await checkMobileLearning({ evaluate, click, fill, text, navigate, base });
   assert.deepEqual(errors, [], 'No uncaught browser errors');
   console.log('PASS: mobile layout and interaction; no uncaught browser errors');
 } finally {

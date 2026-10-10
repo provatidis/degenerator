@@ -1,9 +1,11 @@
+import { parseSnapshotFile, readSnapshot, writeSnapshot } from './snapshot-store.js';
+export { MAX_SNAPSHOT_BYTES } from './snapshot-store.js';
 import { POOL, RPC_URL } from './config.js';
-import { amountOut, formatUnits } from '../models/uniswap-v2.js';
+import { amountOut } from '../models/uniswap-v2.js';
+import { formatUnits } from '../models/units.js';
 
 export const SNAPSHOT_VERSION = 1;
 export const SNAPSHOT_KEY = 'degenerator-pool-snapshot-v1';
-export const MAX_SNAPSHOT_BYTES = 65536;
 const fail = () => { throw new Error('This file is not a supported Ethereum Uniswap v2 WETH/USDC snapshot.'); };
 const address = (value, expected) => typeof value === 'string' && value.toLowerCase() === expected;
 const uint = (value, bits, positive = true) => {
@@ -52,12 +54,7 @@ export function validateSnapshot(input) {
   };
 }
 
-export function parseSnapshot(text) {
-  if (typeof text !== 'string' || new TextEncoder().encode(text).length > MAX_SNAPSHOT_BYTES) throw new Error('Snapshot files must be at most 64 KB.');
-  let input;
-  try { input = JSON.parse(text); } catch { throw new Error('The snapshot file is not valid JSON.'); }
-  return validateSnapshot(input);
-}
+export const parseSnapshot = text => parseSnapshotFile(text, validateSnapshot);
 export function snapshotJSON(input) { return JSON.stringify(validateSnapshot(input), null, 2) + '\n'; }
 
 export function snapshotView(input) {
@@ -67,13 +64,5 @@ export function snapshotView(input) {
   return { snapshot, usdc, eth, ethPrice: usdc / eth, quoteUSDC: Number(formatUnits(BigInt(snapshot.validation.amountOutRaw), 6)) };
 }
 
-export function readSavedSnapshot(getStorage = () => globalThis.localStorage) {
-  try {
-    const text = getStorage().getItem(SNAPSHOT_KEY);
-    return text === null ? { snapshot: null, status: 'empty' } : { snapshot: parseSnapshot(text), status: 'restored' };
-  } catch { return { snapshot: null, status: 'unavailable' }; }
-}
-export function saveSnapshot(snapshot, getStorage = () => globalThis.localStorage) {
-  const text = snapshotJSON(snapshot);
-  try { getStorage().setItem(SNAPSHOT_KEY, text); return true; } catch { return false; }
-}
+export const readSavedSnapshot = getStorage => readSnapshot(SNAPSHOT_KEY, parseSnapshot, getStorage);
+export const saveSnapshot = (snapshot, getStorage) => writeSnapshot(SNAPSHOT_KEY, snapshotJSON(snapshot), getStorage);

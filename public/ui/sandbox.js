@@ -1,3 +1,4 @@
+import { bindTablist } from '../lib/tablist.js';
 import { initialState, quoteSwap, swap, quoteDeposit, deposit, withdraw, impermanentLoss, portfolioValue, MARKET_PRICE } from '../amm.js';
 import { loadSession, saveSession, clearSession, MAX_HISTORY } from '../storage.js';
 
@@ -171,24 +172,11 @@ export function initSandbox() {
       render();
     } catch (error) { $('lp-error').textContent = error.message; }
   });
-  function selectTab(selected) {
-    for (const id of ['swap', 'lp']) {
-      $(id + '-tab').classList.toggle('active', id === selected);
-      $(id + '-tab').setAttribute('aria-selected', String(id === selected));
-      $(id + '-tab').tabIndex = id === selected ? 0 : -1;
-      $(id + '-panel').hidden = id !== selected;
-    }
-  }
-  for (const id of ['swap', 'lp']) {
-    $(id + '-tab').addEventListener('click', () => selectTab(id));
-    $(id + '-tab').addEventListener('keydown', (event) => {
-      if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
-      event.preventDefault();
-      const next = event.key === 'Home' ? 'swap' : event.key === 'End' ? 'lp' : id === 'swap' ? 'lp' : 'swap';
-      selectTab(next);
-      $(next + '-tab').focus();
-    });
-  }
+  const actionTabs = bindTablist({
+    tabs: ['swap', 'lp'].map(key => ({ key, button: $(key + '-tab'), panel: $(key + '-panel') })),
+    activeClass: 'active',
+  });
+  const selectTab = actionTabs.select;
   $('reset').addEventListener('click', () => {
     state = initialState();
     actions = 0;

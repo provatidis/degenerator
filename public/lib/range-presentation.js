@@ -1,3 +1,5 @@
+import { formatTokenQuantity as tokenQuantity } from './format.js';
+
 export const STATE_COPY = Object.freeze({
   below: { title: 'Below range', assets: 'All ETH', note: 'Your position is all ETH. It stops trading while the price stays below your range.' },
   'lower-edge': { title: 'At the lower edge', assets: 'All ETH', note: 'Your position is all ETH at this boundary. A move upward into the range starts exchanging ETH for USDC.' },
@@ -12,10 +14,5 @@ export function rangePriceLabels(lower, upper) {
 }
 function usdWithPrecision(value, digits) {
   return '$' + value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: digits });
-}
-function tokenQuantity(value, digits, minimumDigits = 0) {
-  const threshold = 10 ** -digits;
-  if (value > 0 && value < threshold) return '<' + threshold.toLocaleString('en-US', { maximumFractionDigits: digits });
-  return value.toLocaleString('en-US', { minimumFractionDigits: minimumDigits, maximumFractionDigits: digits });
 }
 export const assetAmounts = (assets) => tokenQuantity(assets.eth, 6) + ' ETH · ' + tokenQuantity(assets.usdc, 2, 2) + ' USDC';

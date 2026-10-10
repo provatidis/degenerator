@@ -14,3 +14,11 @@ export const RPC_URL = 'https://ethereum-rpc.publicnode.com';
 for (const address of [POOL.factory, POOL.router, POOL.address, POOL.usdc, POOL.weth]) {
   if (!/^0x[0-9a-f]{40}$/.test(address)) throw new Error('Invalid supported deployment address.');
 }
+
+export const V3 = Object.freeze({
+  protocol: 'uniswap-v3', chainId: 1, chainName: 'Ethereum',
+  factory: '0x1f98431c8ad98523631ae4a59f267346ea31f984',
+  positionManager: '0xc36442b4a4522e871399cd717abdd847ab11fe88',
+  usdc: POOL.usdc, weth: POOL.weth,
+});
+export const V3_FEE_SPACING = Object.freeze({ 100: 1, 500: 10, 3000: 60, 10000: 200 });

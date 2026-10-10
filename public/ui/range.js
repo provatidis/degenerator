@@ -178,7 +178,7 @@ export function initRangeLab({ navigation }) {
       $('cl-full-hold').textContent = usd(result.fullRange.holdValue);
       $('cl-match-fees').disabled = result.breakEvenFees > LIMITS.fees.max;
       $('cl-match-fees').textContent = result.breakEvenFees > LIMITS.fees.max ? 'Above the supported fee input limit' : 'Use break-even fees';
-      $('cl-origin').textContent = source && result.initialPrice === source.price ? source.label : '';
+      $('cl-origin').textContent = source && result.initialPrice === source.price && (!source.range || ['investment', 'lowerPrice', 'upperPrice'].every(key => result[key] === source.range[key])) ? source.label : '';
       $('cl-origin').hidden = !$('cl-origin').textContent;
       renderPresets(result); renderExplorer(result, updateDomain); renderChart(result); renderComparisons(result);
     } catch (error) {
@@ -282,5 +282,12 @@ export function initRangeLab({ navigation }) {
   fillInputs(DEFAULT_RANGE); loadShared();
   window.addEventListener('hashchange', loadShared);
 
-  return { setStartingPrice: setRangeStartingPrice };
+  function setScenario(input, label) {
+    const result = calculateRange(input);
+    source = { price: result.initialPrice, label, range: { investment: result.investment, lowerPrice: result.lowerPrice, upperPrice: result.upperPrice } };
+    fillInputs(result); render();
+    selectLab('range', { scroll: true });
+  }
+
+  return { setStartingPrice: setRangeStartingPrice, setScenario };
 }

@@ -10,8 +10,10 @@ async function filesIn(directory) {
   return groups.flat();
 }
 const files = await filesIn(root);
+const dependencies = new Map();
 for (const file of files.filter(file => file.endsWith('.js'))) {
   const source = await readFile(file, 'utf8');
+  dependencies.set(file, []);
   const path = relative(root, file).replaceAll('\\', '/');
   const layer = path.split('/')[0];
   const imports = [...source.matchAll(/(?:import|export)\s+[^;]*?\sfrom\s*['"]([^'"]+)['"]/g)].map(match => match[1]);
@@ -20,6 +22,7 @@ for (const file of files.filter(file => file.endsWith('.js'))) {
     const target = resolve(dirname(file), specifier);
     assert.ok(relative(root, target) && !relative(root, target).startsWith('..'), path + ': imports must stay inside public/.');
     await access(target);
+    dependencies.get(file).push(target);
     const targetLayer = relative(root, target).replaceAll('\\', '/').split('/')[0];
     if (layer === 'models') assert.equal(targetLayer, 'models', path + ': calculation models may only depend on models.');
     if (['data', 'lib'].includes(layer)) assert.ok(['data', 'models', 'lib'].includes(targetLayer), path + ': domain and utility modules must not depend on UI.');
@@ -28,6 +31,15 @@ for (const file of files.filter(file => file.endsWith('.js'))) {
   if (['models', 'data'].includes(layer)) assert.doesNotMatch(source, /\b(?:document|window)\s*\./, path + ': keep DOM code in UI.');
   if (layer === 'models') assert.doesNotMatch(source, /\bfetch\s*\(/, path + ': calculation models must not read the network.');
 }
+const visited = new Set(), active = new Set();
+function visit(file, path = []) {
+  assert.ok(!active.has(file), 'Circular module dependency: ' + [...path, file].map(value => relative(root, value)).join(' → '));
+  if (visited.has(file)) return;
+  active.add(file);
+  for (const target of dependencies.get(file) || []) visit(target, [...path, file]);
+  active.delete(file); visited.add(file);
+}
+for (const file of dependencies.keys()) visit(file);
 for (const file of files.filter(file => file.endsWith('.css'))) {
   const source = await readFile(file, 'utf8');
   for (const match of source.matchAll(/@import\s+url\(["']([^"']+)["']\)/g)) await access(resolve(dirname(file), match[1]));
@@ -38,4 +50,4 @@ assert.equal(new Set(ids).size, ids.length, 'HTML IDs must be unique across all 
 const scripts = [...html.matchAll(/<script[^>]+src="([^"]+)"[^>]*><\/script>/g)].map(match => match[1]);
 assert.deepEqual(scripts, ['main.js'], 'Compose startup through one entry point.');
 for (const source of [...scripts, ...[...html.matchAll(/<link[^>]+href="([^"]+)"/g)].map(match => match[1])]) await access(resolve(root, source));
-console.log('PASS: local module paths, layer boundaries, styles, unique IDs and one application entry point');
+console.log('PASS: local module paths, acyclic dependencies, layer boundaries, styles, unique IDs and one application entry point');

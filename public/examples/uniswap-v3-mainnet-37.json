@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "kind": "uniswap-v3-position",
+  "protocol": "uniswap-v3",
+  "chainId": 1,
+  "tokenId": "37",
+  "positionManager": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
+  "factoryAddress": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+  "poolAddress": "0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8",
+  "block": {
+    "number": "26162627",
+    "hash": "0xccb0646640a165a8740f3f055dbb2afb50bb357283a95ea464ed52d735553a02",
+    "timestamp": 1791642455
+  },
+  "tokens": [
+    {
+      "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "symbol": "USDC",
+      "decimals": 6
+    },
+    {
+      "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "symbol": "WETH",
+      "decimals": 18
+    }
+  ],
+  "position": {
+    "fee": 3000,
+    "tickLower": 192180,
+    "tickUpper": 193380,
+    "liquidity": "10860507277202",
+    "feeGrowthInside0LastX128": "0",
+    "feeGrowthInside1LastX128": "0",
+    "tokensOwed0": "0",
+    "tokensOwed1": "0"
+  },
+  "pool": {
+    "sqrtPriceX96": "1587245243673007558976961726392011",
+    "tick": 198113,
+    "tickSpacing": 60
+  },
+  "principal": {
+    "amount0Raw": "0",
+    "amount1Raw": "9999999999999133"
+  },
+  "capturedAt": "2026-10-10T14:46:25.611Z",
+  "provider": "https://ethereum-rpc.publicnode.com"
+}

@@ -1,5 +1,7 @@
 /* Preserve the cascade order; feature styles extend the shared foundation. */
 @import url("./styles/foundation.css");
+@import url("./styles/components.css");
 @import url("./styles/full-range.css");
 @import url("./styles/pools.css");
 @import url("./styles/range.css");
+@import url("./styles/positions.css");

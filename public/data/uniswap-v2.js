@@ -1,31 +1,14 @@
+import { encodeWord as word, abiWords as words, decodeAddress } from './abi.js';
+import { finalizedBlock, confirmBlock } from './block.js';
 import { POOL, RPC_URL } from './config.js';
 import { createRpcClient } from './rpc.js';
 import { validateSnapshot } from './snapshot.js';
 
 // ABI selectors from the supported Uniswap v2 interfaces. No transaction methods.
 const selectors = { getPair: '0xe6a43905', factory: '0xc45a0155', token0: '0x0dfe1681', token1: '0xd21220a7', reserves: '0x0902f1ac', decimals: '0x313ce567', amountsOut: '0xd06ca61f' };
-const word = (value) => value.replace(/^0x/, '').padStart(64, '0');
-function words(data, count) {
-  if (typeof data !== 'string' || !new RegExp('^0x[0-9a-fA-F]{' + count * 64 + '}$').test(data)) throw new Error('The contract returned an unsupported ABI response.');
-  return Array.from({ length: count }, (_, i) => data.slice(2 + i * 64, 2 + (i + 1) * 64));
-}
-function decodeAddress(data) {
-  const [value] = words(data, 1);
-  if (!/^0{24}/.test(value)) throw new Error('The contract returned an invalid address.');
-  return '0x' + value.slice(24).toLowerCase();
-}
-function header(block) {
-  if (!block || typeof block.number !== 'string' || !/^0x[0-9a-fA-F]+$/.test(block.number)
-    || typeof block.timestamp !== 'string' || !/^0x[0-9a-fA-F]+$/.test(block.timestamp)
-    || typeof block.hash !== 'string' || !/^0x[0-9a-fA-F]{64}$/.test(block.hash)) throw new Error('The data provider returned an invalid block.');
-  return { number: BigInt(block.number).toString(), hash: block.hash.toLowerCase(), timestamp: Number(BigInt(block.timestamp)) };
-}
-
 export async function fetchPoolSnapshot({ rpc = createRpcClient() } = {}) {
-  const [chain, block] = await Promise.all([rpc('eth_chainId'), rpc('eth_getBlockByNumber', ['finalized', false])]);
-  if (chain !== '0x1') throw new Error('The provider is not on the supported Ethereum chain.');
-  const capturedBlock = header(block);
-  const atBlock = (to, data) => rpc('eth_call', [{ to, data }, block.number]);
+  const { block: capturedBlock, tag } = await finalizedBlock(rpc);
+  const atBlock = (to, data) => rpc('eth_call', [{ to, data }, tag]);
   const pair = decodeAddress(await atBlock(POOL.factory, selectors.getPair + word(POOL.usdc) + word(POOL.weth)));
   if (pair !== POOL.address) throw new Error('The factory did not return the supported pool.');
   const [factoryData, token0Data, token1Data, decimals0, decimals1, reserveData, routerData] = await Promise.all([
@@ -41,10 +24,7 @@ export async function fetchPoolSnapshot({ rpc = createRpcClient() } = {}) {
   const reserves = words(reserveData, 3).map((value) => BigInt('0x' + value));
   const amounts = words(routerData, 4).map((value) => BigInt('0x' + value));
   if (amounts[0] !== 32n || amounts[1] !== 2n || amounts[2] !== 10n ** 18n) throw new Error('The router returned an unsupported quote.');
-  const confirmed = header(await rpc('eth_getBlockByNumber', [block.number, false]));
-  if (confirmed.hash !== capturedBlock.hash || confirmed.number !== capturedBlock.number || confirmed.timestamp !== capturedBlock.timestamp) {
-    throw new Error('The block changed while reading the pool. Fetch a new snapshot.');
-  }
+  await confirmBlock(rpc, tag, capturedBlock);
   return validateSnapshot({
     version: 1, protocol: POOL.protocol, chainId: POOL.chainId, poolAddress: pair, factoryAddress: POOL.factory,
     block: capturedBlock,

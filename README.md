@@ -1,6 +1,6 @@
 # Degenerator
 
-Your DeFi playground. Degenerator is a browser-based lab for reproducible liquidity scenarios and virtual pool experiments. Compare holding with a 50/50 ETH/USDC position, share your assumptions, export results, and explore swaps without connecting a wallet.
+Your DeFi playground. Degenerator is a browser-based lab for reproducible liquidity scenarios and virtual pool experiments. Compare full-range and concentrated ETH/USDC liquidity, import public pool and position snapshots, share assumptions, export results, and explore swaps without connecting a wallet.
 
 ## Pool snapshots
 
@@ -12,7 +12,7 @@ Snapshots retain their schema version, protocol, chain, pool/factory, block numb
 
 Loading never changes the calculator or swap wallet automatically. **Use in 50/50 lab** explicitly applies the WETH/USDC reserve ratio, assuming USDC = $1, to the theoretical cp50-v1 lab. It retains the investment, sets the future price to 2x and assumed cash fees to zero. The reserve ratio is not an oracle or a general market-price feed. Scenario links continue to share only model assumptions; export the snapshot separately to retain chain provenance.
 
-Only the latest snapshot is saved under the degenerator-pool-snapshot-v1 key, separate from the existing sandbox storage. Unavailable storage and failed providers leave loaded data usable. No RPC credentials or wallet are required. Adding arbitrary pools, chains, or concentrated-liquidity contracts requires another explicitly supported and validated adapter.
+Only the latest snapshot is saved under the degenerator-pool-snapshot-v1 key, separate from the existing sandbox storage. Unavailable storage and failed providers leave loaded data usable. No RPC credentials or wallet are required. The separate v3 position adapter supports only the deployment documented below. Arbitrary assets and chains require their own explicit deployment definitions and validation.
 
 For a manual live integration check:
 
@@ -27,6 +27,36 @@ node scripts/check-pool.js public/examples/uniswap-v2-mainnet.json
 ~~~
 
 The integer quote formula follows the [Uniswap v2 periphery library](https://github.com/Uniswap/v2-periphery/blob/master/contracts/libraries/UniswapV2Library.sol), with deployments documented by [Uniswap](https://developers.uniswap.org/docs/protocols/v2/deployments).
+
+## Uniswap v3 position snapshots
+
+The snapshot source switch opens either the existing Uniswap v2 pool or a Uniswap v3 position. Enter a position NFT ID for an **Ethereum mainnet WETH/USDC** position in the canonical NonfungiblePositionManager. Supported fee tiers are 0.01%, 0.05%, 0.3% and 1%; other token pairs and chains receive an explicit unsupported message.
+
+The adapter reads a finalized block, verifies the position manager’s factory, asks that factory for the position’s pool, and checks the pool’s factory, token order, fee tier, tick spacing and token decimals. Every contract read uses the captured block number; its number, hash and timestamp are checked again before acceptance. NFT IDs remain decimal strings, including IDs larger than JavaScript’s exact integer range.
+
+Principal is calculated in exact integer token units from position liquidity, canonical Q96 tick ratios and the recorded sqrtPriceX96, rounding down as the v3 liquidity-amount formula does. Tick ratios use the MIT-licensed Uniswap v3 SDK arithmetic, with its notice under public/licenses/. The inverse ratio lookup uses integer binary search. Contract range status uses lower tick inclusive and upper tick exclusive, preserving the valid one-tick difference at an exact zero-for-one boundary.
+
+USDC is token 0 and WETH token 1. Raw ticks therefore quote WETH per USDC; the displayed USD/WETH bounds reverse the raw tick order and account for 6/18 token decimals. Dollar values use the pool ratio and USDC = $1, rather than an external price feed. Active principal excludes recorded tokens owed and fees. Recorded tokens owed may include withdrawn principal and omit fee growth since the last position update; they are **not presented as total uncollected fees**.
+
+Position JSON retains schema version/kind, manager/factory/pool, NFT ID, fee tier, ticks, liquidity, stored fee-growth/owed fields, sqrtPriceX96, exact principal, token metadata, block and capture provenance. Opening files validates structure, integer bounds, tick/price consistency and principal arithmetic; it does not authenticate their chain origin. Unknown fields are removed. The latest position uses a separate degenerator-v3-position-snapshot-v1 storage key and does not overwrite pool snapshots or virtual balances.
+
+**Explore this position’s range** explicitly starts a new cl-range-v1 experiment from the snapshot’s active principal value, price and bounds, with zero assumed fees and an unchanged future price. It does not reconstruct the mint deposit or historical return. The captured principal is exact; subsequent lab projections use the existing continuous model. The source label clears when its budget, starting price or range changes. Closed, dust and out-of-limit positions remain inspectable/exportable even when they cannot seed the lab. On mobile a loaded position collapses its refresh/import controls, keeping outcomes within reach.
+
+**Load recorded position** opens public position #37 from a completed contract check at block 26162627. Its recorded active principal is 0 USDC and 9999999999999133 WETH base units (0.009999999999999133 WETH). This fixture is a repeatable historical snapshot, not current market data.
+
+For a live read-only integration check:
+
+~~~sh
+npm run check:position -- 37
+~~~
+
+To record a new example, pass a destination:
+
+~~~sh
+node scripts/check-position.js 37 public/examples/uniswap-v3-mainnet-37.json
+~~~
+
+Sources: [Ethereum v3 deployments](https://developers.uniswap.org/docs/protocols/v3/deployments/v3-ethereum-deployments), [position manager interface](https://github.com/Uniswap/v3-periphery/blob/main/contracts/interfaces/INonfungiblePositionManager.sol), [holdings math](https://blog.uniswap.org/uniswap-v3-math-primer-2), [tick arithmetic](https://github.com/Uniswap/v3-sdk/blob/main/src/utils/tickMath.ts), and [liquidity amounts](https://github.com/Uniswap/v3-periphery/blob/main/contracts/libraries/LiquidityAmounts.sol).
 
 ## Guided experiments and result cards
 
@@ -64,7 +94,7 @@ The model follows the holdings relationships in [Uniswap's math primer](https://
 
 Shared links use the versioned cl-range-v1 fragment and all seven inputs (investment, starting/future/lower/upper prices, range fees and full-range fees). They select the correct lab while leaving saved swap balances and the other lab's setup alone. CSV includes both distinct holding benchmarks and exact numeric inputs. A 1200×900 PNG result card includes the range, starting mix, separate fee assumptions and three outcomes. Editing inputs invalidates a previous card.
 
-**Use in range lab** seeds the theoretical setup with the existing v2 snapshot's reserve ratio, a fresh range and zero fee assumptions. It does not import a real v3 position. Named historical positions, tick-aligned ranges and historical replay are future work.
+**Use in range lab** seeds the theoretical setup with the existing v2 snapshot's reserve ratio, a fresh range and zero fee assumptions. It does not import a real v3 position. The v3 snapshot source imports an actual position and its tick-derived range separately; historical replay remains future work.
 
 ## Liquidity scenario lab
 
@@ -183,14 +213,14 @@ Calculations use JavaScript floating-point numbers for learning, not production 
 - public/models/: pure calculations and protocol arithmetic. They do not read the DOM, browser storage or network.
 - public/data/: chain deployment configuration, read-only RPC adapters, snapshot schemas and persistence.
 - public/lib/: scenario links, exports, formatting and rendering utilities.
-- public/styles/: shared foundation followed by feature styles. public/styles.css preserves the existing cascade order.
+- public/styles/: shared foundation and components followed by feature styles. public/styles.css preserves the existing cascade order.
 - public/index.html: semantic, static markup. Each feature owns its IDs; the structure check rejects duplicates.
 - scripts/: development, integration and browser checks; test/: reference calculations and adapter/storage contracts.
 - server.js: a local static server; GitHub Pages deploys public/ directly.
 
-Run npm run check to verify module paths, architectural boundaries, stylesheet imports, unique HTML IDs and the single entry point. CI runs this before calculation and browser tests. Existing scenario.js, amm.js and storage.js exports and storage keys remain compatible.
+Run npm run check to verify module paths, circular dependencies, architectural boundaries, stylesheet imports, unique HTML IDs and the single entry point. CI runs this before calculation and browser tests. Existing scenario.js, amm.js and storage.js exports and storage keys remain compatible.
 
-The structure review keeps the current dependency-free deployment. Explicit startup removes cross-controller import side effects; feature styles reduce collisions as labs grow. Static HTML remains appropriate at this size. Split markup or add a build step when repeated page layouts actually need it. A framework, database or application backend is not needed for read-only, public-chain imports.
+The structure review keeps the current dependency-free deployment. Explicit startup removes cross-controller import side effects; feature styles reduce collisions as labs grow. Shared tab behavior handles keyboard navigation consistently across the sandbox, labs and snapshot sources. ABI decoding, block pinning and snapshot-file/storage handling are shared by both protocol adapters; protocol identity checks remain adapter-specific. Static HTML remains appropriate at this size. Split markup or add a build step when repeated page layouts actually need it. A framework, database or application backend is not needed for read-only, public-chain imports.
 
 ## Architecture and extension policy
 
@@ -205,6 +235,6 @@ The static app remains dependency-free and deployable on GitHub Pages. Calculati
 
 New financial models get their own versioned module and reference/invariant tests. New protocols get a deployment definition, adapter, exact token-unit handling and contract validation. Preserve old model links and storage keys; introduce explicit migrations when schemas change. Unit and desktop/mobile browser tests run before deployment.
 
-The next milestones are read-only Uniswap v3 position snapshots, named saved experiments, and historical price replay. A backend becomes useful for private provider credentials, shared caching, scheduled snapshots or account synchronization. Each can be added behind the data layer without rewriting the calculation models or existing labs.
+The next milestones are named saved experiments, historical price replay, and complete v3 uncollected-fee accounting. A backend becomes useful for private provider credentials, shared caching, scheduled snapshots or account synchronization. Each can be added behind the data layer without rewriting the calculation models or existing labs.
 
 The cl-range-v1 model, links, CSV, presentation helpers and result cards are separate modules. A shared link router and accessible lab navigation coordinate the two calculators while preserving cp50-v1 links. Reference tests cover asymmetric funding, outside starts, exact boundaries, continuity, virtual-reserve conservation, wide-range limits, separate fees, numerical bounds and reproducible exports.

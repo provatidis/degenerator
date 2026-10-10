@@ -1,4 +1,4 @@
-
+import { bindTablist } from '../lib/tablist.js';
 
 export function initLabNavigation() {
   const labs = {
@@ -17,11 +17,7 @@ export function initLabNavigation() {
 
   function selectLab(mode, { updateURL = true, scroll = false, immediate = false } = {}) {
     if (!Object.hasOwn(labs, mode)) throw new Error('Choose a supported liquidity lab.');
-    for (const [key, lab] of Object.entries(labs)) {
-      lab.panel.hidden = key !== mode;
-      lab.tab.setAttribute('aria-selected', String(key === mode));
-      lab.tab.tabIndex = key === mode ? 0 : -1;
-    }
+    tabs.select(mode);
     if (updateURL) {
       const model = new URLSearchParams(location.hash.replace(/^#/, '')).get('scenario');
       if (model !== labs[mode].model) history.replaceState(null, '', location.pathname + location.search + '#' + labs[mode].panel.id);
@@ -35,16 +31,10 @@ export function initLabNavigation() {
     }
   }
 
-  for (const [mode, lab] of Object.entries(labs)) {
-    lab.tab.addEventListener('click', () => selectLab(mode, { scroll: true, immediate: true }));
-    lab.tab.addEventListener('keydown', (event) => {
-      if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
-      event.preventDefault();
-      const next = event.key === 'Home' ? 'full' : event.key === 'End' ? 'range' : mode === 'full' ? 'range' : 'full';
-      selectLab(next, { scroll: true, immediate: true });
-      labs[next].tab.focus();
-    });
-  }
+  const tabs = bindTablist({
+    tabs: Object.entries(labs).map(([key, lab]) => ({ key, button: lab.tab, panel: lab.panel })),
+    onSelect: mode => selectLab(mode, { scroll: true, immediate: true }),
+  });
   function fromLocation(initial = false) {
     const params = new URLSearchParams(location.hash.replace(/^#/, ''));
     if (params.has('scenario')) {

@@ -12,14 +12,16 @@
 <body>
   <header class="topbar">
     <a class="brand" href="./" aria-label="Degenerator home"><span class="brand-icon"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" fill="none" stroke="currentColor" stroke-width="2"/></svg></span> Degenerator</a>
-    <nav class="site-nav" aria-label="Experiments"><a href="#pool-lab">Pool snapshots</a><a href="#lp-lab">Liquidity lab</a><a href="#range-lab">Range lab</a><a href="#swap-sandbox">Swap sandbox</a><span class="sandbox-badge"><span class="status-dot"></span> Virtual funds</span></nav>
+    <nav class="site-nav" aria-label="Experiments"><a href="#pool-lab">Snapshots</a><a href="#lp-lab">Liquidity lab</a><a href="#range-lab">Range lab</a><a href="#swap-sandbox">Swap sandbox</a><span class="sandbox-badge"><span class="status-dot"></span> Virtual funds</span></nav>
   </header>
   <main>
     <section class="intro">
-      <div><p class="eyebrow">EXPERIMENT. UNDERSTAND. SHARE.</p><h1>Understand your liquidity.</h1><p class="subtitle">Compare holding with providing liquidity, under assumptions you can inspect.</p></div><a class="button secondary intro-range-link" href="#range-lab"><span>New</span> Explore concentrated liquidity →</a>
+      <div><p class="eyebrow">EXPERIMENT. UNDERSTAND. SHARE.</p><h1>Understand your liquidity.</h1><p class="subtitle">Compare holding with providing liquidity, under assumptions you can inspect.</p></div><a class="button secondary intro-range-link" href="#position-lab"><span>New</span> Explore a v3 position →</a>
     </section>
     <div class="notice"><span class="notice-icon">i</span><p>All experiments use virtual funds. Pool imports read public blockchain data. No wallet connection or transactions. <span id="storage-status" role="status">Your sandbox is saved in this browser. Reset clears the saved session.</span></p></div>
-    <section id="pool-lab" class="pool-section card" aria-labelledby="pool-heading">
+    <section id="pool-lab" class="pool-section card" aria-label="Research snapshots">
+      <div class="source-tabs" role="tablist" aria-label="Snapshot sources"><button id="source-pool-tab" type="button" role="tab" aria-selected="true" aria-controls="pool-source" tabindex="0">Pool snapshot</button><button id="source-position-tab" type="button" role="tab" aria-selected="false" aria-controls="position-lab" tabindex="-1">V3 position <span class="new-label">NEW</span></button></div>
+      <div id="pool-source" role="tabpanel" aria-labelledby="source-pool-tab">
       <div class="pool-layout">
         <div>
           <p class="eyebrow">RESEARCH STARTS WITH A SNAPSHOT</p>
@@ -55,6 +57,50 @@
         <dt>WETH reserve · base units</dt><dd id="pool-raw1">—</dd>
         <dt>Captured at</dt><dd id="pool-captured">—</dd>
       </dl><p class="fine-print">The recorded 1 WETH quote is checked using exact integer arithmetic against the Uniswap v2 router at the same block. It describes that snapshot, not an executable live trade. Fee income in the lab remains your own assumption.</p></details>
+      </div>
+
+      <div id="position-lab" role="tabpanel" aria-labelledby="source-position-tab" hidden>
+        <div class="pool-layout">
+          <div>
+            <p class="eyebrow">A REAL POSITION. A NEW STARTING POINT.</p>
+            <h2>Your position. A clearer picture.</h2>
+            <p class="body-copy">Read a Uniswap v3 WETH/USDC position on Ethereum. See its range and token mix at a recorded block, then explore what happens next.</p>
+            <details id="position-setup" class="position-setup" open><summary id="position-setup-summary" class="position-setup-summary"><span>Refresh or open another position</span><span id="position-setup-overview"></span></summary><div class="position-setup-body">
+            <form id="position-form" class="position-form">
+              <div class="scenario-field"><label for="position-id">Position NFT ID <span>Ethereum · Uniswap v3</span></label><input id="position-id" type="text" inputmode="numeric" autocomplete="off" maxlength="80" value="37" required aria-describedby="position-id-help"></div>
+              <button id="position-fetch" class="button primary" type="submit">Fetch position <span>→</span></button>
+            </form>
+            <p id="position-id-help" class="fine-print position-help">Find the NFT ID in your Uniswap position or its NFT page. This release supports WETH/USDC positions; no wallet connection is needed.</p>
+            <div class="pool-buttons"><button id="position-example" class="button secondary" type="button">Load recorded position</button><label class="button secondary file-button" for="position-file">Open position file<input id="position-file" type="file" accept=".json,application/json" aria-label="Open position file"></label></div>
+            <p class="fine-print">Fetching contacts PublicNode for public Ethereum data. Position files open locally. Values assume USDC = $1.</p>
+            </div></details>
+            <p id="position-status" class="pool-status" role="status"></p>
+          </div>
+          <div>
+            <div id="position-empty" class="pool-empty"><p>Bring a range into focus.</p><p class="fine-print">Enter an NFT ID or open the recorded example. Your snapshot keeps the exact ticks, token amounts and block. Loading it leaves your experiments unchanged until you apply it.</p></div>
+            <div id="position-result" role="region" aria-label="Position snapshot" tabindex="-1" hidden>
+              <strong id="position-heading-id" class="position-heading-id"></strong>
+              <span class="small-badge">Ethereum · Uniswap v3</span> <span id="position-fee" class="small-badge"></span>
+              <a id="position-block" class="position-block" target="_blank" rel="noopener noreferrer"></a>
+              <span class="label">Active principal value · USDC = $1</span><strong id="position-principal" class="position-value"></strong>
+              <p class="fine-print">Tokens backing the active liquidity. Excludes fees and recorded tokens owed.</p>
+              <div class="position-token-grid"><div><span class="label">WETH</span><strong id="position-eth"></strong></div><div><span class="label">USDC</span><strong id="position-usdc"></strong></div></div>
+              <svg id="position-allocation-bar" class="allocation-bar" viewBox="0 0 100 8" preserveAspectRatio="none" role="img" aria-labelledby="position-allocation-title"><title id="position-allocation-title"></title><rect width="100" height="8" class="allocation-usdc"/><rect id="position-allocation-eth" width="0" height="8" class="allocation-eth"/></svg><p id="position-allocation-note" class="allocation-note"></p>
+              <div class="position-range"><span id="position-state" class="cl-state"></span><p id="position-state-note" class="fine-print"></p><div class="position-range-prices"><div><span class="label">Lower ETH price</span><strong id="position-lower"></strong></div><div><span class="label">Upper ETH price</span><strong id="position-upper"></strong></div></div><p class="position-current-price">Recorded ETH price <strong id="position-price"></strong></p></div>
+              <p id="position-evidence" class="fine-print"></p>
+              <button id="position-apply" class="button primary position-apply" type="button" disabled>Explore this position’s range <span>→</span></button>
+              <p id="position-apply-note" class="fine-print"></p>
+              <div class="pool-buttons"><button id="position-export" class="button secondary" type="button" disabled>Export position snapshot</button></div>
+            </div>
+          </div>
+        </div>
+        <details id="position-details" class="snapshot-details" hidden><summary>Inspect the position snapshot</summary><dl>
+          <dt>Position manager</dt><dd id="position-manager">—</dd><dt>Pool contract</dt><dd id="position-pool">—</dd><dt>Block hash</dt><dd id="position-hash">—</dd>
+          <dt>Position ticks · raw order</dt><dd id="position-ticks">—</dd><dt>Pool tick</dt><dd id="position-current-tick">—</dd><dt>Tick spacing</dt><dd id="position-spacing">—</dd>
+          <dt>Liquidity · integer</dt><dd id="position-liquidity">—</dd><dt>Pool sqrtPriceX96</dt><dd id="position-sqrt">—</dd><dt>USDC principal · base units</dt><dd id="position-raw0">—</dd><dt>WETH principal · base units</dt><dd id="position-raw1">—</dd>
+          <dt>Recorded USDC owed</dt><dd id="position-owed0">—</dd><dt>Recorded WETH owed</dt><dd id="position-owed1">—</dd><dt>Captured at</dt><dd id="position-captured">—</dd>
+        </dl><p class="fine-print">Principal uses integer Q96 prices and rounds down to token base units. Status uses the contract tick: lower tick inclusive, upper tick exclusive. Raw ticks quote WETH per USDC, so the displayed USD/ETH bounds run in the opposite order.</p><p class="fine-print">Recorded tokens owed may include withdrawn principal and do not include fee growth since the last position update. They are shown separately; this snapshot does not calculate total uncollected fees or historical returns.</p></details>
+      </div>
     </section>
     <div id="liquidity-labs" class="lab-group">
     <div class="lab-switch" role="tablist" aria-label="Liquidity experiments">

@@ -96,14 +96,22 @@ try {
   if (!base) {
     const port = await start(process.execPath, ['server.js'], { cwd: project, env: { ...process.env, PORT: '0', HOST: '127.0.0.1' }, stdio: ['ignore', 'pipe', 'pipe'] }, /listening on port (\d+)/);
     base = `http://127.0.0.1:${port}/`;
-    assert.equal((await fetch(base + 'missing')).status, 404);
+    const missing = await fetch(base + 'missing');
+    assert.equal(missing.status, 404);
+    assert.ok((await missing.text()).includes('This page is out of range.'));
+    assert.equal((await fetch(base + 'degenerator/favicon.svg')).status, 200);
+    assert.equal((await fetch(base + 'degenerator/styles/errors.css')).status, 200);
+    const missingHead = await fetch(base + 'missing', { method: 'HEAD' });
+    assert.equal(missingHead.status, 404);
+    assert.equal(await missingHead.text(), '');
     assert.equal((await fetch(base, { method: 'POST' })).status, 405);
     assert.equal((await fetch(base + '%2e%2e%2fpackage.json')).status, 403);
     console.log('PASS: missing resources, methods, and directory isolation');
   }
   if (!base.endsWith('/')) base += '/';
-  for (const path of ['', 'main.js', 'amm.js', 'storage.js', 'scenario.js', 'ui/sandbox.js', 'ui/full-range.js', 'ui/pools.js', 'ui/range.js', 'ui/lab-navigation.js', 'styles/foundation.css', 'styles/full-range.css', 'styles/pools.css', 'styles/range.css', 'styles/components.css', 'styles/positions.css', 'ui/positions.js', 'ui/snapshot-navigation.js', 'data/uniswap-v3.js', 'data/position-snapshot.js', 'models/tick-math.js', 'examples/uniswap-v3-mainnet-37.json', 'models/cl-range-v1.js', 'lib/range-links.js', 'lib/range-card.js', 'models/cp50-v1.js', 'data/uniswap-v2.js', 'data/snapshot.js', 'lib/result-card.js', 'examples/uniswap-v2-mainnet.json', 'styles.css']) assert.equal((await fetch(base + path)).status, 200);
-  console.log('PASS: HTTP assets');
+  for (const path of ['', 'main.js', 'amm.js', 'storage.js', 'scenario.js', 'ui/sandbox.js', 'ui/full-range.js', 'ui/pools.js', 'ui/range.js', 'ui/lab-navigation.js', 'styles/foundation.css', 'styles/full-range.css', 'styles/pools.css', 'styles/range.css', 'styles/components.css', 'styles/positions.css', 'ui/positions.js', 'ui/snapshot-navigation.js', 'data/uniswap-v3.js', 'data/position-snapshot.js', 'models/tick-math.js', 'examples/uniswap-v3-mainnet-37.json', 'models/cl-range-v1.js', 'lib/range-links.js', 'lib/range-card.js', 'models/cp50-v1.js', 'data/uniswap-v2.js', 'data/snapshot.js', 'lib/result-card.js', 'examples/uniswap-v2-mainnet.json', 'styles.css', 'favicon.svg', 'favicon.ico', 'site.webmanifest', 'assets/apple-touch-icon.png', 'assets/icon-192.png', 'assets/icon-512.png', 'assets/social-preview.png', '404.html', 'styles/errors.css']) assert.equal((await fetch(base + path)).status, 200);
+  for (const [path, type] of [['favicon.svg','image/svg+xml'], ['favicon.ico','image/x-icon'], ['assets/social-preview.png','image/png'], ['site.webmanifest','application/manifest+json']]) assert.ok((await fetch(base + path)).headers.get('content-type').startsWith(type));
+  console.log('PASS: HTTP assets, identity images, manifest types and branded 404');
 
   const devtools = await start(process.env.CHROMIUM_BIN || 'chromium', ['--headless', '--no-sandbox', '--disable-dev-shm-usage', '--remote-debugging-port=0', `--user-data-dir=${profile}`, 'about:blank'], { stdio: ['ignore', 'pipe', 'pipe'] }, /DevTools listening on (ws:\/\/[^\s]+)/);
   const endpoint = new URL(devtools);
@@ -125,9 +133,19 @@ try {
   });
   await call('Runtime.enable');
   await call('Page.enable');
+  await call('Page.bringToFront');
   await call('Emulation.setDeviceMetricsOverride', { width: 1440, height: 1100, deviceScaleFactor: 1, mobile: false });
+  const initialLoad = nextEvent('Page.loadEventFired');
   await call('Page.navigate', { url: base });
+  await initialLoad;
   await evaluate(`new Promise((resolve, reject) => { const deadline = Date.now() + 10000; const check = () => { if (document.getElementById('swap-output')?.textContent === '1,974.32') resolve(true); else if (Date.now() > deadline) reject(new Error('App did not initialize')); else setTimeout(check, 50); }; check(); })`);
+  const initialHash = await evaluate('location.hash');
+  await evaluate("document.querySelector('.skip-link').focus()");
+  assert.equal(await evaluate("document.querySelector('.skip-link').getBoundingClientRect().top >= 0"), true);
+  await call('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Enter', code: 'Enter' });
+  await call('Input.dispatchKeyEvent', { type: 'keyUp', key: 'Enter', code: 'Enter' });
+  assert.equal(await evaluate('document.activeElement.id'), 'main-content');
+  assert.equal(await evaluate('location.hash'), initialHash, 'Skipping preserves shared scenario fragments.');
   assert.equal(await text('portfolio'), '$40,000.00');
   assert.equal(await evaluate("document.querySelector('.brand').href"), base, 'Home link stays inside the project path');
   assert.equal(await text('scenario-hold-value'), '$7,500.00');
@@ -249,6 +267,11 @@ try {
   assert.equal(await text('activity-count'), '1 action');
   assert.ok((await text('activity')).includes('Swap complete'));
   await navigate(sharedURL);
+  const restoredHash = await evaluate('location.hash');
+  await evaluate("document.querySelector('.skip-link').focus()");
+  await call('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Enter', code: 'Enter' });
+  await call('Input.dispatchKeyEvent', { type: 'keyUp', key: 'Enter', code: 'Enter' });
+  assert.equal(await evaluate('location.hash'), restoredHash, 'A shared link survives skip navigation.');
   assert.equal(await evaluate("document.getElementById('scenario-future').value"), '3000', await evaluate("location.hash + ' ' + document.getElementById('scenario-link-status').textContent"));
   assert.equal(await evaluate("document.getElementById('scenario-fees').value"), '250');
   assert.equal(await text('scenario-hold-value'), '$6,250.00');

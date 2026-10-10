@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#101714"/>
+  <rect x="20" y="20" width="1160" height="590" rx="28" fill="none" stroke="#2b392f" stroke-width="2"/>
+  <g font-family="Arial, Helvetica, sans-serif">
+    <rect x="64" y="60" width="58" height="58" rx="16" fill="#c5f680"/>
+    <path d="M5 19 19 5M5 5h14v14" transform="translate(75 71) scale(1.5)" fill="none" stroke="#142011" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="141" y="101" fill="#edf4e8" font-size="38" font-weight="700" letter-spacing="-1">Degenerator</text>
+    <text x="68" y="193" fill="#c5f680" font-size="13" font-weight="700" letter-spacing="2.5">YOUR DEFI PLAYGROUND</text>
+    <text x="64" y="283" fill="#edf4e8" font-size="84" font-weight="700" letter-spacing="-3">Understand</text>
+    <text x="64" y="375" fill="#edf4e8" font-size="84" font-weight="700" letter-spacing="-3">your liquidity.</text>
+    <text x="68" y="443" fill="#a2b1a5" font-size="23">Real snapshots. Repeatable experiments.</text>
+    <rect x="770" y="154" width="360" height="334" rx="20" fill="#18211c" stroke="#2b392f" stroke-width="2"/>
+    <text x="798" y="194" fill="#edf4e8" font-size="14" font-weight="700" letter-spacing="1">CHOOSE. EXPLORE. UNDERSTAND.</text>
+    <text x="800" y="224" fill="#a9c7f5" font-size="12">WETH</text>
+    <text x="1102" y="224" text-anchor="end" fill="#c5f680" font-size="12">USDC</text>
+    <rect x="800" y="237" width="304" height="8" rx="4" fill="#c5f680"/>
+    <path d="M804 241H940.6" stroke="#a9c7f5" stroke-width="8" stroke-linecap="round"/>
+    <rect x="921.6" y="277" width="60.8" height="136" rx="4" fill="#c5f680" opacity=".07"/>
+    <path d="M800 310H1104M800 355H1104M800 400H1104" stroke="#2b392f" fill="none"/>
+    <path d="M800.00,366.66L807.60,364.81L815.20,362.96L822.80,361.11L830.40,359.26L838.00,357.41L845.60,355.56L853.20,353.71L860.80,351.86L868.40,350.01L876.00,348.16L883.60,346.31L891.20,344.46L898.80,342.61L906.40,340.76L914.00,338.91L921.60,337.06L929.20,335.22L936.80,333.37L944.40,331.52L952.00,329.67L959.60,327.82L967.20,325.97L974.80,324.12L982.40,322.27L990.00,320.42L997.60,318.57L1005.20,316.72L1012.80,314.87L1020.40,313.02L1028.00,311.17L1035.60,309.32L1043.20,307.47L1050.80,305.62L1058.40,303.77L1066.00,301.92L1073.60,300.08L1081.20,298.23L1088.80,296.38L1096.40,294.53L1104.00,292.68" fill="none" stroke="#a2b1a5" stroke-width="3" stroke-dasharray="7 6"/>
+    <path d="M800.00,405.24L807.60,401.24L815.20,397.24L822.80,393.24L830.40,389.24L838.00,385.24L845.60,381.24L853.20,377.24L860.80,373.24L868.40,369.25L876.00,365.25L883.60,361.25L891.20,357.25L898.80,353.25L906.40,349.25L914.00,345.25L921.60,341.25L929.20,337.54L936.80,334.38L944.40,331.77L952.00,329.67L959.60,328.06L967.20,326.94L974.80,326.27L982.40,326.06L990.00,326.06L997.60,326.06L1005.20,326.06L1012.80,326.06L1020.40,326.06L1028.00,326.06L1035.60,326.06L1043.20,326.06L1050.80,326.06L1058.40,326.06L1066.00,326.06L1073.60,326.06L1081.20,326.06L1088.80,326.06L1096.40,326.06L1104.00,326.06" fill="none" stroke="#c5f680" stroke-width="4" stroke-linecap="round"/>
+    <text x="800" y="459" fill="#c5f680" font-size="18">Explore the range lab →</text>
+    <text x="68" y="558" fill="#a2b1a5" font-size="18">Virtual funds · No wallet connection</text>
+    <text x="1132" y="558" text-anchor="end" fill="#c5f680" font-size="18">provatidis.github.io/degenerator</text>
+  </g>
+</svg>

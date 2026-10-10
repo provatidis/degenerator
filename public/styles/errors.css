@@ -1,0 +1,10 @@
+.error-page .brand { gap: 12px; }
+.error-page main { max-width: 760px; padding-top: 80px; }
+.error-card { padding: 42px; }
+.error-card h1 { font-size: clamp(32px, 5vw, 44px); line-height: 1.15; }
+.error-card .body-copy { margin: 22px 0 30px; font-size: 15px; }
+.error-home { text-decoration: none; }
+@media (max-width: 750px) {
+  .error-page main { padding-top: 35px; }
+  .error-card { padding: 28px; }
+}

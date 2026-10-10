@@ -131,6 +131,16 @@ break-even fees = holding value − LP before fees
 
 Fee income is an explicit assumption added as separate USD cash at the end; it does not compound or change the token amounts. It is held fixed across comparison rows and chart prices. The calculator does not estimate fees from volume, volatility, pool share, or a time horizon. Gas costs, incentives, depegging, and concentrated liquidity are excluded. These are hypothetical outcomes, not forecasts. Reference tests cover unchanged, falling, doubled, and quadrupled prices, asset-product preservation, fee break-even, input bounds, versioned links, and CSV output. The separate pool adapter validates recorded swap arithmetic against its supported protocol; this theoretical endpoint LP model is not a protocol-specific return forecast.
 
+## Browser identity and sharing
+
+The arrow mark is supplied as an SVG favicon and a 16/32/48-pixel ICO fallback. Opaque 180-pixel Apple touch and 192/512-pixel maskable app icons accompany a manifest scoped to the project directory. The manifest supplies home-screen identity; the app continues to read live chain data only when requested.
+
+Canonical, Open Graph and large-image social-card metadata use the published Pages URL. The 1200×630 preview is a committed PNG generated from an editable SVG. Its chart illustrates the default cl-range-v1 scenario before fees. Scenario fragments share the same site preview. A branded 404 page keeps its links inside /degenerator/, while a skip link and JavaScript-disabled notice provide clear entry points. The active skip link preserves shared scenario fragments when moving keyboard focus to the main content.
+
+The structure check verifies linked files, metadata, PNG/ICO dimensions and manifest paths. The local server supplies correct image/manifest types and also serves /degenerator/ to mirror Pages links; missing resources keep HTTP status 404.
+
+To regenerate the committed raster assets after editing the SVG sources, run node scripts/render-brand-assets.js in an environment with the optional Sharp graphics tool. SHARP_MODULE can point to its module entry file when Sharp is supplied externally. This is a maintainer-only tool, not a website dependency or required build step.
+
 ## Online preview with GitHub Pages
 
 The workflow in `.github/workflows/pages.yml` tests the project and publishes only `public/` whenever `main` changes. It also runs tests on pull requests without publishing them. No hosting credentials or backend server are needed.

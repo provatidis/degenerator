@@ -133,8 +133,9 @@
 .learn-deeper>summary strong{display:block;color:var(--accent);font-weight:600;font-size:14px}
 .learn-deeper-subtitle{display:block;color:var(--muted);font-size:11px;line-height:1.7;margin-top:4px}
 .learn-deeper-optional{margin-left:auto;border:1px solid var(--border);border-radius:20px;padding:5px 9px;font-size:10px;color:var(--muted)}
-.learn-deeper-icon{display:grid;place-items:center;width:24px;height:24px;flex-shrink:0;border:1px solid #495b40;border-radius:50%;color:var(--accent);font-size:16px;line-height:1}
-.learn-deeper[open] .learn-deeper-icon{transform:rotate(45deg)}
+.learn-deeper-icon{display:grid;place-items:center;width:24px;height:24px;flex-shrink:0;border:1px solid #495b40;border-radius:50%;color:var(--accent)}
+.learn-deeper-icon svg{display:block;transform-origin:center}
+.learn-deeper[open] .learn-deeper-icon svg{transform:rotate(45deg)}
 .learn-deeper summary:focus-visible,.learn-math summary:focus-visible{outline:2px solid var(--accent);outline-offset:5px;border-radius:5px}
 .learn-deeper-content{margin-top:24px;max-width:700px}
 .learn-deeper-content h4{font-size:16px;font-weight:500;letter-spacing:-.3px;line-height:1.5;margin:0 0 12px}

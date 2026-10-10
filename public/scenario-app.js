@@ -1,5 +1,7 @@
-import { DEFAULT_SCENARIO, LIMITS, validateScenario, calculateScenario, comparisonScenarios } from './models/cp50-v1.js';
-import { scenarioHash, scenarioFromHash } from './lib/scenario-links.js';
+import { MODEL, DEFAULT_SCENARIO, LIMITS, validateScenario, calculateScenario, comparisonScenarios } from './models/cp50-v1.js';
+import { scenarioHash } from './lib/scenario-links.js';
+import { readSharedScenario, RANGE_MODEL } from './lib/link-router.js';
+import { selectLab } from './lab-navigation.js';
 import { scenarioCSV } from './lib/scenario-csv.js';
 import { experimentScenario } from './models/experiments.js';
 import { fmt, usd, signedUSD, percent, compactUSD } from './lib/format.js';
@@ -207,11 +209,15 @@ export function setStartingPrice(price, label) {
   startingSource = { price, label };
   fillInputs(scenario);
   render();
+  selectLab('full', { scroll: true });
 }
 
 function loadShared() {
   try {
-    const shared = scenarioFromHash(location.hash);
+    const linkedModel = new URLSearchParams(location.hash.replace(/^#/, '')).get('scenario');
+    if (linkedModel === RANGE_MODEL) { render(); return; }
+    const decoded = readSharedScenario(location.hash);
+    const shared = decoded?.model === MODEL ? decoded.scenario : null;
     if (shared) { startingSource = null; fillInputs(shared); }
     render();
     if (shared) $('scenario-link-status').textContent = 'Shared scenario loaded. Your saved swap sandbox is unchanged.';

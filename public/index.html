@@ -4,21 +4,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#101714">
-  <meta name="description" content="Explore reproducible liquidity scenarios and virtual swaps in Degenerator, a DeFi playground with transparent assumptions.">
+  <meta name="description" content="Explore full-range and concentrated liquidity, reproducible pool snapshots and virtual swaps in Degenerator, your DeFi playground.">
   <title>Degenerator · Your DeFi playground</title>
   <link rel="stylesheet" href="styles.css">
   <script type="module" src="app.js"></script>
+  <script type="module" src="lab-navigation.js"></script>
   <script type="module" src="scenario-app.js"></script>
+  <script type="module" src="range-app.js"></script>
   <script type="module" src="pool-app.js"></script>
 </head>
 <body>
   <header class="topbar">
     <a class="brand" href="./" aria-label="Degenerator home"><span class="brand-icon"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" fill="none" stroke="currentColor" stroke-width="2"/></svg></span> Degenerator</a>
-    <nav class="site-nav" aria-label="Experiments"><a href="#pool-lab">Pool snapshots</a><a href="#lp-lab">Liquidity lab</a><a href="#swap-sandbox">Swap sandbox</a><span class="sandbox-badge"><span class="status-dot"></span> Virtual funds</span></nav>
+    <nav class="site-nav" aria-label="Experiments"><a href="#pool-lab">Pool snapshots</a><a href="#lp-lab">Liquidity lab</a><a href="#range-lab">Range lab</a><a href="#swap-sandbox">Swap sandbox</a><span class="sandbox-badge"><span class="status-dot"></span> Virtual funds</span></nav>
   </header>
   <main>
     <section class="intro">
-      <div><p class="eyebrow">EXPERIMENT. UNDERSTAND. SHARE.</p><h1>Understand your liquidity.</h1><p class="subtitle">Compare holding with providing liquidity, under assumptions you can inspect.</p></div>
+      <div><p class="eyebrow">EXPERIMENT. UNDERSTAND. SHARE.</p><h1>Understand your liquidity.</h1><p class="subtitle">Compare holding with providing liquidity, under assumptions you can inspect.</p></div><a class="button secondary intro-range-link" href="#range-lab"><span>New</span> Explore concentrated liquidity →</a>
     </section>
     <div class="notice"><span class="notice-icon">i</span><p>All experiments use virtual funds. Pool imports read public blockchain data. No wallet connection or transactions. <span id="storage-status" role="status">Your sandbox is saved in this browser. Reset clears the saved session.</span></p></div>
     <section id="pool-lab" class="pool-section card" aria-labelledby="pool-heading">
@@ -44,7 +46,7 @@
             <div class="pool-reserves"><span id="pool-reserve-eth"></span><span id="pool-reserve-usdc"></span></div>
             <p id="pool-quote" class="fine-print"></p>
             <p id="pool-evidence" class="fine-print"></p>
-            <div class="pool-buttons"><button id="pool-apply" class="button primary" type="button" disabled>Use this starting price</button><button id="pool-export" class="button secondary" type="button" disabled>Export snapshot</button></div>
+            <div class="pool-buttons"><button id="pool-apply" class="button primary" type="button" disabled>Use in 50/50 lab</button><button id="pool-apply-range" class="button secondary" type="button" disabled>Use in range lab</button><button id="pool-export" class="button secondary" type="button" disabled>Export snapshot</button></div>
           </div>
         </div>
       </div>
@@ -58,7 +60,12 @@
         <dt>Captured at</dt><dd id="pool-captured">—</dd>
       </dl><p class="fine-print">The recorded 1 WETH quote is checked using exact integer arithmetic against the Uniswap v2 router at the same block. It describes that snapshot, not an executable live trade. Fee income in the lab remains your own assumption.</p></details>
     </section>
-    <section id="lp-lab" class="scenario-section" aria-labelledby="scenario-heading">
+    <div id="liquidity-labs" class="lab-group">
+    <div class="lab-switch" role="tablist" aria-label="Liquidity experiments">
+      <button id="lab-full-tab" type="button" role="tab" aria-selected="true" aria-controls="lp-lab" tabindex="0">Full-range 50/50</button>
+      <button id="lab-range-tab" type="button" role="tab" aria-selected="false" aria-controls="range-lab" tabindex="-1">Concentrated liquidity <span class="new-label">NEW</span></button>
+    </div>
+    <section id="lp-lab" class="scenario-section" role="tabpanel" aria-labelledby="lab-full-tab">
       <div class="lab-heading"><div><p class="eyebrow">A QUESTION WORTH EXPLORING</p><h2 id="scenario-heading">Provide liquidity, or hold?</h2><p class="body-copy">See dollar outcomes for a full-range 50/50 ETH/USDC position.</p></div><span class="small-badge">Constant-product model · v1</span></div>
       <div class="guided-experiments" aria-label="Guided experiments">
         <button type="button" class="experiment-card" data-experiment="double"><span class="eyebrow">01 · THE PUMP</span><strong>ETH doubles. Who wins?</strong><span>Start with zero fees and see how the tokens rebalance.</span></button>
@@ -100,6 +107,106 @@
       <div id="scenario-comparison-card" class="card comparison-card"><div class="card-heading"><div><h3>Compare outcomes</h3><p class="body-copy">Select a price to explore it. Investment and assumed fee income stay the same in every row.</p></div></div><div class="table-scroll" tabindex="0" role="region" aria-label="Scenario comparison table"><table class="scenario-table"><caption class="sr-only">Holding and liquidity outcomes under different future ETH prices, with the same assumed fees</caption><thead><tr><th scope="col">Future ETH price</th><th scope="col">Holding</th><th scope="col">LP + fees</th><th scope="col">LP minus holding</th><th scope="col">IL before fees</th></tr></thead><tbody id="scenario-comparisons"></tbody></table></div><p class="fine-print">Values are hypothetical outcomes, not probabilities or recommendations.</p></div>
       <details class="model-details"><summary>How this model works</summary><div><p>A full-range constant-product position starts with 50% ETH and 50% USDC by dollar value. USDC stays at $1. Ideal, frictionless arbitrage brings the pool price to the future market price.</p><p>For an initial investment V and price ratio r = future price / starting price, holding is worth V × (1 + r) / 2. The LP assets are worth V × √r before fee income. Initial ETH = V / (2 × starting price); after rebalancing, LP ETH = initial ETH / √r and LP USDC = initial USDC × √r.</p><p>Fee income is your assumed total for this position, added as separate USD cash at the end. It is held fixed across the comparison, does not compound, and is not inferred from market prices or trading volume. The model excludes gas, incentives, depegging, and concentrated liquidity. It shows endpoints, not a trading path.</p><p>Model version: cp50-v1. Shared links and CSV exports include the assumptions and model version so another person can reproduce the calculation.</p></div></details>
     </section>
+    <section id="range-lab" class="scenario-section" role="tabpanel" aria-labelledby="lab-range-tab" hidden>
+      <div class="lab-heading">
+        <div><p class="eyebrow">LESS ROOM. MORE TO EXPLORE.</p><h2>Give your liquidity a range.</h2><p class="body-copy">Choose two prices. Follow your tokens as ETH moves through—and beyond—them.</p></div>
+        <span class="small-badge">Continuous range model · v1</span>
+      </div>
+      <p id="cl-link-status" class="fine-print cl-link-status" role="status" hidden></p>
+      <p id="cl-origin" class="fine-print cl-origin" hidden></p>
+      <div class="cl-layout">
+        <details id="cl-setup-details" class="card cl-controls" open>
+          <summary id="cl-setup-summary" class="cl-setup-summary"><span>Edit budget &amp; range</span><span id="cl-setup-overview"></span></summary>
+          <div class="cl-setup-body">
+          <h3>Your setup</h3><p class="body-copy">Same starting budget. A range that sets your token mix.</p>
+          <form id="cl-form">
+            <div class="scenario-field"><label for="cl-investment">Initial investment <span>USD</span></label><input id="cl-investment" type="number" min="1" max="1000000000" step="any" value="5000" required aria-describedby="cl-error"></div>
+            <div class="scenario-field"><label for="cl-start">Starting ETH price <span>USD</span></label><input id="cl-start" type="number" min="0.01" max="10000000" step="any" value="2000" required aria-describedby="cl-error"></div>
+            <fieldset class="cl-range-fields"><legend>Your active price range</legend><div class="cl-bounds">
+              <div class="scenario-field"><label for="cl-lower">Lower price <span>USD</span></label><input id="cl-lower" type="number" min="0.01" max="10000000" step="any" value="1800" required aria-describedby="cl-error"></div>
+              <div class="scenario-field"><label for="cl-upper">Upper price <span>USD</span></label><input id="cl-upper" type="number" min="0.01" max="10000000" step="any" value="2200" required aria-describedby="cl-error"></div>
+            </div><div class="cl-range-presets" aria-label="Range width presets">
+              <button type="button" data-range-width="0.05" aria-pressed="false">Tight<span>±5%</span></button>
+              <button type="button" data-range-width="0.1" aria-pressed="true">Balanced<span>±10%</span></button>
+              <button type="button" data-range-width="0.5" aria-pressed="false">Wide<span>±50%</span></button>
+            </div><p class="fine-print">Presets center the range on your starting price. Each range determines the ETH and USDC needed.</p></fieldset>
+            <div id="cl-starting-mix" class="cl-starting-mix">
+              <span class="label">Your starting token mix</span><p id="cl-initial-assets"></p>
+              <svg class="cl-allocation-bar" viewBox="0 0 100 8" preserveAspectRatio="none" role="img" aria-labelledby="cl-initial-allocation-title"><title id="cl-initial-allocation-title">Starting allocation by dollar value</title><rect class="cl-token-usdc" width="100" height="8"/><rect id="cl-initial-allocation-eth" class="cl-token-eth" height="8"/></svg>
+              <p id="cl-initial-allocation" class="fine-print"></p><p id="cl-initial-note" class="fine-print"></p>
+            </div>
+            <div class="scenario-field"><label for="cl-future">Future ETH price <span>USD</span></label><input id="cl-future" type="number" min="0.01" max="10000000" step="any" value="2100" required aria-describedby="cl-error"></div>
+            <details id="cl-fee-details" class="cl-fee-details"><summary>Assumed fee income <span>Optional</span></summary>
+              <p class="fine-print">Total cash earned over your scenario, entered separately for each LP strategy. This lab does not forecast fees.</p>
+              <div class="scenario-field"><label for="cl-fees">For your range <span>USD</span></label><input id="cl-fees" type="number" min="0" max="1000000000" step="any" value="0" aria-describedby="cl-error cl-fee-help"></div>
+              <div class="scenario-field"><label for="cl-full-fees">For the full-range LP <span>USD</span></label><input id="cl-full-fees" type="number" min="0" max="1000000000" step="any" value="0" aria-describedby="cl-error cl-fee-help"></div>
+              <p id="cl-fee-help" class="fine-print">Fees remain separate cash. They do not compound or change the position's token amounts.</p>
+            </details>
+            <p id="cl-error" class="form-error" role="status"></p>
+          </form>
+          <button id="cl-close-setup" class="button secondary cl-close-setup" type="button">See range outcomes →</button>
+          </div>
+        </details>
+        <div class="cl-results-column">
+          <div id="cl-invalid" class="card cl-invalid" hidden><span class="small-badge">Check your setup</span><h3>A clear range starts with valid inputs.</h3><p class="body-copy">Use positive prices, with the upper boundary above the lower one. Your results will return as soon as the setup is valid.</p></div>
+          <div id="cl-results" class="card cl-output" role="region" aria-label="Range outcomes" tabindex="-1">
+            <div class="cl-state-line"><span id="cl-state" class="cl-state-badge">In range</span><span id="cl-range-label" class="cl-range-label"></span></div>
+            <p id="cl-state-note" class="cl-state-note"></p>
+            <div class="cl-totals">
+              <div class="cl-total"><span class="label">Hold your starting mix</span><strong id="cl-hold-value">—</strong><span id="cl-hold-return" class="stat-note"></span><p id="cl-held-note"></p></div>
+              <div class="cl-total"><span class="label">Full-range 50/50 LP</span><strong id="cl-full-value">—</strong><span id="cl-full-return" class="stat-note"></span><p id="cl-full-note"></p></div>
+              <div class="cl-total cl-total-range"><span class="label">Your range LP</span><strong id="cl-value">—</strong><span id="cl-return" class="stat-note"></span><p id="cl-fees-note"></p></div>
+            </div>
+            <div class="cl-price-explorer">
+              <div class="cl-explorer-heading"><label for="cl-explorer">Explore the future price</label><strong id="cl-explorer-value"></strong></div>
+              <input id="cl-explorer" type="range" min="1000" max="3000" step="any" value="2100" aria-describedby="cl-explorer-help">
+              <div class="range-labels"><span id="cl-explorer-low"></span><span>Move the price. Follow the tokens.</span><span id="cl-explorer-high"></span></div>
+              <div class="cl-price-presets" aria-label="Range price checkpoints">
+                <button type="button" data-range-price="below">Below range</button><button type="button" data-range-price="lower">Lower edge</button><button type="button" data-range-price="start">Starting price</button><button type="button" data-range-price="upper">Upper edge</button><button type="button" data-range-price="above">Above range</button>
+              </div>
+              <p id="cl-explorer-help" class="sr-only">Use the price slider, the price checkpoints, or the future price input. You can also select a price on the chart.</p>
+            </div>
+            <p id="cl-verdict" class="scenario-verdict" aria-live="polite"></p>
+            <p class="cl-benchmark-note">Holding keeps your range's starting tokens. The full-range LP uses the same budget and starts 50/50, so its starting mix may differ.</p>
+            <div class="cl-position">
+              <div><h3>Your range now holds</h3><p id="cl-final-assets"></p></div><span id="cl-asset-state" class="small-badge"></span>
+              <svg class="cl-allocation-bar" viewBox="0 0 100 8" preserveAspectRatio="none" role="img" aria-labelledby="cl-final-allocation-title"><title id="cl-final-allocation-title">Position allocation by dollar value</title><rect class="cl-token-usdc" width="100" height="8"/><rect id="cl-final-allocation-eth" class="cl-token-eth" height="8"/></svg>
+              <p id="cl-final-allocation" class="fine-print"></p>
+            </div>
+            <figure class="cl-figure">
+              <div class="cl-chart-heading"><h3>Same budget. Different outcomes.</h3><div class="cl-chart-legend"><span><i class="cl-legend-hold"></i>Hold starting mix</span><span><i class="cl-legend-full"></i>50/50 LP</span><span><i class="cl-legend-range"></i>Your range LP</span></div></div>
+              <svg id="cl-chart" viewBox="0 0 720 300" role="img" aria-labelledby="cl-chart-title cl-chart-desc">
+                <title id="cl-chart-title">Concentrated liquidity compared with holding and full-range liquidity</title><desc id="cl-chart-desc">The shaded band is the chosen range. Use the price slider to explore outcomes.</desc>
+                <rect id="cl-chart-band" class="cl-chart-band" y="26" height="220"/>
+                <g class="grid"><path d="M70 26H690 M70 136H690 M70 246H690"/></g>
+                <path id="cl-chart-lower" class="cl-boundary-line"/><path id="cl-chart-upper" class="cl-boundary-line"/><path id="cl-chart-marker" class="scenario-marker"/>
+                <path id="cl-chart-hold" class="cl-hold-line"/><path id="cl-chart-full" class="cl-full-line"/><path id="cl-chart-range" class="cl-range-line"/>
+                <circle id="cl-dot-hold" r="4" class="cl-hold-dot"/><circle id="cl-dot-full" r="4" class="cl-full-dot"/><circle id="cl-dot-range" r="5" class="cl-range-dot"/>
+                <text id="cl-y-high" x="62" y="30" text-anchor="end" class="chart-label"></text><text id="cl-y-mid" x="62" y="140" text-anchor="end" class="chart-label"></text><text x="62" y="250" text-anchor="end" class="chart-label">$0</text>
+                <text id="cl-x-low" x="70" y="273" class="chart-label"></text><text id="cl-x-mid" x="380" y="273" text-anchor="middle" class="chart-label"></text><text id="cl-x-high" x="690" y="273" text-anchor="end" class="chart-label"></text><text x="380" y="296" text-anchor="middle" class="chart-label">Future ETH price →</text>
+              </svg>
+              <figcaption id="cl-chart-note" class="fine-print"></figcaption>
+            </figure>
+            <div class="cl-metrics"><div><span class="label">Range IL · before fees</span><strong id="cl-il">—</strong><span class="fine-print">vs. holding its starting mix</span></div><div><span class="label">Range fees needed to match holding</span><strong id="cl-break-even">—</strong><button id="cl-match-fees" class="text-button" type="button">Use break-even fees</button></div><div><span class="label">50/50 holding benchmark</span><strong id="cl-full-hold">—</strong><span class="fine-print">for the full-range LP</span></div></div>
+            <p class="fine-print">Range status describes the endpoint. Assumed fees may include earlier time inside the range; they are held fixed across this comparison.</p>
+          </div>
+          <div class="card cl-share-card"><h3>Make this experiment repeatable.</h3><p class="body-copy">Keep the range and both fee assumptions in a link, export the numbers, or share a result card.</p>
+          <button id="cl-share" class="button primary" type="button">Copy range scenario <span>→</span></button>
+          <div class="scenario-actions"><button id="cl-export" class="button secondary" type="button">Export CSV</button><button id="cl-image" class="button secondary" type="button">Create result card</button><button id="cl-reset" class="text-button" type="button">Reset range scenario</button></div>
+          <div id="cl-share-wrap" class="share-wrap" hidden><p id="cl-share-status" role="status"></p><label class="sr-only" for="cl-share-url">Range scenario link</label><input id="cl-share-url" type="text" readonly></div>
+          <p id="cl-image-status" class="fine-print" role="status"></p></div>
+          <details id="cl-card-preview" class="card result-card-preview cl-card-preview" hidden><summary>Your range result card</summary><img id="cl-card-image" alt="Range result card with price boundaries, starting allocation, assumptions and the three strategy outcomes."><a id="cl-image-download" class="button secondary" download="degenerator-range-cl-range-v1.png">Download PNG</a></details>
+        </div>
+      </div>
+      <details id="cl-comparison-card" class="card cl-comparisons"><summary>Compare prices at the edges</summary><p class="body-copy">Select a row to explore it. Each row keeps the same range, investment and separate fee assumptions.</p><div class="table-scroll" tabindex="0" role="region" aria-label="Range comparison table"><table class="scenario-table cl-table"><caption class="sr-only">Concentrated range outcomes at key future prices</caption><thead><tr><th scope="col">Future ETH price</th><th scope="col">Range status</th><th scope="col">Hold starting mix</th><th scope="col">50/50 LP</th><th scope="col">Your range LP</th><th scope="col">Range LP minus holding</th></tr></thead><tbody id="cl-comparisons"></tbody></table></div></details>
+      <details class="model-details"><summary>How this range model works</summary><div>
+        <p>Prices are USD per ETH, with USDC fixed at $1. The starting range determines your token mix; concentrated positions do not always begin 50/50. Holding keeps those exact starting tokens. The full-range LP invests the same amount in a separate 50/50 position.</p>
+        <p>For liquidity L and lower/upper prices a and b, clamp the current price p to the range. The position holds ETH = L × (1/√p − 1/√b) and USDC = L × (√p − √a). L is sized so those assets equal your investment at the starting price. Below a the position is all ETH; above b it is all USDC.</p>
+        <p>This continuous model uses arbitrary price bounds. It does not apply Uniswap tick spacing or on-chain rounding, and does not estimate fees, gas, incentives or trading paths. Each fee input is assumed total USD cash, added separately without compounding.</p>
+        <p>Model: cl-range-v1. Shared links, CSV exports and result cards include the range and assumptions. <a href="https://blog.uniswap.org/uniswap-v3-math-primer-2" target="_blank" rel="noopener noreferrer">Read the Uniswap liquidity math →</a></p>
+      </div></details>
+    </section>
+    </div>
     <div id="swap-sandbox" class="lab-heading sandbox-heading"><div><p class="eyebrow">LEARN BY MAKING A MOVE</p><h2>Swap sandbox</h2><p class="body-copy">Explore pool mechanics with your own virtual balances.</p></div><button class="button secondary" id="reset">↻ Reset sandbox</button></div>
     <section class="stats" aria-label="Sandbox overview">
       <article class="stat"><span class="label">Your virtual portfolio</span><strong id="portfolio">$40,000.00</strong><span class="stat-note">Includes your share of pool assets</span></article>

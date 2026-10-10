@@ -133,8 +133,11 @@ try {
   });
   await call('Runtime.enable');
   await call('Page.enable');
+  await call('Page.bringToFront');
   await call('Emulation.setDeviceMetricsOverride', { width: 1440, height: 1100, deviceScaleFactor: 1, mobile: false });
+  const initialLoad = nextEvent('Page.loadEventFired');
   await call('Page.navigate', { url: base });
+  await initialLoad;
   await evaluate(`new Promise((resolve, reject) => { const deadline = Date.now() + 10000; const check = () => { if (document.getElementById('swap-output')?.textContent === '1,974.32') resolve(true); else if (Date.now() > deadline) reject(new Error('App did not initialize')); else setTimeout(check, 50); }; check(); })`);
   const initialHash = await evaluate('location.hash');
   await evaluate("document.querySelector('.skip-link').focus()");

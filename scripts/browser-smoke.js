@@ -136,11 +136,13 @@ try {
   await call('Emulation.setDeviceMetricsOverride', { width: 1440, height: 1100, deviceScaleFactor: 1, mobile: false });
   await call('Page.navigate', { url: base });
   await evaluate(`new Promise((resolve, reject) => { const deadline = Date.now() + 10000; const check = () => { if (document.getElementById('swap-output')?.textContent === '1,974.32') resolve(true); else if (Date.now() > deadline) reject(new Error('App did not initialize')); else setTimeout(check, 50); }; check(); })`);
+  const initialHash = await evaluate('location.hash');
   await evaluate("document.querySelector('.skip-link').focus()");
   assert.equal(await evaluate("document.querySelector('.skip-link').getBoundingClientRect().top >= 0"), true);
   await call('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Enter', code: 'Enter' });
   await call('Input.dispatchKeyEvent', { type: 'keyUp', key: 'Enter', code: 'Enter' });
   assert.equal(await evaluate('document.activeElement.id'), 'main-content');
+  assert.equal(await evaluate('location.hash'), initialHash, 'Skipping preserves shared scenario fragments.');
   assert.equal(await text('portfolio'), '$40,000.00');
   assert.equal(await evaluate("document.querySelector('.brand').href"), base, 'Home link stays inside the project path');
   assert.equal(await text('scenario-hold-value'), '$7,500.00');
@@ -262,6 +264,11 @@ try {
   assert.equal(await text('activity-count'), '1 action');
   assert.ok((await text('activity')).includes('Swap complete'));
   await navigate(sharedURL);
+  const restoredHash = await evaluate('location.hash');
+  await evaluate("document.querySelector('.skip-link').focus()");
+  await call('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Enter', code: 'Enter' });
+  await call('Input.dispatchKeyEvent', { type: 'keyUp', key: 'Enter', code: 'Enter' });
+  assert.equal(await evaluate('location.hash'), restoredHash, 'A shared link survives skip navigation.');
   assert.equal(await evaluate("document.getElementById('scenario-future').value"), '3000', await evaluate("location.hash + ' ' + document.getElementById('scenario-link-status').textContent"));
   assert.equal(await evaluate("document.getElementById('scenario-fees').value"), '250');
   assert.equal(await text('scenario-hold-value'), '$6,250.00');

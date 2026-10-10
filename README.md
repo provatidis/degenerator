@@ -135,7 +135,7 @@ Fee income is an explicit assumption added as separate USD cash at the end; it d
 
 The arrow mark is supplied as an SVG favicon and a 16/32/48-pixel ICO fallback. Opaque 180-pixel Apple touch and 192/512-pixel maskable app icons accompany a manifest scoped to the project directory. The manifest supplies home-screen identity; the app continues to read live chain data only when requested.
 
-Canonical, Open Graph and large-image social-card metadata use the published Pages URL. The 1200×630 preview is a committed PNG generated from an editable SVG. Its chart illustrates the default cl-range-v1 scenario before fees. Scenario fragments share the same site preview. A branded 404 page keeps its links inside /degenerator/, while a skip link and JavaScript-disabled notice provide clear entry points.
+Canonical, Open Graph and large-image social-card metadata use the published Pages URL. The 1200×630 preview is a committed PNG generated from an editable SVG. Its chart illustrates the default cl-range-v1 scenario before fees. Scenario fragments share the same site preview. A branded 404 page keeps its links inside /degenerator/, while a skip link and JavaScript-disabled notice provide clear entry points. The active skip link preserves shared scenario fragments when moving keyboard focus to the main content.
 
 The structure check verifies linked files, metadata, PNG/ICO dimensions and manifest paths. The local server supplies correct image/manifest types and also serves /degenerator/ to mirror Pages links; missing resources keep HTTP status 404.
 

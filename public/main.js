@@ -1,3 +1,4 @@
+import { initPageAccess } from './ui/page-access.js';
 import { initPositionSnapshots } from './ui/positions.js';
 import { initSnapshotNavigation } from './ui/snapshot-navigation.js';
 import { initSandbox } from './ui/sandbox.js';
@@ -7,6 +8,7 @@ import { initRangeLab } from './ui/range.js';
 import { initPoolSnapshots } from './ui/pools.js';
 
 // Compose controllers explicitly. Data adapters and calculation models never initialize UI.
+initPageAccess();
 const navigation = initLabNavigation();
 const snapshots = initSnapshotNavigation();
 initSandbox();

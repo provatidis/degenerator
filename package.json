@@ -8,7 +8,8 @@
     "start": "node server.js",
     "test": "node --test",
     "test:browser": "node scripts/browser-smoke.js",
-    "check:pool": "node scripts/check-pool.js"
+    "check:pool": "node scripts/check-pool.js",
+    "check": "node scripts/check-project.js"
   },
   "engines": {
     "node": ">=22"

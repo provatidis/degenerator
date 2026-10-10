@@ -1,0 +1,82 @@
+.site-nav{display:flex; align-items:center; gap:22px; font-size:12px; color:var(--muted)}
+.site-nav a:hover{color:var(--accent)}
+.scenario-section{scroll-margin-top:25px; margin-bottom:42px}
+.lab-heading{display:flex; align-items:center; justify-content:space-between; gap:20px; margin-bottom:20px}
+.lab-heading .body-copy{margin:9px 0 0}
+.scenario-layout{display:grid; grid-template-columns:330px minmax(0,1fr); gap:24px}
+.scenario-controls h3{font-size:18px; font-weight:600}
+.scenario-controls>.body-copy{margin:10px 0 22px}
+.scenario-field{margin:0 0 18px}
+.scenario-field label{font-size:12px; color:var(--text); display:flex; justify-content:space-between; gap:10px; margin-bottom:9px}
+.scenario-field label span{font-size:10px; color:var(--muted)}
+.scenario-field input{display:block; width:100%; background:var(--surface); border:1px solid var(--border); color:var(--text); padding:12px 14px; border-radius:8px; font-size:20px; font-variant-numeric:tabular-nums}
+.scenario-field .fine-print{margin-top:9px}
+.scenario-presets{display:flex; gap:7px; margin:-7px 0 23px}
+.scenario-presets button{flex:1; font-size:11px; padding:7px 5px; border:1px solid var(--border); background:var(--surface); color:var(--muted); border-radius:6px}
+.scenario-presets button[aria-pressed=true]{background:#2b3b23; color:var(--accent); border-color:#607847}
+.scenario-actions{display:flex; gap:12px; align-items:center; justify-content:space-between; margin-top:13px}
+.scenario-actions .secondary{font-size:12px; padding:10px 12px}
+.text-button{border:0; background:none; color:var(--muted); font-size:12px; padding:8px 0}
+.text-button:hover{color:var(--text)}
+.share-wrap{margin-top:15px; font-size:11px; color:var(--muted); line-height:1.7}
+.share-wrap input{width:100%; border:1px solid var(--border); background:var(--surface); color:var(--text); padding:10px; border-radius:6px; font-size:11px}
+.scenario-totals{display:grid; grid-template-columns:1fr 1fr; gap:18px}
+.scenario-totals>div{padding:18px; border:1px solid var(--border); border-radius:10px; background:var(--surface); min-width:0}
+.scenario-totals strong{display:block; font-size:clamp(22px,2.4vw,33px); letter-spacing:-1px; font-weight:500; margin:12px 0 8px; overflow-wrap:anywhere; font-variant-numeric:tabular-nums}
+.scenario-totals>div:nth-child(2) strong{color:var(--accent)}
+.scenario-verdict{font-size:13px; line-height:1.8; margin:18px 0 22px; padding:12px 14px; border:1px solid var(--border); border-radius:8px}
+.gain{color:var(--accent)}
+.loss{color:#e5bd85}
+.scenario-metrics{display:grid; grid-template-columns:1fr 1fr 1.2fr; gap:18px}
+.scenario-metrics .label{font-size:10px; line-height:1.6}
+.scenario-metrics strong{display:block; font-size:20px; font-weight:500; margin-top:7px; overflow-wrap:anywhere; font-variant-numeric:tabular-nums}
+.scenario-figure{margin:25px 0 18px; padding-top:22px; border-top:1px solid var(--border)}
+.scenario-chart-heading{display:flex; align-items:center; justify-content:space-between; gap:15px}
+.chart-legend{display:flex; gap:13px; font-size:10px; color:var(--muted)}
+.chart-legend span{display:flex; align-items:center; gap:5px}
+.chart-legend i{display:inline-block; width:15px; height:3px}
+.legend-hold{background:#a2b1a5}
+.legend-lp{background:var(--accent)}
+#scenario-chart{display:block; width:100%; margin-top:15px}
+.scenario-hold-line{fill:none; stroke:#a2b1a5; stroke-width:2; stroke-dasharray:6 5}
+.scenario-hold-dot{fill:#a2b1a5}
+.scenario-marker{fill:none; stroke:#617457; stroke-width:1; stroke-dasharray:4 4}
+.scenario-figure .fine-print{margin:0}
+.scenario-assets{display:grid; grid-template-columns:1fr 1fr; gap:22px; border-top:1px solid var(--border); padding-top:18px}
+.scenario-assets h3{font-size:12px; color:var(--muted); font-weight:500; margin-bottom:12px}
+.scenario-assets p{margin:8px 0; font-size:13px; font-variant-numeric:tabular-nums; overflow-wrap:anywhere}
+.comparison-card{margin-top:20px; padding:22px 27px}
+.comparison-card .body-copy{font-size:12px; margin:8px 0 17px}
+.table-scroll{overflow-x:auto; max-width:100%; border:1px solid var(--border); border-radius:9px}
+.scenario-table{border-collapse:collapse; width:100%; min-width:660px; text-align:left; font-size:12px; font-variant-numeric:tabular-nums}
+.scenario-table th,.scenario-table td{padding:14px 16px; border-bottom:1px solid var(--border); white-space:nowrap}
+.scenario-table thead th{font-size:10px; font-weight:500; color:var(--muted); background:var(--surface)}
+.scenario-table tbody th{font-weight:400}
+.scenario-table tr:last-child th,.scenario-table tr:last-child td{border-bottom:0}
+.selected-scenario{background:#263423}
+.scenario-row-button{background:none; border:0; color:var(--text); padding:0; font-size:12px; text-align:left}
+.scenario-row-button:hover{color:var(--accent)}
+.model-details{margin-top:18px; border:1px solid var(--border); border-radius:10px; padding:16px 20px; color:var(--muted); font-size:12px; line-height:1.8}
+.model-details summary{cursor:pointer; color:var(--text); font-weight:500}
+.model-details p:last-child{margin-bottom:0}
+.scenario-invalid{padding:35px 0}
+.sandbox-heading{scroll-margin-top:25px}
+@media(max-width:1000px){.scenario-layout{grid-template-columns:290px minmax(0,1fr); gap:18px}
+.scenario-totals{grid-template-columns:1fr}
+.scenario-metrics{grid-template-columns:1fr 1fr}
+.site-nav{gap:15px}
+.scenario-totals strong{font-size:29px}
+.scenario-chart-heading{align-items:flex-start; flex-direction:column}}
+@media(max-width:750px){.site-nav>a{display:none}
+.scenario-layout{grid-template-columns:1fr}
+.scenario-totals{grid-template-columns:1fr 1fr; gap:12px}
+.scenario-totals>div{padding:14px}
+.scenario-totals strong{font-size:25px}
+.scenario-totals .label{font-size:10px; line-height:1.6}
+.scenario-metrics{grid-template-columns:1fr 1fr; gap:16px}
+.scenario-assets{gap:14px}
+.lab-heading{align-items:flex-start; flex-wrap:wrap}
+.comparison-card{padding:22px}
+.scenario-section{margin-bottom:35px}
+.sandbox-heading .secondary{font-size:12px; padding:10px 12px}}
+.scenario-field input[aria-invalid=true]{border-color:var(--error)}

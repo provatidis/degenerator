@@ -101,7 +101,7 @@ try {
     console.log('PASS: missing resources, methods, and directory isolation');
   }
   if (!base.endsWith('/')) base += '/';
-  for (const path of ['', 'app.js', 'amm.js', 'storage.js', 'scenario.js', 'scenario-app.js', 'pool-app.js', 'range-app.js', 'lab-navigation.js', 'models/cl-range-v1.js', 'lib/range-links.js', 'lib/range-card.js', 'models/cp50-v1.js', 'data/uniswap-v2.js', 'data/snapshot.js', 'lib/result-card.js', 'examples/uniswap-v2-mainnet.json', 'styles.css']) assert.equal((await fetch(base + path)).status, 200);
+  for (const path of ['', 'main.js', 'amm.js', 'storage.js', 'scenario.js', 'ui/sandbox.js', 'ui/full-range.js', 'ui/pools.js', 'ui/range.js', 'ui/lab-navigation.js', 'styles/foundation.css', 'styles/full-range.css', 'styles/pools.css', 'styles/range.css', 'models/cl-range-v1.js', 'lib/range-links.js', 'lib/range-card.js', 'models/cp50-v1.js', 'data/uniswap-v2.js', 'data/snapshot.js', 'lib/result-card.js', 'examples/uniswap-v2-mainnet.json', 'styles.css']) assert.equal((await fetch(base + path)).status, 200);
   console.log('PASS: HTTP assets');
 
   const devtools = await start(process.env.CHROMIUM_BIN || 'chromium', ['--headless', '--no-sandbox', '--disable-dev-shm-usage', '--remote-debugging-port=0', `--user-data-dir=${profile}`, 'about:blank'], { stdio: ['ignore', 'pipe', 'pipe'] }, /DevTools listening on (ws:\/\/[^\s]+)/);

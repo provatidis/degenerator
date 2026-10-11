@@ -83,3 +83,16 @@ test('very large NFT IDs are encoded without Number precision loss',async()=>{
   const snapshot=await fetchPositionSnapshot(id,{rpc:v3RpcFixture({id})});
   assert.equal(snapshot.tokenId,id);
 });
+
+import { RpcError } from '../public/data/rpc.js';
+
+test('missing or burned NFT reverts identify the ID and block without mislabelling other RPC failures', async () => {
+  for (const [reason, expected] of [['Invalid token ID', /Position #37 does not exist.*block 256.*burned/], [null, /contract unavailable/]]) {
+    const source = v3RpcFixture();
+    const rpc = async (method, params = []) => {
+      if (method === 'eth_call' && params[0].data.startsWith('0x99fbab88')) throw new RpcError('contract unavailable', { category: 'revert', revertReason: reason });
+      return source(method, params);
+    };
+    await assert.rejects(fetchPositionSnapshot('37', { rpc }), expected);
+  }
+});

@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; connect-src 'self' https://ethereum-rpc.publicnode.com https://eth.drpc.org; base-uri 'none'; object-src 'none'; form-action 'self'">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#101714">
   <meta name="description" content="Learn liquidity by doing. Predict, experiment and check your understanding through six practical DeFi lessons and a final challenge.">
@@ -34,6 +35,7 @@
       <div><p class="eyebrow">LEARN BY DOING</p><h1>Liquidity essentials</h1><p class="subtitle">Explore swaps, pool ownership, fees and price ranges with interactive examples.</p></div>
       <button type="button" id="learn-resume" class="button secondary">Continue to the lesson ↓</button>
     </section>
+    <nav class="learn-entry-links" aria-label="Learning entry points"><a href="#lesson=swap-impact">Start with foundations →</a><a href="#lesson=final-challenge">Jump to the applied challenge →</a><a href="./#example=in-range-position">Inspect a recorded position in Playground ↗</a></nav>
     <div class="learn-meta"><span>6 lessons + a final challenge</span> <span>Open any topic</span> <span id="learn-storage" role="status">Progress saves in this browser.</span></div>
     <div id="learn-route-note" class="notice" role="status" hidden><p>That lesson link could not be opened. Your last lesson is shown below; choose any topic from the chapter.</p></div>
     <div id="learn-workspace" class="learn-workspace">
@@ -49,6 +51,7 @@
       </aside>
       <article class="learn-lesson" aria-labelledby="learn-lesson-title">
         <div class="learn-lesson-heading"><p id="learn-lesson-number" class="eyebrow">LESSON 1 OF 6</p><span id="learn-concept" class="small-badge">Swaps</span><button type="button" id="learn-topics" class="learn-text-button">All topics ↑</button></div>
+        <p id="learn-level" class="learn-level">Stage 1 · Foundations</p>
         <h2 id="learn-lesson-title" tabindex="-1">Trade size and execution price</h2>
         <p id="learn-skill" class="learn-skill"></p>
         <p id="learn-intro" class="learn-reading">A larger swap moves further along the pool’s curve. Predict what happens, then try it.</p>

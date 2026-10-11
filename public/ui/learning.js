@@ -1,3 +1,4 @@
+import { stageForLesson } from '../learning/example-path.js';
 import { DEEPER_READING } from '../learning/deeper-reading.js';
 import { lessonWalkthrough } from '../lib/lesson-walkthrough.js';
 import { LESSONS } from '../learning/liquidity-essentials.js';
@@ -33,6 +34,13 @@ export function initLearning() {
       link.setAttribute('aria-current', id === lesson.id ? 'step' : 'false');
       link.querySelector('.learn-step-state').textContent = progress.completed.includes(id) ? 'Checked' : id === lesson.id ? 'Now exploring' : 'Open lesson';
       link.classList.toggle('learn-step-done', progress.completed.includes(id));
+    }
+    if (!matchMedia('(max-width: 750px)').matches) {
+      const sidebar = document.querySelector('.learn-sidebar');
+      const selected = document.querySelector('[data-lesson-id="' + lesson.id + '"]');
+      const bounds = selected.getBoundingClientRect(), visible = sidebar.getBoundingClientRect();
+      if (bounds.bottom > visible.bottom) sidebar.scrollTop += bounds.bottom - visible.bottom + 24;
+      else if (bounds.top < visible.top) sidebar.scrollTop += bounds.top - visible.top - 24;
     }
   }
   function clearCard() {
@@ -213,6 +221,7 @@ export function initLearning() {
     if (!lesson.predictions.some(([value]) => value === draft.prediction)) draft.prediction = '';
     if (!lesson.reasons.some(([value]) => value === draft.reason)) draft.reason = '';
     if (!draft.prediction) draft.ran = false;
+    $('learn-level').textContent = 'Stage ' + stageForLesson(lesson.id).level + ' · ' + stageForLesson(lesson.id).title;
     $('learn-lesson-title').textContent = lesson.title; document.title = lesson.short + ' · Degenerator Learn';
     $('learn-lesson-number').textContent = index === 6 ? 'FINAL CHALLENGE' : 'LESSON ' + (index + 1) + ' OF 6';
     $('learn-concept').textContent = lesson.concept; $('learn-skill').textContent = lesson.skill;
@@ -283,13 +292,21 @@ export function initLearning() {
     } catch (error) { if (generation === token) $('learn-card-status').textContent = error.message; }
   });
   const overview = $('learn-lesson-list');
+  let lastLevel = 0, groupList;
   LESSONS.forEach((item, i) => {
+    const stage = stageForLesson(item.id);
+    if (stage.level !== lastLevel) {
+      const group = document.createElement('li'); group.className = 'learn-path-group';
+      const heading = document.createElement('h3'); heading.textContent = stage.level + ' · ' + stage.title;
+      groupList = document.createElement('ol'); group.append(heading, groupList);
+      overview.append(group); lastLevel = stage.level;
+    }
     const li = document.createElement('li'); const link = document.createElement('a'); link.href = '#lesson=' + item.id; link.dataset.lessonId = item.id;
     const number = document.createElement('span'); number.className = 'learn-step-number'; number.textContent = i === 6 ? '★' : String(i + 1).padStart(2, '0');
     const copy = document.createElement('span'); copy.className = 'learn-step-copy';
     const title = document.createElement('strong'); title.textContent = item.short;
     const state = document.createElement('span'); state.className = 'learn-step-state';
-    copy.append(title, ' ', state); link.append(number, ' ', copy); li.append(link); overview.append(li);
+    copy.append(title, ' ', state); link.append(number, ' ', copy); li.append(link); groupList.append(li);
     link.addEventListener('click', () => { if (matchMedia('(max-width: 750px)').matches) courseDetails.open = false; });
   });
   $('learn-topics').addEventListener('click', () => { courseDetails.open = true; const summary = courseDetails.querySelector('summary'); summary.focus({ preventScroll: true }); courseDetails.scrollIntoView({ block: 'start', behavior: 'instant' }); });

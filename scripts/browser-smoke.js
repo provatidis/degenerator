@@ -1,3 +1,4 @@
+import { checkExamples } from './browser/example-checks.js';
 import { checkLearning, checkMobileLearning } from './browser/learning-checks.js';
 import { checkPositions, checkMobilePositions } from './browser/position-checks.js';
 // Optional real-browser smoke test, using Chromium's DevTools protocol and Node built-ins.
@@ -253,7 +254,7 @@ try {
   const badFile = join(profile, 'bad-snapshot.json');
   await writeFile(badFile, JSON.stringify({ ...exportedSnapshot, version: 99 }));
   await call('DOM.setFileInputFiles', { nodeId: fileInput.nodeId, files: [badFile] });
-  await evaluate("new Promise((resolve, reject) => { const deadline = Date.now() + 10000; const check = () => { if (document.getElementById('pool-status').textContent.includes('not a supported')) resolve(); else if (Date.now() > deadline) reject(new Error('Invalid file was not rejected')); else setTimeout(check, 50); }; check(); })");
+  await evaluate("new Promise((resolve, reject) => { const deadline = Date.now() + 10000; const check = () => { if (document.getElementById('pool-status').textContent.includes('snapshot version is not supported')) resolve(); else if (Date.now() > deadline) reject(new Error('Invalid file was not rejected')); else setTimeout(check, 50); }; check(); })");
   assert.equal(await text('pool-price'), snapshotPrice);
   await call('DOM.setFileInputFiles', { nodeId: fileInput.nodeId, files: [snapshotPath] });
   await evaluate("new Promise((resolve, reject) => { const deadline = Date.now() + 10000; const check = () => { if (document.getElementById('pool-status').textContent.includes('Snapshot saved')) resolve(); else if (Date.now() > deadline) reject(new Error('Saved file did not restore')); else setTimeout(check, 50); }; check(); })");
@@ -393,6 +394,7 @@ try {
   await navigate(base);
   console.log('PASS: range reference math, exact edges, slider stability, independent fees, validation, keyboard tabs, preserved setups, CSV/PNG downloads, snapshot seeding and shared range restoration');
   await checkPositions({ base, call, evaluate, click, fill, text, reload, navigate, downloadFile, profile });
+  await checkExamples({ evaluate, click, fill, text, navigate, base });
 
   const swappedPortfolio = await text('portfolio');
   await reload();

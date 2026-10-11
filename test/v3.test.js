@@ -57,7 +57,7 @@ test('v3 files preserve exact fields, reject tampering and remove unrecognized d
   assert.deepEqual(validatePositionSnapshot({...recorded,displayHTML:'<img src=x>'}),recorded);
   for (const patch of [
     {version:2},{chainId:8453},{kind:'pool'},{poolAddress:'0x'+'00'.repeat(20)},
-    {tokens:[...recorded.tokens].reverse()},{tokenId:'1e6'},{provider:'https://example.com'},
+    {tokens:[...recorded.tokens].reverse()},{tokenId:'1e6'},{provider:'javascript:alert(1)'},
     {position:{...recorded.position,fee:'3000'}},{position:{...recorded.position,tickLower:192181}},
     {pool:{...recorded.pool,tick:198100}},{pool:{...recorded.pool,tickSpacing:1}},
     {principal:{...recorded.principal,amount1Raw:'9999999999999134'}},
@@ -95,6 +95,6 @@ test('position saving is independent from pool and sandbox state and tolerates b
   assert.equal(entries.get('defi-sandbox-v1'),'wallet');
   assert.equal(entries.get('degenerator-pool-snapshot-v1'),'pool');
   entries.set(POSITION_SNAPSHOT_KEY,'broken');
-  assert.equal(readSavedPosition(()=>storage).status,'unavailable');
+  assert.equal(readSavedPosition(()=>storage).status,'invalid');
   assert.equal(savePositionSnapshot(recorded,()=>{throw Error('blocked')}),false);
 });

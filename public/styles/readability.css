@@ -1,0 +1,52 @@
+/* Type roles keep explanations readable while preserving the hierarchy of numbers. */
+:root{--type-reading:16px;--type-control:14px;--type-detail:13px;--type-meta:12px}
+.body-copy,.section-heading p,.learn-reading,.learn-results .learn-reading,.learn-deeper-content p{font-size:var(--type-reading);line-height:1.85}
+.fine-print,.notice,.learn-note,.withdraw-box p,.pool-status,.pool-reserves,.position-current-price,.allocation-note,.learn-independence,.learn-skill,.learn-setup,.learn-prediction-feedback,.learn-metric-note,.learn-feedback p,.learn-hint,.learn-worked-note,.learn-worked-steps p,.learn-math-note,.learn-reading-sources li p{font-size:var(--type-detail);line-height:1.8}
+.button,.intro .button,.pool-buttons .button,.position-form .primary,.source-tabs button,.lab-switch button,.site-nav a,.product-nav a,.learn-text-button,.learn-continue .button,.learn-explore,.learn-choice,.learn-fieldset legend,.learn-control-label,.learn-width,.learn-answer-label,.learn-sidebar-link{font-size:var(--type-control)}
+.button,.learn-text-button,.scenario-presets button,.cl-range-presets button{min-height:44px}
+.button.secondary{white-space:normal;line-height:1.5}
+.label,.learn-metric .label,.quote-details,.scenario-field label,.learn-step-copy strong,.learn-bar-label,.snapshot-details,.scenario-table,.cl-comparison{font-size:var(--type-detail);line-height:1.7}
+.eyebrow,.new-label,.stat-note,.token-label,.range-labels,.activity-time,.small-badge,.learn-meta,.learn-course summary,.learn-course summary strong,.learn-step-number,.learn-step-state,.learn-experiment-footer,.learn-stage,.learn-deeper-subtitle,.learn-deeper-optional,.pool-result-heading a,.position-block,#position-setup-overview,footer{font-size:var(--type-meta);line-height:1.7}
+.learn-deeper-content .eyebrow{font-size:var(--type-meta)}
+.learn-deeper-content .learn-math-note,.learn-deeper-content .learn-worked-note,.learn-reading-sources>p,.learn-reading-sources li p{font-size:var(--type-detail)}
+.learn-math pre{font-size:var(--type-detail);line-height:1.8;white-space:pre-wrap;overflow-wrap:anywhere}
+.learn-worked-steps li{font-size:14px;line-height:1.8}
+.chart-label{font-size:12px}
+.experiment-card>span:last-child{font-size:var(--type-detail)}
+.site-nav{flex-wrap:wrap}
+.learn-workspace{grid-template-columns:300px minmax(0,1fr);gap:36px}
+#learn-lesson-list a{gap:10px}
+@media(max-width:1000px){.learn-workspace{grid-template-columns:255px minmax(0,1fr);gap:26px}}
+@media(max-width:750px){
+ :root{--type-reading:15px}
+ .learn-workspace{grid-template-columns:1fr;gap:24px}
+ .learn-lesson-heading{flex-wrap:wrap;justify-content:flex-start}
+ .learn-lesson-heading .learn-text-button{margin-left:auto}
+ .learn-metric{grid-template-columns:minmax(0,1fr) auto}
+ .learn-metric strong{max-width:170px}
+ .site-nav a{font-size:13px}
+ .source-tabs button{padding:10px 8px}
+}
+
+/* Feature-specific roles override smaller captions in the original layouts. */
+.scenario-field label span,.cl-fee-details summary span,.lab-switch .new-label,.learn-lesson-heading .small-badge,.cl-total .stat-note,.cl-setup-summary #cl-setup-overview,.cl-position .small-badge,.position-setup-summary{font-size:var(--type-meta)}
+.scenario-metrics .label,.scenario-totals .label,.cl-total .label,.cl-metrics .label,.cl-total>p,.cl-starting-mix>p:first-of-type,.cl-starting-mix .fine-print,.cl-position .fine-print,.cl-metrics .fine-print,.cl-range-label,.cl-benchmark-note,.cl-state-note,.cl-figure figcaption,.learn-worked .learn-worked-note,.learn-math .learn-math-note,#learn-sources p{font-size:var(--type-detail);line-height:1.8}
+.scenario-presets button,.cl-range-presets button,.cl-price-presets button,.cl-metrics .text-button,.cl-explorer-heading label,.cl-position h3,.cl-fee-details summary,.scenario-actions .secondary,.text-button,.playground-learn-link{font-size:var(--type-control)}
+.cl-range-presets button span,.chart-legend,.cl-chart-legend,.scenario-table thead th,.share-wrap,.share-wrap input{font-size:var(--type-meta)}
+.cl-price-presets button,.text-button,.cl-metrics .text-button,.cl-fee-details summary{min-height:44px}
+.learn-misconception p:last-child{font-size:var(--type-reading)}
+#learn-worked-steps li::marker{font-size:var(--type-meta)}
+.learn-lesson-heading .small-badge{white-space:normal}
+.example-library>summary .example-summary-copy{margin:0;color:var(--text)}
+
+.cl-state-badge{font-size:var(--type-meta)}
+@media(max-width:750px){
+ .cl-totals{grid-template-columns:1fr}
+ .cl-total{padding:18px}
+ .cl-total .label{min-height:0}
+}
+
+/* Keep every topic reachable when the larger desktop course list exceeds the screen. */
+@media(min-width:751px){
+ .learn-sidebar{max-height:calc(100dvh - 48px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:#52694a transparent;padding:4px}
+}

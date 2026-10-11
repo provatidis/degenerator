@@ -1,12 +1,15 @@
 import { encodeWord as word, abiWords as words, decodeAddress } from './abi.js';
 import { finalizedBlock, confirmBlock } from './block.js';
-import { POOL, RPC_URL } from './config.js';
-import { createRpcClient } from './rpc.js';
+import { POOL } from './config.js';
+import { requestSnapshot } from './snapshot-request.js';
 import { validateSnapshot } from './snapshot.js';
 
 // ABI selectors from the supported Uniswap v2 interfaces. No transaction methods.
 const selectors = { getPair: '0xe6a43905', factory: '0xc45a0155', token0: '0x0dfe1681', token1: '0xd21220a7', reserves: '0x0902f1ac', decimals: '0x313ce567', amountsOut: '0xd06ca61f' };
-export async function fetchPoolSnapshot({ rpc = createRpcClient() } = {}) {
+export function fetchPoolSnapshot(options = {}) {
+  return requestSnapshot(readPoolSnapshot, options);
+}
+async function readPoolSnapshot(rpc, provider) {
   const { block: capturedBlock, tag } = await finalizedBlock(rpc);
   const atBlock = (to, data) => rpc('eth_call', [{ to, data }, tag]);
   const pair = decodeAddress(await atBlock(POOL.factory, selectors.getPair + word(POOL.usdc) + word(POOL.weth)));
@@ -32,6 +35,6 @@ export async function fetchPoolSnapshot({ rpc = createRpcClient() } = {}) {
     reserves: { reserve0: reserves[0].toString(), reserve1: reserves[1].toString(), timestamp: Number(reserves[2]) },
     swapFee: { numerator: 997, denominator: 1000 },
     validation: { routerAddress: POOL.router, inputToken: POOL.weth, outputToken: POOL.usdc, amountInRaw: amounts[2].toString(), amountOutRaw: amounts[3].toString() },
-    capturedAt: new Date().toISOString(), provider: RPC_URL,
+    capturedAt: new Date().toISOString(), provider,
   });
 }

@@ -1,4 +1,5 @@
-import { V3, V3_FEE_SPACING, RPC_URL } from './config.js';
+import { validateProvider } from './provenance.js';
+import { V3, V3_FEE_SPACING, V3_POOLS } from './config.js';
 import { parseSnapshotFile, readSnapshot, writeSnapshot, MAX_SNAPSHOT_BYTES } from './snapshot-store.js';
 import { positionAmounts, positionRange, usdPerETH } from '../models/uniswap-v3.js';
 import { MIN_TICK, MAX_TICK, sqrtRatioAtTick, tickAtSqrtRatio } from '../models/tick-math.js';
@@ -41,6 +42,7 @@ export function validatePositionSnapshot(input) {
   });
   const position = input.position;
   if (!position || !Number.isInteger(position.fee) || !Object.hasOwn(V3_FEE_SPACING, position.fee)) fail();
+  if (!address(input.poolAddress, V3_POOLS[position.fee])) throw new Error('The pool address does not match the supported WETH/USDC pair and fee tier.');
   const tickLower = tick(position.tickLower), tickUpper = tick(position.tickUpper);
   const spacing = V3_FEE_SPACING[position.fee];
   if (tickLower >= tickUpper || tickLower % spacing || tickUpper % spacing) fail();
@@ -57,7 +59,7 @@ export function validatePositionSnapshot(input) {
   const amount0Raw = uint(input.principal?.amount0Raw, 256);
   const amount1Raw = uint(input.principal?.amount1Raw, 256);
   if (amounts.amount0.toString() !== amount0Raw || amounts.amount1.toString() !== amount1Raw) throw new Error('The recorded principal does not match the position liquidity, ticks and pool price.');
-  if (typeof input.capturedAt !== 'string' || input.capturedAt.length > 40 || !Number.isFinite(Date.parse(input.capturedAt)) || input.provider !== RPC_URL) fail();
+  if (typeof input.capturedAt !== 'string' || input.capturedAt.length > 40 || !Number.isFinite(Date.parse(input.capturedAt))) fail();
   return {
     version: 1, kind: 'uniswap-v3-position', protocol: V3.protocol, chainId: 1, tokenId,
     positionManager: V3.positionManager, factoryAddress: V3.factory, poolAddress: input.poolAddress.toLowerCase(),
@@ -70,7 +72,7 @@ export function validatePositionSnapshot(input) {
     },
     pool: { sqrtPriceX96, tick: currentTick, tickSpacing: spacing },
     principal: { amount0Raw, amount1Raw },
-    capturedAt: new Date(input.capturedAt).toISOString(), provider: RPC_URL,
+    capturedAt: new Date(input.capturedAt).toISOString(), provider: validateProvider(input.provider),
   };
 }
 export const parsePositionSnapshot = text => parseSnapshotFile(text, validatePositionSnapshot);

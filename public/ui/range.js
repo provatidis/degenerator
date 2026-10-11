@@ -289,5 +289,5 @@ export function initRangeLab({ navigation }) {
     selectLab('range', { scroll: true });
   }
 
-  return { setStartingPrice: setRangeStartingPrice, setScenario };
+  return { setStartingPrice: setRangeStartingPrice, setScenario, restoreLocation: loadShared };
 }

@@ -1,5 +1,6 @@
-import { V3, V3_FEE_SPACING, RPC_URL } from './config.js';
-import { createRpcClient } from './rpc.js';
+import { V3, V3_FEE_SPACING } from './config.js';
+import { RpcError } from './rpc.js';
+import { requestSnapshot } from './snapshot-request.js';
 import { finalizedBlock, confirmBlock } from './block.js';
 import { abiWords, encodeWord, encodeUint, decodeAddress, addressFromWord, uintFromWord, intFromWord } from './abi.js';
 import { positionId, validatePositionSnapshot } from './position-snapshot.js';
@@ -11,14 +12,20 @@ const selectors = Object.freeze({
   token0: '0x0dfe1681', token1: '0xd21220a7', fee: '0xddca3f43',
   tickSpacing: '0xd0c93a7c', slot0: '0x3850c7bd', decimals: '0x313ce567',
 });
-export async function fetchPositionSnapshot(id, { rpc = createRpcClient(), onProgress = () => {} } = {}) {
+export async function fetchPositionSnapshot(id, { onProgress = () => {}, ...options } = {}) {
   const tokenId = positionId(id);
+  return requestSnapshot((rpc, provider) => readPositionSnapshot(tokenId, rpc, provider, onProgress), { ...options, onFallback: onProgress });
+}
+async function readPositionSnapshot(tokenId, rpc, provider, onProgress) {
   onProgress('Reading a finalized Ethereum block…');
   const { block, tag } = await finalizedBlock(rpc);
   const atBlock = (to, data) => rpc('eth_call', [{ to, data }, tag]);
   onProgress('Reading position #' + tokenId + '…');
   const [positionData, managerFactory] = await Promise.all([
-    atBlock(V3.positionManager, selectors.positions + encodeUint(tokenId)),
+    atBlock(V3.positionManager, selectors.positions + encodeUint(tokenId)).catch(error => {
+      if (error instanceof RpcError && error.revertReason === 'Invalid token ID') throw new Error('Position #' + tokenId + ' does not exist in the Ethereum Uniswap v3 manager at block ' + block.number + '. It may never have been minted or may have been burned.');
+      throw error;
+    }),
     atBlock(V3.positionManager, selectors.factory),
   ]);
   if (decodeAddress(managerFactory) !== V3.factory) throw new Error('The position manager is not connected to the supported Uniswap v3 factory.');
@@ -59,6 +66,6 @@ export async function fetchPositionSnapshot(id, { rpc = createRpcClient(), onPro
     tokens: [{ address: V3.usdc, symbol: 'USDC', decimals: 6 }, { address: V3.weth, symbol: 'WETH', decimals: 18 }],
     position, pool: { sqrtPriceX96: sqrtPriceX96.toString(), tick: currentTick, tickSpacing: V3_FEE_SPACING[fee] },
     principal: { amount0Raw: amounts.amount0.toString(), amount1Raw: amounts.amount1.toString() },
-    capturedAt: new Date().toISOString(), provider: RPC_URL,
+    capturedAt: new Date().toISOString(), provider,
   });
 }

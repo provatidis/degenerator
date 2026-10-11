@@ -1,3 +1,4 @@
+import { initExamples } from './ui/examples.js';
 import { initPageAccess } from './ui/page-access.js';
 import { initPositionSnapshots } from './ui/positions.js';
 import { initSnapshotNavigation } from './ui/snapshot-navigation.js';
@@ -15,6 +16,10 @@ initSandbox();
 const fullRangeLab = initFullRangeLab({ navigation });
 const rangeLab = initRangeLab({ navigation });
 initPoolSnapshots({ fullRangeLab, rangeLab });
-initPositionSnapshots({ rangeLab });
+const positionSnapshots = initPositionSnapshots({ rangeLab });
 snapshots.restoreLocation();
 navigation.restoreLocation();
+initExamples({
+  positionSnapshots, snapshotNavigation: snapshots,
+  restoreScenario: () => { fullRangeLab.restoreLocation(); rangeLab.restoreLocation(); navigation.restoreLocation(); },
+});

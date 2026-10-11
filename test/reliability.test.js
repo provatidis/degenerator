@@ -127,7 +127,7 @@ test('backup serial reads avoid bursts and stop queued work after a failure', as
 
 test('example concepts rise in order, reproduce model inputs, and share the lesson stages without gates', () => {
   assert.deepEqual(EXAMPLE_STAGES.flatMap(stage => stage.lessons), LESSON_IDS);
-  assert.deepEqual(PLAYGROUND_EXAMPLES.map(example => example.level), [1, 2, 2, 3, 3, 4, 4, 4]);
+  assert.deepEqual(PLAYGROUND_EXAMPLES.map(example => example.level), [1, 2, 2, 3, 3, 4, 4, 4, 4]);
   for (const id of LESSON_IDS) assert.ok(stageForLesson(id));
   const a = scenarioFromHash(PLAYGROUND_EXAMPLES[0].href), b = scenarioFromHash(PLAYGROUND_EXAMPLES[1].href), c = scenarioFromHash(PLAYGROUND_EXAMPLES[2].href);
   assert.deepEqual({ ...b, futurePrice: a.futurePrice }, a);

@@ -1,6 +1,6 @@
 {
   "name": "degenerator",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "private": true,
   "type": "module",
   "description": "A DeFi playground for reproducible liquidity scenarios and virtual pool experiments",
@@ -11,7 +11,8 @@
     "check:pool": "node scripts/check-pool.js",
     "check": "node scripts/check-project.js",
     "check:position": "node scripts/check-position.js",
-    "check:fees": "node scripts/check-position-fees.js"
+    "check:fees": "node scripts/check-position-fees.js",
+    "check:replay": "node scripts/check-replay.js"
   },
   "engines": {
     "node": ">=22"

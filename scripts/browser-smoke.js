@@ -1,3 +1,4 @@
+import { checkWorkspaces } from './browser/workspace-checks.js';
 import { checkExamples } from './browser/example-checks.js';
 import { checkLearning, checkMobileLearning } from './browser/learning-checks.js';
 import { checkPositions, checkMobilePositions } from './browser/position-checks.js';
@@ -397,6 +398,7 @@ try {
   await checkPositions({ base, call, evaluate, click, fill, text, reload, navigate, downloadFile, profile });
   await checkExamples({ evaluate, click, fill, text, navigate, base });
   await checkSavedExperiments({ evaluate, click, fill, text, navigate, reload, downloadFile, call, base, profile });
+  await checkWorkspaces({ evaluate, click, fill, text, navigate, base, downloadFile });
 
   const swappedPortfolio = await text('portfolio');
   await reload();
@@ -534,6 +536,11 @@ try {
   assert.equal(await evaluate("(()=>{const rect=document.getElementById('experiment-dialog').getBoundingClientRect();return rect.left>=0&&rect.right<=innerWidth;})()"),true);
   await click('experiment-save-cancel');
   console.log('PASS: 320px saved comparison and modal bounds without page overflow');
+  await navigate(base+'#historical-case');
+  await evaluate("new Promise((resolve,reject)=>{const until=Date.now()+10000;const check=()=>{if(!document.getElementById('period-result').hidden)resolve();else if(Date.now()>until)reject(new Error(document.getElementById('period-status').textContent));else setTimeout(check,20)};check()})");
+  assert.equal(await text('period-fees'),'$2.36');assert.equal(await evaluate('document.documentElement.scrollWidth<=innerWidth'),true);
+  await fill('period-checkpoint','0');assert.equal(await text('period-lp'),await text('period-hold'));
+  console.log('PASS: 320px historical case, checkpoint scrubbing and initial holding equality');
   assert.deepEqual(errors, [], 'No uncaught browser errors');
   console.log('PASS: mobile layout and interaction; no uncaught browser errors');
 } finally {

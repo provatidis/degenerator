@@ -89,6 +89,8 @@ export async function checkPositionFees({ evaluate, click, text, navigate, base,
 }
 
 export async function checkMobilePositionFees({ evaluate, click, text }) {
+  // Applying principal now moves to the Experiment workspace; return through Inspect.
+  await click('nav-inspect');
   await click('position-setup-summary');
   await click('position-example-fees');
   await evaluate("new Promise((resolve,reject)=>{const until=Date.now()+10000;const check=()=>{if(document.getElementById('position-lab').getAttribute('aria-busy')==='false'&&document.getElementById('position-fees').open&&document.activeElement.tagName==='SUMMARY')resolve();else if(Date.now()>until)reject(new Error('Mobile fee example did not open'));else setTimeout(check,20)};check()})");

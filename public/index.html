@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#101714">
   <meta name="description" content="Explore full-range and concentrated liquidity, import pool and position snapshots, and experiment with virtual swaps in Degenerator.">
-  <title>Degenerator · Your DeFi playground</title>
+  <title>Degenerator · Learn, experiment, inspect</title>
   <meta name="application-name" content="Degenerator">
   <meta name="apple-mobile-web-app-title" content="Degenerator">
   <meta name="color-scheme" content="dark">
@@ -17,7 +17,7 @@
   <link rel="manifest" href="site.webmanifest">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Degenerator">
-  <meta property="og:title" content="Degenerator · Your DeFi playground">
+  <meta property="og:title" content="Degenerator · Learn, experiment, inspect">
   <meta property="og:description" content="Explore full-range and concentrated liquidity, import pool and position snapshots, and experiment with virtual swaps in Degenerator.">
   <meta property="og:url" content="https://provatidis.github.io/degenerator/">
   <meta property="og:image" content="https://provatidis.github.io/degenerator/assets/social-preview.png">
@@ -26,7 +26,7 @@
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="Degenerator. Compare liquidity scenarios using pool snapshots and virtual experiments.">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Degenerator · Your DeFi playground">
+  <meta name="twitter:title" content="Degenerator · Learn, experiment, inspect">
   <meta name="twitter:description" content="Explore full-range and concentrated liquidity, import pool and position snapshots, and experiment with virtual swaps in Degenerator.">
   <meta name="twitter:image" content="https://provatidis.github.io/degenerator/assets/social-preview.png">
   <meta name="twitter:image:alt" content="Degenerator. Compare liquidity scenarios using pool snapshots and virtual experiments.">
@@ -37,13 +37,15 @@
   <a class="skip-link" href="#main-content">Skip to content</a>
   <header class="topbar">
     <a class="brand" href="./" aria-label="Degenerator home"><span class="brand-icon"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" fill="none" stroke="currentColor" stroke-width="2"/></svg></span> Degenerator</a>
-    <nav class="site-nav" aria-label="Degenerator"><div class="product-nav"><a href="./" aria-current="page">Playground</a><a href="learn.html">Learn</a></div><a href="#pool-lab">Snapshots</a><a href="#lp-lab">Liquidity lab</a><a href="#range-lab">Range lab</a><a href="#swap-sandbox">Swap sandbox</a><span class="sandbox-badge"><span class="status-dot"></span> Virtual funds</span></nav>
+    <nav class="site-nav" aria-label="Degenerator"><div class="product-nav"><a id="nav-experiment" href="#lp-lab" aria-current="page">Experiment</a><a href="learn.html">Learn</a><a id="nav-inspect" href="#position-lab">Inspect</a></div></nav>
   </header>
   <main id="main-content" tabindex="-1">
     <noscript><div class="notice"><p>JavaScript is needed for the calculators and snapshot imports. Enable it to use the playground.</p></div></noscript>
     <section class="intro">
-      <div><p class="eyebrow">DEFI PLAYGROUND</p><h1>Compare liquidity scenarios</h1><p class="subtitle">Compare holding with providing liquidity, under assumptions you can inspect.</p></div><a class="button secondary intro-range-link" href="#position-lab">Import a v3 position →</a>
+      <div><p id="workspace-eyebrow" class="eyebrow">DEFI PLAYGROUND</p><h1 id="workspace-title" tabindex="-1">Compare liquidity scenarios</h1><p id="workspace-subtitle" class="subtitle">Change a price, range or fee assumption. Compare the outcome with holding.</p></div><a class="button secondary intro-range-link" href="#position-lab">Import a v3 position →</a>
     </section>
+    <nav class="workspace-links" aria-label="Playground tools"><a href="#lp-lab">Full-range lab</a><a href="#range-lab">Range lab</a><a href="#saved-experiments">Saved experiments</a><a href="#historical-case">Historical case</a><a href="#swap-sandbox">Pool mechanics</a></nav>
+    <div id="experiment-workspace" class="app-workspace">
     <a class="playground-learn-link" href="learn.html">New to liquidity? Learn through six practical experiments →</a>
     <details id="example-library" class="example-library card">
       <summary><span class="example-summary-copy"><strong>Choose an example</strong><span>1 · Foundations → 2 · Comparisons → 3 · Ranges → 4 · Applied cases</span></span></summary>
@@ -55,7 +57,7 @@
     </details>
     <details id="saved-experiments" class="saved-experiments card">
       <summary><strong>Saved experiments</strong> <span id="experiments-count">0 saved</span></summary>
-      <p class="body-copy">Keep a setup and your reasoning, then revisit it or compare a few variations. Reopening loads a working copy; saving again keeps a new variation.</p>
+      <p class="body-copy">Save your setup and notes. Reopen it to try a variation, or compare two or three saved experiments.</p>
       <p id="experiments-storage" class="fine-print">Stored in this browser. Export a backup to keep it elsewhere.</p>
       <div class="experiment-library-tools"><button id="experiments-export" class="button secondary" type="button" disabled>Export experiments</button><label class="button secondary file-button" for="experiments-file">Import experiments<input id="experiments-file" type="file" accept=".json,application/json" aria-label="Import experiments"></label></div>
       <div id="experiments-recovery" class="experiment-recovery" hidden><p id="experiments-recovery-copy" class="fine-print"></p><button id="experiments-export-recovery" class="button secondary" type="button">Download saved copy</button><button id="experiments-discard" class="text-button" type="button">Discard unreadable saved copy</button></div>
@@ -68,135 +70,6 @@
       <div id="experiments-comparison-controls" class="experiment-comparison-controls" hidden><p id="experiments-selection">Select two or three experiments to compare.</p><button id="experiments-compare" class="button secondary" type="button" disabled>Compare selected</button><button id="experiments-clear-selection" class="text-button" type="button" hidden>Clear selection</button></div>
       <section id="experiments-comparison" class="experiment-comparison" aria-labelledby="experiments-comparison-title" tabindex="-1" hidden><div class="experiment-comparison-heading"><h3 id="experiments-comparison-title">Compare saved experiments</h3><button id="experiments-close-comparison" class="text-button" type="button">Close comparison</button></div><p id="experiments-comparison-context" class="experiment-comparison-context"></p><p class="fine-print">Each holding benchmark keeps that experiment’s own starting tokens. Fees are assumed USD cash; gas, incentives and trading paths are excluded. Values use USDC = $1.</p><div id="experiments-comparison-cards" class="experiment-comparison-cards"></div></section>
     </details>
-    <div class="notice"><span class="notice-icon">i</span><p>All experiments use virtual funds. Pool imports read public blockchain data. No wallet connection or transactions. <span id="storage-status" role="status">Your sandbox is saved in this browser. Reset clears the saved session.</span></p></div>
-    <section id="pool-lab" class="pool-section card" aria-label="Research snapshots">
-      <div class="source-tabs" role="tablist" aria-label="Snapshot sources"><button id="source-pool-tab" type="button" role="tab" aria-selected="true" aria-controls="pool-source" tabindex="0">Pool snapshot</button><button id="source-position-tab" type="button" role="tab" aria-selected="false" aria-controls="position-lab" tabindex="-1">V3 position</button></div>
-      <div id="pool-source" role="tabpanel" aria-labelledby="source-pool-tab">
-      <div class="pool-layout">
-        <div>
-          <p class="eyebrow">POOL SNAPSHOTS</p>
-          <h2 id="pool-heading">Import a Uniswap v2 pool snapshot</h2>
-          <p class="body-copy">Capture the Ethereum Uniswap v2 WETH/USDC pool at a finalized block, or reopen a saved snapshot.</p>
-          <div class="pool-buttons">
-            <button id="pool-fetch" class="button primary" type="button">Fetch latest snapshot</button>
-            <button id="pool-example" class="button secondary" type="button">Load recorded example</button>
-            <label class="button secondary file-button" for="pool-file">Open snapshot file<input id="pool-file" type="file" accept=".json,application/json" aria-label="Open snapshot file"></label>
-          </div>
-          <p class="fine-print">Fetching contacts PublicNode, with dRPC as a backup for public chain data. Saved files open locally. WETH is wrapped ETH; the calculator assumes USDC = $1.</p>
-          <p id="pool-status" class="pool-status" role="status"></p><button id="pool-clear-saved" class="button secondary snapshot-recovery" type="button" hidden>Discard unreadable saved pool snapshot</button>
-        </div>
-        <div>
-          <div id="pool-empty" class="pool-empty"><p>No pool snapshot loaded.</p><p class="fine-print">Your snapshot keeps its block, token amounts and recorded quote. Loading it leaves your calculator and virtual wallet unchanged until you apply its price.</p></div>
-          <div id="pool-result" hidden>
-            <div class="pool-result-heading"><span class="small-badge">Ethereum · Uniswap v2</span><a id="pool-block" target="_blank" rel="noopener noreferrer"></a></div>
-            <p class="label">WETH price from pool reserves · USDC = $1</p>
-            <strong id="pool-price" class="pool-price"></strong>
-            <div class="pool-reserves"><span id="pool-reserve-eth"></span><span id="pool-reserve-usdc"></span></div>
-            <p id="pool-quote" class="fine-print"></p>
-            <p id="pool-evidence" class="fine-print"></p>
-            <div class="pool-buttons"><button id="pool-apply" class="button primary" type="button" disabled>Use in 50/50 lab</button><button id="pool-apply-range" class="button secondary" type="button" disabled>Use in range lab</button><button id="pool-export" class="button secondary" type="button" disabled>Export snapshot</button></div>
-          </div>
-        </div>
-      </div>
-      <details class="snapshot-details"><summary>Inspect the snapshot</summary><dl>
-        <dt>Pool contract</dt><dd id="pool-address">—</dd>
-        <dt>Block hash</dt><dd id="pool-hash">—</dd>
-        <dt>Token 0 · USDC</dt><dd id="pool-token0">—</dd>
-        <dt>Token 1 · WETH</dt><dd id="pool-token1">—</dd>
-        <dt>USDC reserve · base units</dt><dd id="pool-raw0">—</dd>
-        <dt>WETH reserve · base units</dt><dd id="pool-raw1">—</dd>
-        <dt>Captured at</dt><dd id="pool-captured">—</dd><dt>Recorded provider</dt><dd id="pool-provider">—</dd>
-      </dl><p class="fine-print">The recorded 1 WETH quote is checked using exact integer arithmetic against the Uniswap v2 router at the same block. It describes that snapshot, not an executable live trade. Fee income in the lab remains your own assumption.</p></details>
-      </div>
-
-      <div id="position-lab" role="tabpanel" aria-labelledby="source-position-tab" hidden>
-        <div class="pool-layout">
-          <div>
-            <p class="eyebrow">POSITION SNAPSHOTS</p>
-            <h2>Import a Uniswap v3 position</h2>
-            <p class="body-copy">Read a Uniswap v3 WETH/USDC position on Ethereum. See its range, token mix and fee accounting at a recorded block, then test future-price assumptions in the range lab.</p>
-            <details id="position-setup" class="position-setup" open><summary id="position-setup-summary" class="position-setup-summary"><span>Refresh or open another position</span><span id="position-setup-overview"></span></summary><div class="position-setup-body">
-            <form id="position-form" class="position-form">
-              <div class="scenario-field"><label for="position-id">Position NFT ID <span>Ethereum · Uniswap v3</span></label><input id="position-id" type="text" inputmode="numeric" autocomplete="off" maxlength="80" value="1382030" required aria-describedby="position-id-help"></div>
-              <button id="position-fetch" class="button primary" type="submit">Fetch position <span>→</span></button>
-            </form>
-            <p id="position-id-help" class="fine-print position-help">Find the NFT ID in your Uniswap position or its NFT page. This release supports WETH/USDC positions; no wallet connection is needed.</p>
-            <div class="pool-buttons"><button id="position-example-fees" class="button secondary" type="button">With fee accounting</button><button id="position-example-inside" class="button secondary" type="button">In-range example</button><button id="position-example" class="button secondary" type="button">Out-of-range example</button><label class="button secondary file-button" for="position-file">Open position file<input id="position-file" type="file" accept=".json,application/json" aria-label="Open position file"></label></div>
-            <p class="fine-print">Fetching contacts PublicNode, with dRPC as a backup for public Ethereum data. Position files open locally. Values assume USDC = $1.</p>
-            </div></details>
-            <p id="position-status" class="pool-status" role="status"></p><button id="position-clear-saved" class="button secondary snapshot-recovery" type="button" hidden>Discard unreadable saved position</button>
-          </div>
-          <div>
-            <div id="position-empty" class="pool-empty"><p>No position snapshot loaded.</p><p class="fine-print">Enter an NFT ID or choose a recorded example. Your snapshot keeps the exact ticks, token amounts and block. Loading it leaves your experiments unchanged until you apply it.</p></div>
-            <div id="position-result" role="region" aria-label="Position snapshot" tabindex="-1" hidden>
-              <strong id="position-heading-id" class="position-heading-id"></strong>
-              <span class="small-badge">Ethereum · Uniswap v3</span> <span id="position-fee" class="small-badge"></span>
-              <a id="position-block" class="position-block" target="_blank" rel="noopener noreferrer"></a>
-              <span class="label">Position principal value · USDC = $1</span><strong id="position-principal" class="position-value"></strong>
-              <p class="fine-print">Tokens backing the position’s liquidity, including when it is out of range. Excludes fees and recorded tokens owed.</p>
-              <div class="position-token-grid"><div><span class="label">WETH</span><strong id="position-eth"></strong></div><div><span class="label">USDC</span><strong id="position-usdc"></strong></div></div>
-              <svg id="position-allocation-bar" class="allocation-bar" viewBox="0 0 100 8" preserveAspectRatio="none" role="img" aria-labelledby="position-allocation-title"><title id="position-allocation-title"></title><rect width="100" height="8" class="allocation-usdc"/><rect id="position-allocation-eth" width="0" height="8" class="allocation-eth"/></svg><p id="position-allocation-note" class="allocation-note"></p>
-              <div class="position-range"><span id="position-state" class="cl-state"></span><p id="position-state-note" class="fine-print"></p><div class="position-range-prices"><div><span class="label">Lower ETH price</span><strong id="position-lower"></strong></div><div><span class="label">Upper ETH price</span><strong id="position-upper"></strong></div></div><p class="position-current-price">Recorded ETH price <strong id="position-price"></strong></p></div>
-              <p id="position-evidence" class="fine-print"></p>
-              <button id="position-apply" class="button primary position-apply" type="button" disabled>Explore this position’s range <span>→</span></button>
-              <p id="position-apply-note" class="fine-print"></p>
-              <div class="pool-buttons"><button id="position-export" class="button secondary" type="button" disabled>Export position snapshot</button></div>
-            </div>
-          </div>
-        </div>
-              <details id="position-fees" class="position-fees" hidden>
-                <summary><strong>Fees and tokens owed</strong> <span id="position-fee-context"></span> <span id="position-collectable-summary">Fee growth was not recorded in this file.</span></summary>
-                <p id="position-fee-empty" class="fine-print">This older snapshot includes principal and recorded owed balances, but lacks the growth data needed to calculate new fees. Fetch the position again for a new capture, or <a href="#example=position-fees">open the applied fee example →</a>.</p>
-                <p id="position-fee-overflow" class="fine-print" hidden>This position exceeds the manager’s fee-accounting capacity. The exact uint128 contract values remain in the inspector and exported file; normal dollar totals are not shown.</p>
-                <div id="position-fee-data" hidden>
-                  <dl class="position-fee-balances">
-                    <div><dt>Newly accrued fees</dt> <dd><strong id="position-accrued-value"></strong> <span id="position-accrued-tokens"></span></dd></div>
-                    <div><dt>Recorded tokens owed</dt> <dd><strong id="position-recorded-owed-value"></strong> <span id="position-recorded-owed-tokens"></span></dd></div>
-                    <div class="position-fee-total"><dt>Estimated collectable tokens</dt> <dd><strong id="position-collectable-value"></strong> <span id="position-collectable-tokens"></span></dd></div>
-                  </dl>
-                  <p id="position-owed-note" class="fine-print"></p>
-                  <p class="fine-print">Newly accrued fees cover the growth since the position’s last accounting update, up to this block. The update’s date is not reconstructed. Collection can return slightly less because of rounding in the pool’s accounting.</p>
-                  <p class="position-assets-total">Principal + estimated collectable value <strong id="position-assets-value"></strong></p>
-                  <p class="fine-print">Values use this block’s pool price and USDC = $1. Displayed amounts are rounded; the inspector and exported file retain exact token base units. This is a balance breakdown, not historical profit or a fee forecast.</p>
-                  <details id="position-fee-walkthrough" class="position-fee-walkthrough">
-                    <summary>Work through this snapshot</summary>
-                    <ol id="position-fee-steps"></ol>
-                    <p class="fine-print">At an unchanged price and ignoring costs, removing $1,000 of principal without collecting moves about $1,000 from active liquidity into owed tokens. That bookkeeping change does not increase total assets or create $1,000 of fee income.</p>
-                  </details>
-                  <details id="position-fee-math" class="position-fee-math">
-                    <summary>Inspect the fee calculation</summary>
-                    <pre><code id="position-fee-formula"></code></pre>
-                    <p class="fine-print">Growth differences wrap modulo 2^256. The contract tick chooses growth below and above the range, with the lower raw tick included and the upper raw tick excluded. Credits and owed totals follow the manager’s uint128 accounting; capacity overflow is flagged.</p>
-                  </details>
-                  <p class="position-fee-sources"><a href="https://blog.uniswap.org/uniswap-v3-math-primer-2" target="_blank" rel="noopener noreferrer">Uniswap’s fee-growth explanation ↗</a> <a href="https://github.com/Uniswap/v3-periphery/blob/main/contracts/NonfungiblePositionManager.sol" target="_blank" rel="noopener noreferrer">Position manager accounting ↗</a></p>
-                </div>
-              </details>
-        <details id="position-details" class="snapshot-details" hidden><summary>Inspect the position snapshot</summary><dl>
-          <dt>Position manager</dt><dd id="position-manager">—</dd><dt>Pool contract</dt><dd id="position-pool">—</dd><dt>Block hash</dt><dd id="position-hash">—</dd>
-          <dt>Position ticks · raw order</dt><dd id="position-ticks">—</dd><dt>Pool tick</dt><dd id="position-current-tick">—</dd><dt>Tick spacing</dt><dd id="position-spacing">—</dd>
-          <dt>Liquidity · integer</dt><dd id="position-liquidity">—</dd><dt>Pool sqrtPriceX96</dt><dd id="position-sqrt">—</dd><dt>USDC principal · base units</dt><dd id="position-raw0">—</dd><dt>WETH principal · base units</dt><dd id="position-raw1">—</dd>
-          <dt>Recorded USDC owed</dt><dd id="position-owed0">—</dd><dt>Recorded WETH owed</dt><dd id="position-owed1">—</dd><dt>Captured at</dt><dd id="position-captured">—</dd><dt>Recorded provider</dt><dd id="position-provider">—</dd>
-        </dl><section id="position-fee-details" hidden><h3>Fee accounting inputs</h3><dl>
-          <dt>USDC global growth · Q128</dt><dd id="position-growth-global0">—</dd>
-          <dt>WETH global growth · Q128</dt><dd id="position-growth-global1">—</dd>
-          <dt>USDC lower outside growth</dt><dd id="position-growth-lower0">—</dd>
-          <dt>WETH lower outside growth</dt><dd id="position-growth-lower1">—</dd>
-          <dt>USDC upper outside growth</dt><dd id="position-growth-upper0">—</dd>
-          <dt>WETH upper outside growth</dt><dd id="position-growth-upper1">—</dd>
-          <dt>USDC last inside growth</dt><dd id="position-growth-last0">—</dd>
-          <dt>WETH last inside growth</dt><dd id="position-growth-last1">—</dd>
-          <dt>USDC current inside growth</dt><dd id="position-growth-inside0">—</dd>
-          <dt>WETH current inside growth</dt><dd id="position-growth-inside1">—</dd>
-          <dt>Lower boundary liquidity</dt><dd id="position-growth-gross-lower">—</dd>
-          <dt>Upper boundary liquidity</dt><dd id="position-growth-gross-upper">—</dd>
-          <dt>USDC new fees · base units</dt><dd id="position-fee-raw0">—</dd>
-          <dt>WETH new fees · base units</dt><dd id="position-fee-raw1">—</dd>
-          <dt>USDC collectable estimate · base units</dt><dd id="position-collectable-raw0">—</dd>
-          <dt>WETH collectable estimate · base units</dt><dd id="position-collectable-raw1">—</dd>
-          <dt>Manager accounting capacity</dt><dd id="position-fee-capacity">—</dd>
-        </dl></section><p class="fine-print">Principal uses integer Q96 prices and rounds down to token base units. Status uses the contract tick: lower tick inclusive, upper tick exclusive. Raw ticks quote WETH per USDC, so the displayed USD/ETH bounds run in the opposite order.</p><p class="fine-print">Recorded tokens owed may include withdrawn principal and do not include fee growth since the last accounting update. New snapshots also record global and boundary fee growth to estimate newly accrued fees and collectable tokens. These amounts do not reconstruct historical returns.</p></details>
-      </div>
-    </section>
     <div id="liquidity-labs" class="lab-group">
     <div class="lab-switch" role="tablist" aria-label="Liquidity experiments">
       <button id="lab-full-tab" type="button" role="tab" aria-selected="true" aria-controls="lp-lab" tabindex="0">Full-range 50/50</button>
@@ -346,6 +219,140 @@
       </div></details>
     </section>
     </div>
+    </div>
+    <div id="inspect-workspace" class="app-workspace" hidden>
+    <section id="pool-lab" class="pool-section card" aria-label="Research snapshots">
+      <div class="source-tabs" role="tablist" aria-label="Snapshot sources"><button id="source-pool-tab" type="button" role="tab" aria-selected="true" aria-controls="pool-source" tabindex="0">Pool snapshot</button><button id="source-position-tab" type="button" role="tab" aria-selected="false" aria-controls="position-lab" tabindex="-1">V3 position</button></div>
+      <div id="pool-source" role="tabpanel" aria-labelledby="source-pool-tab">
+      <div class="pool-layout">
+        <div>
+          <p class="eyebrow">POOL SNAPSHOTS</p>
+          <h2 id="pool-heading">Import a Uniswap v2 pool snapshot</h2>
+          <p class="body-copy">Capture the Ethereum Uniswap v2 WETH/USDC pool at a finalized block, or reopen a saved snapshot.</p>
+          <div class="pool-buttons">
+            <button id="pool-fetch" class="button primary" type="button">Fetch latest snapshot</button>
+            <button id="pool-example" class="button secondary" type="button">Load recorded example</button>
+            <label class="button secondary file-button" for="pool-file">Open snapshot file<input id="pool-file" type="file" accept=".json,application/json" aria-label="Open snapshot file"></label>
+          </div>
+          <p class="fine-print">Fetching contacts PublicNode, with dRPC as a backup for public chain data. Saved files open locally. WETH is wrapped ETH; the calculator assumes USDC = $1.</p>
+          <p id="pool-status" class="pool-status" role="status"></p><button id="pool-clear-saved" class="button secondary snapshot-recovery" type="button" hidden>Discard unreadable saved pool snapshot</button>
+        </div>
+        <div>
+          <div id="pool-empty" class="pool-empty"><p>No pool snapshot loaded.</p><p class="fine-print">Your snapshot keeps its block, token amounts and recorded quote. Loading it leaves your calculator and virtual wallet unchanged until you apply its price.</p></div>
+          <div id="pool-result" hidden>
+            <div class="pool-result-heading"><span class="small-badge">Ethereum · Uniswap v2</span><a id="pool-block" target="_blank" rel="noopener noreferrer"></a></div>
+            <p class="label">WETH price from pool reserves · USDC = $1</p>
+            <strong id="pool-price" class="pool-price"></strong>
+            <div class="pool-reserves"><span id="pool-reserve-eth"></span><span id="pool-reserve-usdc"></span></div>
+            <p id="pool-quote" class="fine-print"></p>
+            <p id="pool-evidence" class="fine-print"></p>
+            <div class="pool-buttons"><button id="pool-apply" class="button primary" type="button" disabled>Use in 50/50 lab</button><button id="pool-apply-range" class="button secondary" type="button" disabled>Use in range lab</button><button id="pool-export" class="button secondary" type="button" disabled>Export snapshot</button></div>
+          </div>
+        </div>
+      </div>
+      <details class="snapshot-details"><summary>Inspect the snapshot</summary><dl>
+        <dt>Pool contract</dt><dd id="pool-address">—</dd>
+        <dt>Block hash</dt><dd id="pool-hash">—</dd>
+        <dt>Token 0 · USDC</dt><dd id="pool-token0">—</dd>
+        <dt>Token 1 · WETH</dt><dd id="pool-token1">—</dd>
+        <dt>USDC reserve · base units</dt><dd id="pool-raw0">—</dd>
+        <dt>WETH reserve · base units</dt><dd id="pool-raw1">—</dd>
+        <dt>Captured at</dt><dd id="pool-captured">—</dd><dt>Recorded provider</dt><dd id="pool-provider">—</dd>
+      </dl><p class="fine-print">The recorded 1 WETH quote is checked using exact integer arithmetic against the Uniswap v2 router at the same block. It describes that snapshot, not an executable live trade. Fee income in the lab remains your own assumption.</p></details>
+      </div>
+
+      <div id="position-lab" role="tabpanel" aria-labelledby="source-position-tab" hidden>
+        <div class="pool-layout">
+          <div>
+            <p class="eyebrow">POSITION SNAPSHOTS</p>
+            <h2>Import a Uniswap v3 position</h2>
+            <p class="body-copy">Read a Uniswap v3 WETH/USDC position on Ethereum. See its range, token mix and fee accounting at a recorded block, then test future-price assumptions in the range lab.</p>
+            <details id="position-setup" class="position-setup" open><summary id="position-setup-summary" class="position-setup-summary"><span>Refresh or open another position</span><span id="position-setup-overview"></span></summary><div class="position-setup-body">
+            <form id="position-form" class="position-form">
+              <div class="scenario-field"><label for="position-id">Position NFT ID <span>Ethereum · Uniswap v3</span></label><input id="position-id" type="text" inputmode="numeric" autocomplete="off" maxlength="80" value="1382030" required aria-describedby="position-id-help"></div>
+              <button id="position-fetch" class="button primary" type="submit">Fetch position <span>→</span></button>
+            </form>
+            <p id="position-id-help" class="fine-print position-help">Find the NFT ID in your Uniswap position or its NFT page. This release supports WETH/USDC positions; no wallet connection is needed.</p>
+            <div class="pool-buttons"><button id="position-example-fees" class="button secondary" type="button">With fee accounting</button><button id="position-example-inside" class="button secondary" type="button">In-range example</button><button id="position-example" class="button secondary" type="button">Out-of-range example</button><label class="button secondary file-button" for="position-file">Open position file<input id="position-file" type="file" accept=".json,application/json" aria-label="Open position file"></label></div>
+            <p class="fine-print">Fetching contacts PublicNode, with dRPC as a backup for public Ethereum data. Position files open locally. Values assume USDC = $1.</p>
+            </div></details>
+            <p id="position-status" class="pool-status" role="status"></p><button id="position-clear-saved" class="button secondary snapshot-recovery" type="button" hidden>Discard unreadable saved position</button>
+          </div>
+          <div>
+            <div id="position-empty" class="pool-empty"><p>No position snapshot loaded.</p><p class="fine-print">Enter an NFT ID or choose a recorded example. Your snapshot keeps the exact ticks, token amounts and block. Loading it leaves your experiments unchanged until you apply it.</p></div>
+            <div id="position-result" role="region" aria-label="Position snapshot" tabindex="-1" hidden>
+              <strong id="position-heading-id" class="position-heading-id"></strong>
+              <span class="small-badge">Ethereum · Uniswap v3</span> <span id="position-fee" class="small-badge"></span>
+              <a id="position-block" class="position-block" target="_blank" rel="noopener noreferrer"></a>
+              <span class="label">Position principal value · USDC = $1</span><strong id="position-principal" class="position-value"></strong>
+              <p class="fine-print">Tokens backing the position’s liquidity, including when it is out of range. Excludes fees and recorded tokens owed.</p>
+              <div class="position-token-grid"><div><span class="label">WETH</span><strong id="position-eth"></strong></div><div><span class="label">USDC</span><strong id="position-usdc"></strong></div></div>
+              <svg id="position-allocation-bar" class="allocation-bar" viewBox="0 0 100 8" preserveAspectRatio="none" role="img" aria-labelledby="position-allocation-title"><title id="position-allocation-title"></title><rect width="100" height="8" class="allocation-usdc"/><rect id="position-allocation-eth" width="0" height="8" class="allocation-eth"/></svg><p id="position-allocation-note" class="allocation-note"></p>
+              <div class="position-range"><span id="position-state" class="cl-state"></span><p id="position-state-note" class="fine-print"></p><div class="position-range-prices"><div><span class="label">Lower ETH price</span><strong id="position-lower"></strong></div><div><span class="label">Upper ETH price</span><strong id="position-upper"></strong></div></div><p class="position-current-price">Recorded ETH price <strong id="position-price"></strong></p></div>
+              <p id="position-evidence" class="fine-print"></p>
+              <button id="position-apply" class="button primary position-apply" type="button" disabled>Explore this position’s range <span>→</span></button>
+              <p id="position-apply-note" class="fine-print"></p>
+              <div class="pool-buttons"><button id="position-export" class="button secondary" type="button" disabled>Export position snapshot</button></div>
+            </div>
+          </div>
+        </div>
+              <details id="position-fees" class="position-fees" hidden>
+                <summary><strong>Fees and tokens owed</strong> <span id="position-fee-context"></span> <span id="position-collectable-summary">Fee growth was not recorded in this file.</span></summary>
+                <p id="position-fee-empty" class="fine-print">This older snapshot includes principal and recorded owed balances, but lacks the growth data needed to calculate new fees. Fetch the position again for a new capture, or <a href="#example=position-fees">open the applied fee example →</a>.</p>
+                <p id="position-fee-overflow" class="fine-print" hidden>This position exceeds the manager’s fee-accounting capacity. The exact uint128 contract values remain in the inspector and exported file; normal dollar totals are not shown.</p>
+                <div id="position-fee-data" hidden>
+                  <dl class="position-fee-balances">
+                    <div><dt>Newly accrued fees</dt> <dd><strong id="position-accrued-value"></strong> <span id="position-accrued-tokens"></span></dd></div>
+                    <div><dt>Recorded tokens owed</dt> <dd><strong id="position-recorded-owed-value"></strong> <span id="position-recorded-owed-tokens"></span></dd></div>
+                    <div class="position-fee-total"><dt>Estimated collectable tokens</dt> <dd><strong id="position-collectable-value"></strong> <span id="position-collectable-tokens"></span></dd></div>
+                  </dl>
+                  <p id="position-owed-note" class="fine-print"></p>
+                  <p class="fine-print">Newly accrued fees cover the growth since the position’s last accounting update, up to this block. The update’s date is not reconstructed. Collection can return slightly less because of rounding in the pool’s accounting.</p>
+                  <p class="position-assets-total">Principal + estimated collectable value <strong id="position-assets-value"></strong></p>
+                  <p class="fine-print">Values use this block’s pool price and USDC = $1. Displayed amounts are rounded; the inspector and exported file retain exact token base units. This is a balance breakdown, not historical profit or a fee forecast.</p>
+                  <details id="position-fee-walkthrough" class="position-fee-walkthrough">
+                    <summary>Work through this snapshot</summary>
+                    <ol id="position-fee-steps"></ol>
+                    <p class="fine-print">At an unchanged price and ignoring costs, removing $1,000 of principal without collecting moves about $1,000 from active liquidity into owed tokens. That bookkeeping change does not increase total assets or create $1,000 of fee income.</p>
+                  </details>
+                  <details id="position-fee-math" class="position-fee-math">
+                    <summary>Inspect the fee calculation</summary>
+                    <pre><code id="position-fee-formula"></code></pre>
+                    <p class="fine-print">Growth differences wrap modulo 2^256. The contract tick chooses growth below and above the range, with the lower raw tick included and the upper raw tick excluded. Credits and owed totals follow the manager’s uint128 accounting; capacity overflow is flagged.</p>
+                  </details>
+                  <p class="position-fee-sources"><a href="https://blog.uniswap.org/uniswap-v3-math-primer-2" target="_blank" rel="noopener noreferrer">Uniswap’s fee-growth explanation ↗</a> <a href="https://github.com/Uniswap/v3-periphery/blob/main/contracts/NonfungiblePositionManager.sol" target="_blank" rel="noopener noreferrer">Position manager accounting ↗</a></p>
+                </div>
+              </details>
+        <details id="position-details" class="snapshot-details" hidden><summary>Inspect the position snapshot</summary><dl>
+          <dt>Position manager</dt><dd id="position-manager">—</dd><dt>Pool contract</dt><dd id="position-pool">—</dd><dt>Block hash</dt><dd id="position-hash">—</dd>
+          <dt>Position ticks · raw order</dt><dd id="position-ticks">—</dd><dt>Pool tick</dt><dd id="position-current-tick">—</dd><dt>Tick spacing</dt><dd id="position-spacing">—</dd>
+          <dt>Liquidity · integer</dt><dd id="position-liquidity">—</dd><dt>Pool sqrtPriceX96</dt><dd id="position-sqrt">—</dd><dt>USDC principal · base units</dt><dd id="position-raw0">—</dd><dt>WETH principal · base units</dt><dd id="position-raw1">—</dd>
+          <dt>Recorded USDC owed</dt><dd id="position-owed0">—</dd><dt>Recorded WETH owed</dt><dd id="position-owed1">—</dd><dt>Captured at</dt><dd id="position-captured">—</dd><dt>Recorded provider</dt><dd id="position-provider">—</dd>
+        </dl><section id="position-fee-details" hidden><h3>Fee accounting inputs</h3><dl>
+          <dt>USDC global growth · Q128</dt><dd id="position-growth-global0">—</dd>
+          <dt>WETH global growth · Q128</dt><dd id="position-growth-global1">—</dd>
+          <dt>USDC lower outside growth</dt><dd id="position-growth-lower0">—</dd>
+          <dt>WETH lower outside growth</dt><dd id="position-growth-lower1">—</dd>
+          <dt>USDC upper outside growth</dt><dd id="position-growth-upper0">—</dd>
+          <dt>WETH upper outside growth</dt><dd id="position-growth-upper1">—</dd>
+          <dt>USDC last inside growth</dt><dd id="position-growth-last0">—</dd>
+          <dt>WETH last inside growth</dt><dd id="position-growth-last1">—</dd>
+          <dt>USDC current inside growth</dt><dd id="position-growth-inside0">—</dd>
+          <dt>WETH current inside growth</dt><dd id="position-growth-inside1">—</dd>
+          <dt>Lower boundary liquidity</dt><dd id="position-growth-gross-lower">—</dd>
+          <dt>Upper boundary liquidity</dt><dd id="position-growth-gross-upper">—</dd>
+          <dt>USDC new fees · base units</dt><dd id="position-fee-raw0">—</dd>
+          <dt>WETH new fees · base units</dt><dd id="position-fee-raw1">—</dd>
+          <dt>USDC collectable estimate · base units</dt><dd id="position-collectable-raw0">—</dd>
+          <dt>WETH collectable estimate · base units</dt><dd id="position-collectable-raw1">—</dd>
+          <dt>Manager accounting capacity</dt><dd id="position-fee-capacity">—</dd>
+        </dl></section><p class="fine-print">Principal uses integer Q96 prices and rounds down to token base units. Status uses the contract tick: lower tick inclusive, upper tick exclusive. Raw ticks quote WETH per USDC, so the displayed USD/ETH bounds run in the opposite order.</p><p class="fine-print">Recorded tokens owed may include withdrawn principal and do not include fee growth since the last accounting update. New snapshots also record global and boundary fee growth to estimate newly accrued fees and collectable tokens. These amounts do not reconstruct historical returns.</p></details>
+      </div>
+    </section>
+    </div>
+    <div id="mechanics-workspace" class="app-workspace" hidden>
+    <a class="workspace-back" href="#lp-lab">← Back to experiments</a>
+    <div class="notice"><span class="notice-icon">i</span><p>All experiments use virtual funds. Pool imports read public blockchain data. No wallet connection or transactions. <span id="storage-status" role="status">Your sandbox is saved in this browser. Reset clears the saved session.</span></p></div>
     <div id="swap-sandbox" class="lab-heading sandbox-heading"><div><p class="eyebrow">VIRTUAL POOL</p><h2>Swap sandbox</h2><p class="body-copy">Explore pool mechanics with your own virtual balances.</p></div><button class="button secondary" id="reset">↻ Reset sandbox</button></div>
     <section class="stats" aria-label="Sandbox overview">
       <article class="stat"><span class="label">Your virtual portfolio</span><strong id="portfolio">$40,000.00</strong><span class="stat-note">Valued at $2,000/ETH, including your LP share</span></article>
@@ -387,7 +394,24 @@
       <section class="card loss-card"><div class="card-heading"><div><p class="eyebrow">WHAT IF?</p><h2>Explore impermanent loss.</h2></div><span class="small-badge">50 / 50 pool</span></div><p class="body-copy">When ETH’s market price changes, a rebalanced pool can be worth less than simply holding the original tokens.</p><div class="loss-result"><div><span class="label">ETH price change</span><strong id="price-change">+100%</strong></div><div><span class="label">Return vs. holding</span><strong id="loss">−5.72%</strong></div></div><label class="sr-only" for="price-ratio">ETH price relative to its starting price</label><input type="range" id="price-ratio" min="0.25" max="4" step="0.05" value="2"><div class="range-labels"><span>0.25×</span><span>Slide to explore</span><span>4×</span></div><p class="fine-print">An independent scenario assuming arbitrage, equal starting token values, and no fees. 1× means an unchanged price. It does not change your sandbox pool.</p></section>
       <section class="card activity-card"><div class="card-heading"><div><p class="eyebrow">YOUR EXPERIMENTS</p><h2>Activity</h2></div><span class="small-badge" id="activity-count">0 actions</span></div><ol id="activity" aria-live="polite"><li class="empty-activity"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" fill="none" stroke="currentColor" stroke-width="2"/></svg><p>No actions yet.<br><span class="muted">Make a swap or add some liquidity.</span></p></li></ol></section>
     </div>
-    <footer><span>Virtual funds · No wallet connection</span><span>Degenerator · An educational simulation</span></footer>
+    </div>
+    <div id="replay-workspace" class="app-workspace" hidden>
+      <section id="historical-case" class="card period-card" aria-labelledby="period-title">
+        <p class="eyebrow">FIXED-RANGE HISTORICAL CASE</p><h2 id="period-title">Position #1382030 · 83 minutes</h2>
+        <p class="body-copy">Follow a recorded Ethereum WETH/USDC position in the 0.3% pool. Its liquidity stayed fixed for this period. Fees below are calculated from recorded accounting.</p>
+        <p id="period-window" class="fine-print"></p><p id="period-status" class="fine-print" role="status"></p>
+        <div id="period-result" hidden>
+          <div class="period-metrics"><div><span class="label">Principal + period fees</span><strong id="period-lp"></strong></div><div><span class="label">Hold starting principal tokens</span><strong id="period-hold"></strong></div><div><span class="label">Fees earned during this period</span><strong id="period-fees"></strong></div><div><span class="label">LP minus holding</span><strong id="period-gap"></strong></div></div>
+          <label for="period-checkpoint" class="period-slider-label">Move through the recorded checkpoints</label><input id="period-checkpoint" type="range" min="0" max="8" step="1" value="8"><p id="period-current" class="fine-print"></p>
+          <figure class="period-figure"><svg id="period-chart" viewBox="0 0 620 260" role="img" aria-label="Recorded price checkpoints"><path id="period-lower" class="period-bound"/><path id="period-upper" class="period-bound"/><text id="period-lower-label" x="65" class="chart-label"></text><text id="period-upper-label" x="65" class="chart-label"></text><path id="period-line" class="curve-line"/><circle id="period-dot" r="6" class="curve-dot"/><text x="65" y="245" class="chart-label">Start</text><text x="555" y="245" text-anchor="end" class="chart-label">End</text></svg><figcaption class="fine-print">Dashed lines mark the position’s range. The price line connects nine recorded samples. Fees and time in range use cumulative contract counters, including activity between samples.</figcaption></figure>
+          <div class="period-time"><div><span class="label">Time in range so far</span><strong id="period-range-time"></strong><p id="period-time-detail" class="fine-print"></p></div><div><span class="label">Recorded ETH price · USDC = $1</span><strong id="period-price"></strong></div></div>
+          <details class="model-details period-details"><summary>Tokens and verification</summary><dl><dt>Position principal</dt><dd id="period-principal"></dd><dt>Period fee tokens</dt><dd id="period-fee-tokens"></dd><dt>Holding basket</dt><dd id="period-hold-tokens"></dd><dt>Selected block</dt><dd><a id="period-block" target="_blank" rel="noopener noreferrer"></a></dd><dt>Block hash</dt><dd id="period-hash"></dd><dt>Period fees · exact integers</dt><dd id="period-raw-fees"></dd><dt>Range-time counter · uint32</dt><dd id="period-counter"></dd></dl><p class="fine-print">Both providers agreed on the endpoint block hashes. Position-update event queries covered the complete period. Independent read-only collection simulations agree with the period fee calculation within one base unit per token because accounting checkpoints round down separately.</p></details>
+        </div>
+        <p class="fine-print">This is one short recorded case, not lifetime PnL or a forecast. Both strategies start with the same principal tokens; previously accrued fees and owed balances are excluded. Period fees remain in their earned tokens, valued at the selected pool price. Gas and incentives are excluded; USDC is valued at $1.</p>
+        <div class="period-actions"><button id="period-apply" class="button secondary" type="button" disabled>Explore this checkpoint in Playground →</button><button id="period-export" class="button secondary" type="button" disabled>Export recorded case</button></div>
+      </section>
+    </div>
+    <footer><span>Read-only chain data · Virtual experiments</span><span>Degenerator</span></footer>
   </main>
   <dialog id="experiment-dialog" class="experiment-dialog" aria-labelledby="experiment-dialog-title" aria-describedby="experiment-dialog-context"><form id="experiment-save-form"><h2 id="experiment-dialog-title">Save experiment</h2><p id="experiment-dialog-context" class="fine-print"></p><div class="scenario-field"><label for="experiment-name">Name</label><input id="experiment-name" type="text" maxlength="80" required autocomplete="off" aria-describedby="experiment-dialog-error"></div><div class="scenario-field"><label for="experiment-notes">Notes <span>Optional · 1,000 characters</span></label><textarea id="experiment-notes" maxlength="1000" rows="4" placeholder="What are you testing with this setup?" aria-describedby="experiment-dialog-error"></textarea></div><p id="experiment-dialog-error" class="form-error" role="status"></p><p class="fine-print">Saved in this browser. Export your library for a portable backup.</p><div class="experiment-dialog-actions"><button id="experiment-save-confirm" class="button primary" type="submit">Save experiment</button><button id="experiment-save-cancel" class="button secondary" type="button">Cancel</button></div></form></dialog>
 </body>

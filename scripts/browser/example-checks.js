@@ -42,7 +42,7 @@ export async function checkExamples({ evaluate, click, fill, text, navigate, bas
 
   await navigate(base+'#example=position-fees');
   await wait("document.getElementById('position-fees').open && document.getElementById('position-fee-walkthrough').open && document.getElementById('position-lab').getAttribute('aria-busy')==='false'");
-  assert.equal(await evaluate("document.querySelectorAll('#example-cards a').length"), 3);
+  assert.equal(await evaluate("document.querySelectorAll('#example-cards a').length"), 4);
   assert.equal(await evaluate("document.querySelector('[data-example-id=position-fees]').hash"), '#example=position-fees');
   assert.match(await text('position-fee-context'), /1382030.*26168941/);
   assert.equal(await text('position-collectable-value'), '$5.67');

@@ -1,0 +1,9 @@
+/* Focus the page on one task while keeping controllers and drafts alive. */
+.workspace-links{display:flex;flex-wrap:wrap;gap:10px 24px;margin:0 0 24px;padding:0 0 18px;border-bottom:1px solid var(--border)}
+.workspace-links a,.workspace-back{color:var(--muted);font-size:14px;line-height:1.7;min-height:44px;display:inline-flex;align-items:center}
+.workspace-links a:hover,.workspace-back:hover{color:var(--accent)}
+.workspace-back{margin-bottom:20px}
+#workspace-title:focus{outline:none}
+#inspect-workspace .pool-section{margin-top:0}
+@media(max-width:750px){.workspace-links{gap:4px 20px}.topbar{height:auto;min-height:70px;flex-direction:column;align-items:flex-start;gap:12px;padding:16px 20px}.topbar .site-nav{display:flex;width:100%}.topbar .product-nav{gap:10px;width:100%}.topbar .product-nav a{flex:1;text-align:center}}
+@media(max-width:360px){.topbar{padding:0 12px}.brand{font-size:16px}.product-nav{gap:10px}.product-nav a{font-size:13px}}

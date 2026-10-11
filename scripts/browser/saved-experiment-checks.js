@@ -29,7 +29,7 @@ export async function checkSavedExperiments({ evaluate, click, fill, text, navig
   await fill('scenario-investment','5000');await fill('scenario-fees','0');
   await click('scenario-save');await fill('experiment-name','   ');await click('experiment-save-confirm');
   assert.match(await text('experiment-dialog-error'),/name/);assert.equal((await library()),null);
-  await click('experiment-save-cancel');assert.equal(await evaluate('document.activeElement.id'),'scenario-save');
+  await click('experiment-save-cancel');await waitFor(evaluate,"document.activeElement.id==='scenario-save'");assert.equal(await evaluate('document.activeElement.id'),'scenario-save');
   await save('scenario-save','Price doubles · no fees','Baseline\nSame starting tokens.');
   const baseline=(await library()).experiments[0];assert.equal(baseline.inputs.fees,0);
   await fill('scenario-fees','500');await save('scenario-save','Price doubles · assumed fees','An assumption, not a yield forecast.');
@@ -122,6 +122,7 @@ export async function checkMobileSavedExperiments({ evaluate, click, fill, text,
   await evaluate("document.querySelector('#experiments-list button').click()");
   assert.equal(await evaluate("document.getElementById('lab-full-tab').getAttribute('aria-selected')"),'true');
   await click('scenario-save');await call('Input.dispatchKeyEvent',{type:'keyDown',key:'Escape',code:'Escape'});await call('Input.dispatchKeyEvent',{type:'keyUp',key:'Escape',code:'Escape'});
+  await waitFor(evaluate,"!document.getElementById('experiment-dialog').open&&document.activeElement.id==='scenario-save'");
   assert.equal(await evaluate("document.getElementById('experiment-dialog').open"),false);
   assert.equal(await evaluate('document.activeElement.id'),'scenario-save');
   await navigate(base);

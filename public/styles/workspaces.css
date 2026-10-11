@@ -9,9 +9,12 @@
 @media(max-width:360px){.topbar{padding:0 12px}.brand{font-size:16px}.product-nav{gap:10px}.product-nav a{font-size:13px}}
 
 /* Keep primary navigation available; secondary tabs and lesson sidebars sit below it. */
-:root{--header-height:85px}
+:root{--header-height:85px;--lab-tabs-height:56px}
 html{scroll-padding-top:calc(var(--header-height) + 12px)}
 .topbar{position:sticky;top:0;z-index:30;background:var(--bg)}
 .lab-switch{top:calc(var(--header-height) + 12px)}
 @media(min-width:751px){.learn-sidebar{top:calc(var(--header-height) + 24px);max-height:calc(100dvh - var(--header-height) - 48px);overflow-y:auto}}
 @media(max-width:360px){.topbar{padding:12px}}
+
+.lab-group .scenario-section,#cl-results{scroll-margin-top:calc(var(--lab-tabs-height) + 24px)}
+.scenario-section :is(input,select,button,summary){scroll-margin-top:calc(var(--lab-tabs-height) + 24px)}

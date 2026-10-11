@@ -14,9 +14,9 @@ import { initPoolSnapshots } from './ui/pools.js';
 import { initSavedExperiments } from './ui/saved-experiments.js';
 
 // Compose controllers explicitly. Data adapters and calculation models never initialize UI.
-initPageAccess();
+const pageAccess = initPageAccess();
 const workspaces = initWorkspaces();
-const navigation = initLabNavigation({ activate: () => workspaces.select('experiment') });
+const navigation = initLabNavigation({ activate: () => { workspaces.select('experiment'); pageAccess.refreshOffsets(); } });
 const snapshots = initSnapshotNavigation({ activate: () => workspaces.select('inspect') });
 initSandbox();
 const fullRangeLab = initFullRangeLab({ navigation });

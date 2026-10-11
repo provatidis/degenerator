@@ -10,6 +10,7 @@ async function targetClear(evaluate,id){
  await settle(evaluate);const header=await headerVisible(evaluate);
  const top=await evaluate('document.getElementById('+JSON.stringify(id)+').getBoundingClientRect().top');
  assert.ok(top>=header.bottom+10,id+' must clear the sticky header ('+top+' vs '+header.bottom+').');
+ if(['lp-lab','range-lab'].includes(id)){const bottom=await evaluate("document.querySelector('.lab-switch').getBoundingClientRect().bottom");assert.ok(top>=bottom+10,id+' must also clear the lab tabs.');}
 }
 export async function checkNavigation({evaluate,click,fill,navigate,base,nextEvent,call}){
  await navigate(base+'#experiment');

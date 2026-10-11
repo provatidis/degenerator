@@ -2,10 +2,16 @@
 export function initPageAccess() {
   // Native anchors and scrollIntoView share the measured sticky-header offset.
   const header = document.querySelector('.topbar');
-  const measureHeader = () => document.documentElement.style.setProperty('--header-height', header.getBoundingClientRect().height + 'px');
-  measureHeader();
-  const observer = new ResizeObserver(measureHeader);
+  const tabs = document.querySelector('.lab-switch');
+  function refreshOffsets() {
+    document.documentElement.style.setProperty('--header-height', header.getBoundingClientRect().height + 'px');
+    const height = tabs?.getBoundingClientRect().height;
+    if (height) document.documentElement.style.setProperty('--lab-tabs-height', height + 'px');
+  }
+  refreshOffsets();
+  const observer = new ResizeObserver(refreshOffsets);
   observer.observe(header);
+  if (tabs) observer.observe(tabs);
   const skip = document.querySelector('.skip-link');
   const content = document.getElementById('main-content');
   skip.addEventListener('click', event => {
@@ -13,4 +19,5 @@ export function initPageAccess() {
     content.focus({ preventScroll: true });
     content.scrollIntoView({ block: 'start', behavior: 'instant' });
   });
+  return { refreshOffsets };
 }

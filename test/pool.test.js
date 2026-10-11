@@ -4,7 +4,7 @@ import { amountOut, formatUnits } from '../public/models/uniswap-v2.js';
 import { POOL, RPC_URL } from '../public/data/config.js';
 import { fetchPoolSnapshot } from '../public/data/uniswap-v2.js';
 import { validateSnapshot, parseSnapshot, snapshotJSON, snapshotView, saveSnapshot, readSavedSnapshot, SNAPSHOT_KEY } from '../public/data/snapshot.js';
-import { createRpcClient } from '../public/data/rpc.js';
+import { createRpcClient, RpcError } from '../public/data/rpc.js';
 
 const word = (n) => (typeof n === 'bigint' ? n.toString(16) : n.replace(/^0x/, '')).padStart(64, '0');
 const encoded = (...values) => '0x' + values.map(word).join('');
@@ -82,7 +82,7 @@ test('snapshot files round trip exact reserves and sanitize additional input fie
   assert.deepEqual(parseSnapshot(snapshotJSON(snapshot)), snapshot);
   const restored = validateSnapshot({ ...snapshot, displayHTML: '<img src=x>', block: { ...snapshot.block, other: 'ignore' } });
   assert.deepEqual(restored, snapshot);
-  for (const patch of [{ version: 9 }, { protocol: 'uniswap-v3' }, { chainId: 8453 }, { tokens: [...snapshot.tokens].reverse() }, { provider: 'https://example.com' }]) {
+  for (const patch of [{ version: 9 }, { protocol: 'uniswap-v3' }, { chainId: 8453 }, { tokens: [...snapshot.tokens].reverse() }]) {
     assert.throws(() => validateSnapshot({ ...snapshot, ...patch }), /not a supported/);
   }
   assert.throws(() => parseSnapshot('{'), /valid JSON/);
@@ -123,4 +123,38 @@ test('RPC client sends only read methods and validates response IDs and provider
 test('slow data providers time out cleanly', async () => {
   const rpc = createRpcClient({ timeoutMs: 5, fetchImpl: async (_, { signal }) => new Promise((_, reject) => signal.addEventListener('abort', () => reject(new Error('aborted')))) });
   await assert.rejects(rpc('eth_chainId'), /timed out/);
+});
+
+test('fallback restarts v2 identity and reserves at a fresh block and records the successful provider', async () => {
+  const primaryCalls = [], backupCalls = [], progress = [];
+  const first = rpcFixture({}, primaryCalls), second = rpcFixture({}, backupCalls);
+  const backupBlock = { ...block, number: '0x101', hash: '0x' + 'cd'.repeat(32) };
+  const snapshot = await fetchPoolSnapshot({
+    endpoints: ['https://one.example', 'https://two.example'], onFallback: message => progress.push(message),
+    createClient: ({ endpoint }) => endpoint === 'https://one.example' ? async (method, params) => {
+      if (method === 'eth_call' && params[0].data === '0x0902f1ac') throw new RpcError('busy', { retryable: true });
+      return first(method, params);
+    } : async (method, params = []) => {
+      if (method === 'eth_getBlockByNumber') { backupCalls.push({ method, params }); return backupBlock; }
+      if (method === 'eth_call') {
+        assert.equal(params[1], backupBlock.number);
+        return second(method, [params[0], block.number]);
+      }
+      return second(method, params);
+    },
+  });
+  assert.equal(snapshot.block.number, '257');
+  assert.equal(snapshot.block.hash, backupBlock.hash);
+  assert.equal(snapshot.provider, 'https://two.example');
+  assert.equal(progress.length, 1);
+  assert.ok(backupCalls.some(call => call.params?.[0]?.data?.startsWith('0xe6a43905')));
+  assert.equal(backupCalls.filter(call => call.method === 'eth_call').length, 8);
+});
+
+test('fallback does not conceal a bad chain or inconsistent pool identity', async () => {
+  for (const overrides of [{ chain: '0x2105' }, { pair: encoded(POOL.router) }]) {
+    let clients = 0;
+    await assert.rejects(fetchPoolSnapshot({ endpoints: ['https://one.example', 'https://two.example'], createClient: () => { clients++; return rpcFixture(overrides); } }));
+    assert.equal(clients, 1);
+  }
 });

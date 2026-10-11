@@ -1,3 +1,4 @@
+import { RPC_ENDPOINTS } from '../public/data/config.js';
 import assert from 'node:assert/strict';
 import { readdir, readFile, access } from 'node:fs/promises';
 import { resolve, relative, dirname } from 'node:path';
@@ -60,6 +61,12 @@ async function checkAsset(source) {
 }
 for (const document of ['index.html', 'learn.html', '404.html']) {
   const markup = await readFile(resolve(root, document), 'utf8');
+  const policy = markup.match(/<meta http-equiv="Content-Security-Policy" content="([^"]+)"/)?.[1];
+  assert.ok(policy, document + ': provide the production CSP in HTML.');
+  assert.ok(markup.indexOf('http-equiv="Content-Security-Policy"') < markup.indexOf('<link'), 'CSP must precede resource loading.');
+  assert.ok(policy.includes("script-src 'self'") && policy.includes("object-src 'none'"));
+  assert.ok(!policy.includes('unsafe-inline') && !policy.includes('unsafe-eval'));
+  for (const endpoint of RPC_ENDPOINTS) assert.ok(policy.includes(new URL(endpoint).origin), 'CSP must allow the configured RPC providers.');
   const ids = [...markup.matchAll(/\bid="([^"]+)"/g)].map(match => match[1]);
   assert.equal(new Set(ids).size, ids.length, document + ': HTML IDs must be unique.');
   for (const tag of markup.matchAll(/<(?:link|script|img)\b[^>]*>/g)) {

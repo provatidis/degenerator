@@ -233,5 +233,5 @@ export function initFullRangeLab({ navigation }) {
   loadShared();
   window.addEventListener('hashchange', loadShared);
 
-  return { setStartingPrice };
+  return { setStartingPrice, restoreLocation: loadShared };
 }

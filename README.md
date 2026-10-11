@@ -2,6 +2,12 @@
 
 Your DeFi playground. Degenerator is a browser-based lab for reproducible liquidity scenarios and virtual pool experiments. Compare full-range and concentrated ETH/USDC liquidity, import public pool and position snapshots, share assumptions, export results, and explore swaps without connecting a wallet.
 
+## Example progression
+
+Playground's **Choose an example** library follows seven ordered cases: unchanged price, a price increase, a fee target, an in-range model, its price boundary, a recorded in-range NFT, and an out-of-range NFT. Each case states what it adds. The four stages are **Foundations → Comparisons → Ranges → Applied cases**, shared with Learn's lesson groups. Every stage and lesson is directly accessible; variations practice the same concept rather than representing difficulty levels. Advanced users can open [the recorded in-range case](https://provatidis.github.io/degenerator/#example=in-range-position) without completing earlier lessons.
+
+Opening a model example carries versioned assumptions through the existing scenario link. Opening a recorded case selects the position snapshot source and saves that snapshot; calculator inputs change only when the user applies it. Examples do not change virtual balances or lesson completion.
+
 ## Learn: Liquidity essentials
 
 Open [Learn](https://provatidis.github.io/degenerator/learn.html) for six independent lessons and a final challenge. Every topic is available directly, including shareable lesson fragments such as learn.html#lesson=range-boundaries. Exercises ask for a prediction, show the calculated outcome, and require both a numeric answer and sound reasoning. Hints and three repeatable variations support practice; completion records understanding checks, not simulated profit.
@@ -16,15 +22,15 @@ Content lives in public/learning/, pure experiment/assessment logic in public/mo
 
 ## Pool snapshots
 
-The pool lab reads one supported deployment: Ethereum mainnet Uniswap v2 WETH/USDC. **Fetch latest snapshot** contacts [PublicNode](https://ethereum.publicnode.com/) and reads a finalized block. Every contract read uses that block number, and the block hash is checked again before accepting the result.
+The pool lab reads one supported deployment: Ethereum mainnet Uniswap v2 WETH/USDC. **Fetch latest snapshot** contacts [PublicNode](https://ethereum.publicnode.com/), with [dRPC](https://drpc.org/docs/ethereum-api) as a backup, and reads a finalized block. Every contract read uses that block number, and the block hash is checked again before accepting the result.
 
 The adapter verifies the canonical factory's pair, the pair's factory/token order, and USDC/WETH decimals. It preserves integer reserves and compares an exact integer 1 WETH quote against the supported Uniswap v2 router at the same block. This is a recorded quote, not an executable current trade. The 0.3% swap fee is separate from assumed position fee income.
 
-Snapshots retain their schema version, protocol, chain, pool/factory, block number/hash/timestamp, token addresses/order/decimals, raw reserves, fee formula, router quote, capture time, and provider. **Export snapshot** saves JSON; **Open snapshot file** restores it locally. Files are limited to 64 KB and validated before use. File validation checks structure and internal arithmetic; it cannot authenticate supplied chain data. Saved and imported files are labelled as not rechecked. **Load recorded example** opens a bundled snapshot from a completed contract check.
+Snapshots retain their schema version, protocol, chain, pool/factory, block number/hash/timestamp, token addresses/order/decimals, raw reserves, fee formula, router quote, capture time, and provider. **Export snapshot** saves JSON; **Open snapshot file** restores it locally. Files are limited to 64 KB and validated before use. Provider metadata is preserved independently of the current endpoint. It must be a bounded HTTPS URL without credentials and is never contacted when opening a file. File validation checks structure and internal arithmetic; it cannot authenticate supplied chain data. Saved and imported files are labelled as not rechecked. **Load recorded example** opens a bundled snapshot from a completed contract check.
 
 Loading never changes the calculator or swap wallet automatically. **Use in 50/50 lab** explicitly applies the WETH/USDC reserve ratio, assuming USDC = $1, to the theoretical cp50-v1 lab. It retains the investment, sets the future price to 2x and assumed cash fees to zero. The reserve ratio is not an oracle or a general market-price feed. Scenario links continue to share only model assumptions; export the snapshot separately to retain chain provenance.
 
-Only the latest snapshot is saved under the degenerator-pool-snapshot-v1 key, separate from the existing sandbox storage. Unavailable storage and failed providers leave loaded data usable. No RPC credentials or wallet are required. The separate v3 position adapter supports only the deployment documented below. Arbitrary assets and chains require their own explicit deployment definitions and validation.
+Only the latest snapshot is saved under the degenerator-pool-snapshot-v1 key, separate from the existing sandbox storage. Unavailable storage and failed providers leave loaded data usable. Unreadable and unsupported-version saves have distinct recovery messages and remain in storage until explicitly discarded or replaced. Recovery removes only the relevant snapshot key. No RPC credentials or wallet are required. The separate v3 position adapter supports only the deployment documented below. Arbitrary assets and chains require their own explicit deployment definitions and validation.
 
 For a manual live integration check:
 
@@ -50,11 +56,11 @@ Principal is calculated in exact integer token units from position liquidity, ca
 
 USDC is token 0 and WETH token 1. Raw ticks therefore quote WETH per USDC; the displayed USD/WETH bounds reverse the raw tick order and account for 6/18 token decimals. Dollar values use the pool ratio and USDC = $1, rather than an external price feed. Active principal excludes recorded tokens owed and fees. Recorded tokens owed may include withdrawn principal and omit fee growth since the last position update; they are **not presented as total uncollected fees**.
 
-Position JSON retains schema version/kind, manager/factory/pool, NFT ID, fee tier, ticks, liquidity, stored fee-growth/owed fields, sqrtPriceX96, exact principal, token metadata, block and capture provenance. Opening files validates structure, integer bounds, tick/price consistency and principal arithmetic; it does not authenticate their chain origin. Unknown fields are removed. The latest position uses a separate degenerator-v3-position-snapshot-v1 storage key and does not overwrite pool snapshots or virtual balances.
+Position JSON retains schema version/kind, manager/factory/pool, NFT ID, fee tier, ticks, liquidity, stored fee-growth/owed fields, sqrtPriceX96, exact principal, token metadata, block and capture provenance. Opening files validates structure, integer bounds, the canonical pool for the token pair and fee tier, tick/price consistency and principal arithmetic; it does not authenticate their chain origin. Unknown fields are removed. The latest position uses a separate degenerator-v3-position-snapshot-v1 storage key and does not overwrite pool snapshots or virtual balances.
 
 **Explore this position’s range** explicitly starts a new cl-range-v1 experiment from the snapshot’s position principal value, price and bounds, with zero assumed fees and an unchanged future price. It does not reconstruct the mint deposit or historical return. The captured principal is exact; subsequent lab projections use the existing continuous model. The source label clears when its budget, starting price or range changes. Closed, dust and out-of-limit positions remain inspectable/exportable even when they cannot seed the lab. On mobile a loaded position collapses its refresh/import controls, keeping outcomes within reach.
 
-**Load recorded position** opens public position #37 from a completed contract check at block 26162627. Its recorded position principal is 0 USDC and 9999999999999133 WETH base units (0.009999999999999133 WETH). This fixture is a repeatable historical snapshot, not current market data.
+**In-range example** opens public position #1382030 at block 26168526, with 22046660876 USDC base units and 10283485726696667741 WETH base units, worth about $47,793.97 under the recorded pool ratio and USDC = $1. **Out-of-range example** retains public position #37 from a completed contract check at block 26162627. Its recorded position principal is 0 USDC and 9999999999999133 WETH base units (0.009999999999999133 WETH). This fixture is a repeatable historical snapshot, not current market data.
 
 For a live read-only integration check:
 
@@ -260,3 +266,15 @@ New financial models get their own versioned module and reference/invariant test
 The next milestones are named saved experiments, historical price replay, and complete v3 uncollected-fee accounting. A backend becomes useful for private provider credentials, shared caching, scheduled snapshots or account synchronization. Each can be added behind the data layer without rewriting the calculation models or existing labs.
 
 The cl-range-v1 model, links, CSV, presentation helpers and result cards are separate modules. A shared link router and accessible lab navigation coordinate the two calculators while preserving cp50-v1 links. Reference tests cover asymmetric funding, outside starts, exact boundaries, continuity, virtual-reserve conservation, wide-range limits, separate fees, numerical bounds and reproducible exports.
+
+## Provider failures and production policy
+
+Captures attempt each configured public endpoint at most once. Only typed network, timeout, HTTP capacity/server errors or recognized JSON-RPC rate limits trigger fallback. The entire capture restarts on the next provider, with a new finalized block and a final block-identity check; reads from different providers are never combined. Backup requests are sequential to avoid bursts, and a failed serial capture stops its queued reads. The exported provider is the successful source. Public endpoints can both be unavailable; recorded examples and saved files remain usable.
+
+A manager revert with the specific Invalid token ID reason identifies a nonexistent or burned NFT at the captured block. Other reverts and identity/schema failures keep their own error path. Imported provider metadata remains descriptive, not proof of chain origin.
+
+The HTML entry points carry a restrictive Content Security Policy for GitHub Pages, including the two configured RPC origins. The local server also sends it as a header, with frame-ancestors protection (which cannot be enforced by a meta policy). Script/style assets remain local.
+
+## License
+
+Degenerator's own code is [MIT licensed](LICENSE), copyright 2026 Apostolos Provatidis. The adapted Uniswap v3 SDK TickMath implementation retains its separate [Uniswap MIT notice](public/licenses/uniswap-v3-sdk.txt).

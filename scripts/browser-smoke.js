@@ -1,3 +1,4 @@
+import { checkExamples } from './browser/example-checks.js';
 import { checkLearning, checkMobileLearning } from './browser/learning-checks.js';
 import { checkPositions, checkMobilePositions } from './browser/position-checks.js';
 // Optional real-browser smoke test, using Chromium's DevTools protocol and Node built-ins.
@@ -393,6 +394,7 @@ try {
   await navigate(base);
   console.log('PASS: range reference math, exact edges, slider stability, independent fees, validation, keyboard tabs, preserved setups, CSV/PNG downloads, snapshot seeding and shared range restoration');
   await checkPositions({ base, call, evaluate, click, fill, text, reload, navigate, downloadFile, profile });
+  await checkExamples({ evaluate, click, fill, text, navigate, base });
 
   const swappedPortfolio = await text('portfolio');
   await reload();

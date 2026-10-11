@@ -1,5 +1,6 @@
+import { clearSnapshot } from '../data/snapshot-store.js';
 import { fetchPoolSnapshot } from '../data/uniswap-v2.js';
-import { parseSnapshot, snapshotJSON, snapshotView, readSavedSnapshot, saveSnapshot, MAX_SNAPSHOT_BYTES } from '../data/snapshot.js';
+import { parseSnapshot, snapshotJSON, snapshotView, readSavedSnapshot, saveSnapshot, SNAPSHOT_KEY, MAX_SNAPSHOT_BYTES } from '../data/snapshot.js';
 import { LIMITS } from '../models/cp50-v1.js';
 import { LIMITS as RANGE_LIMITS } from '../models/cl-range-v1.js';
 import { fmt, usd } from '../lib/format.js';
@@ -15,6 +16,7 @@ export function initPoolSnapshots({ fullRangeLab, rangeLab }) {
     $('pool-fetch').disabled = busy;
     $('pool-example').disabled = busy;
     $('pool-file').disabled = busy;
+    $('pool-clear-saved').disabled = busy;
     $('pool-export').disabled = busy || !current;
     const price = current ? snapshotView(current).ethPrice : 0;
     $('pool-apply').disabled = busy || !current || price < LIMITS.initialPrice.min || price * 2 > LIMITS.futurePrice.max;
@@ -42,7 +44,7 @@ export function initPoolSnapshots({ fullRangeLab, rangeLab }) {
       'pool-token0': current.tokens[0].address + ' · 6 decimals',
       'pool-token1': current.tokens[1].address + ' · 18 decimals',
       'pool-raw0': current.reserves.reserve0, 'pool-raw1': current.reserves.reserve1,
-      'pool-captured': current.capturedAt,
+      'pool-captured': current.capturedAt, 'pool-provider': current.provider,
     };
     for (const [id, value] of Object.entries(values)) $(id).textContent = value;
     controls();
@@ -56,12 +58,13 @@ export function initPoolSnapshots({ fullRangeLab, rangeLab }) {
       const snapshot = await loader();
       display(snapshot, evidence);
       const saved = saveSnapshot(current);
+      if (saved) $('pool-clear-saved').hidden = true;
       $('pool-status').textContent = saved ? 'Snapshot saved in this browser. Apply its price when you are ready.' : 'Snapshot loaded. Browser saving is unavailable; export the file to keep it.';
     } catch (error) {
       $('pool-status').textContent = error.message + (current ? ' Your previous snapshot is still available.' : '');
     } finally { busy = false; controls(); }
   }
-  $('pool-fetch').addEventListener('click', () => loadSnapshot(() => fetchPoolSnapshot(), 'live'));
+  $('pool-fetch').addEventListener('click', () => loadSnapshot(() => fetchPoolSnapshot({ onFallback: message => { $('pool-status').textContent = message; } }), 'live'));
   $('pool-example').addEventListener('click', () => loadSnapshot(async () => {
     const response = await fetch(new URL('../examples/uniswap-v2-mainnet.json', import.meta.url));
     if (!response.ok) throw new Error('The recorded example could not be loaded.');
@@ -98,7 +101,18 @@ export function initPoolSnapshots({ fullRangeLab, rangeLab }) {
     display(restored.snapshot, 'saved');
     $('pool-status').textContent = 'Restored the last saved snapshot. Fetch a new one to refresh the data.';
   } else if (restored.status === 'unavailable') {
-    $('pool-status').textContent = 'A saved snapshot could not be restored. Fetch a new snapshot or open a file.';
+    $('pool-status').textContent = 'Browser storage is unavailable. You can load and export a pool snapshot in this tab.';
+  } else if (restored.status === 'invalid' || restored.status === 'incompatible') {
+    $('pool-status').textContent = restored.status === 'incompatible'
+      ? 'The saved pool uses an unsupported snapshot version. It has been kept in storage; open a compatible file or explicitly discard it.'
+      : 'The saved pool snapshot is unreadable. It has been kept in storage; open another snapshot or discard this saved copy.';
+    $('pool-clear-saved').hidden = false;
   }
+  $('pool-clear-saved').addEventListener('click', () => {
+    if (clearSnapshot(SNAPSHOT_KEY)) {
+      $('pool-clear-saved').hidden = true;
+      $('pool-status').textContent = 'Unreadable saved pool snapshot discarded. Your other snapshots, lessons and virtual balances are unchanged.';
+    } else $('pool-status').textContent = 'Browser storage is unavailable; the saved pool snapshot could not be discarded.';
+  });
   controls();
 }

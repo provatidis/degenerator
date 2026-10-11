@@ -10,6 +10,7 @@ export const POOL = Object.freeze({
   weth: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
 });
 export const RPC_URL = 'https://ethereum-rpc.publicnode.com';
+export const RPC_ENDPOINTS = Object.freeze([RPC_URL, 'https://eth.drpc.org']);
 
 for (const address of [POOL.factory, POOL.router, POOL.address, POOL.usdc, POOL.weth]) {
   if (!/^0x[0-9a-f]{40}$/.test(address)) throw new Error('Invalid supported deployment address.');
@@ -22,3 +23,11 @@ export const V3 = Object.freeze({
   usdc: POOL.usdc, weth: POOL.weth,
 });
 export const V3_FEE_SPACING = Object.freeze({ 100: 1, 500: 10, 3000: 60, 10000: 200 });
+
+// Canonical Ethereum USDC/WETH pools returned by the Uniswap v3 factory.
+export const V3_POOLS = Object.freeze({
+  100: '0xe0554a476a092703abdb3ef35c80e0d76d32939f',
+  500: '0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640',
+  3000: '0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8',
+  10000: '0x7bea39867e4169dbe237d55c8242a8f2fcdcc387',
+});

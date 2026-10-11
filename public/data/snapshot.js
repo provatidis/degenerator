@@ -1,6 +1,7 @@
+import { validateProvider } from './provenance.js';
 import { parseSnapshotFile, readSnapshot, writeSnapshot } from './snapshot-store.js';
 export { MAX_SNAPSHOT_BYTES } from './snapshot-store.js';
-import { POOL, RPC_URL } from './config.js';
+import { POOL } from './config.js';
 import { amountOut } from '../models/uniswap-v2.js';
 import { formatUnits } from '../models/units.js';
 
@@ -41,8 +42,7 @@ export function validateSnapshot(input) {
   if (amountOut(10n ** 18n, BigInt(reserve1), BigInt(reserve0)).toString() !== amountOutRaw) {
     throw new Error('The recorded router quote does not match the reserves and fee formula.');
   }
-  if (typeof input.capturedAt !== 'string' || input.capturedAt.length > 40 || !Number.isFinite(Date.parse(input.capturedAt))
-    || input.provider !== RPC_URL) fail();
+  if (typeof input.capturedAt !== 'string' || input.capturedAt.length > 40 || !Number.isFinite(Date.parse(input.capturedAt))) fail();
   return {
     version: SNAPSHOT_VERSION, protocol: POOL.protocol, chainId: POOL.chainId,
     poolAddress: POOL.address, factoryAddress: POOL.factory,
@@ -50,7 +50,7 @@ export function validateSnapshot(input) {
     reserves: { reserve0, reserve1, timestamp: reserveTimestamp },
     swapFee: { numerator: 997, denominator: 1000 },
     validation: { routerAddress: POOL.router, inputToken: POOL.weth, outputToken: POOL.usdc, amountInRaw: quote.amountInRaw, amountOutRaw },
-    capturedAt: new Date(input.capturedAt).toISOString(), provider: RPC_URL,
+    capturedAt: new Date(input.capturedAt).toISOString(), provider: validateProvider(input.provider),
   };
 }
 

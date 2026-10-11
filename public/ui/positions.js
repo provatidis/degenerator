@@ -1,5 +1,6 @@
+import { clearSnapshot } from '../data/snapshot-store.js';
 import { fetchPositionSnapshot } from '../data/uniswap-v3.js';
-import { positionId, parsePositionSnapshot, positionSnapshotJSON, positionSnapshotView, positionScenario, readSavedPosition, savePositionSnapshot, MAX_SNAPSHOT_BYTES } from '../data/position-snapshot.js';
+import { positionId, parsePositionSnapshot, positionSnapshotJSON, positionSnapshotView, positionScenario, readSavedPosition, savePositionSnapshot, POSITION_SNAPSHOT_KEY, MAX_SNAPSHOT_BYTES } from '../data/position-snapshot.js';
 import { formatUnits } from '../models/units.js';
 import { POSITION_STATES, positionPrice, positionPriceLabels, positionTokenAmount } from '../lib/position-presentation.js';
 import { usd, fmt } from '../lib/format.js';
@@ -7,7 +8,7 @@ import { downloadBlob } from '../lib/download.js';
 
 export function initPositionSnapshots({ rangeLab }) {
   const $ = id => document.getElementById(id);
-  let current = null, view = null, scenario = null, busy = false;
+  let current = null, view = null, scenario = null, busy = false, pendingLoad = Promise.resolve();
   const setupMedia = matchMedia('(max-width: 750px)');
   function syncSetup() {
     if (!setupMedia.matches || !current) $('position-setup').open = true;
@@ -20,7 +21,7 @@ export function initPositionSnapshots({ rangeLab }) {
     try { positionId($('position-id').value); } catch { valid = false; }
     $('position-id').setAttribute('aria-invalid', String(!valid));
     $('position-fetch').disabled = busy || !valid;
-    for (const id of ['position-id', 'position-example', 'position-file']) $(id).disabled = busy;
+    for (const id of ['position-id', 'position-example', 'position-example-inside', 'position-file', 'position-clear-saved']) $(id).disabled = busy;
     $('position-export').disabled = busy || !current;
     $('position-apply').disabled = busy || !scenario;
     $('position-lab').setAttribute('aria-busy', String(busy));
@@ -68,22 +69,28 @@ export function initPositionSnapshots({ rangeLab }) {
       'position-raw0': current.principal.amount0Raw, 'position-raw1': current.principal.amount1Raw,
       'position-owed0': formatUnits(BigInt(current.position.tokensOwed0), 6) + ' USDC',
       'position-owed1': formatUnits(BigInt(current.position.tokensOwed1), 18) + ' WETH',
-      'position-captured': current.capturedAt,
+      'position-captured': current.capturedAt, 'position-provider': current.provider,
     };
     for (const [id, value] of Object.entries(exact)) $(id).textContent = value;
     $('position-details').hidden = false;
     if (setupMedia.matches) $('position-setup').open = false;
     controls();
   }
-  async function load(loader, evidence) {
-    if (busy) return;
+  function load(loader, evidence) {
+    if (busy) return pendingLoad;
+    pendingLoad = performLoad(loader, evidence);
+    return pendingLoad;
+  }
+  async function performLoad(loader, evidence) {
     busy = true; controls();
     $('position-status').dataset.error = 'false';
     $('position-status').textContent = evidence === 'live' ? 'Reading your position…' : 'Opening the position snapshot…';
     try {
       display(await loader(), evidence);
       if (setupMedia.matches) $('position-result').focus({ preventScroll: true });
-      $('position-status').textContent = savePositionSnapshot(current)
+      const saved = savePositionSnapshot(current);
+      if (saved) $('position-clear-saved').hidden = true;
+      $('position-status').textContent = saved
         ? 'Position saved in this browser. Explore it in the range lab when you’re ready.'
         : 'Position loaded. Browser saving is unavailable; export the file to keep it.';
     } catch (error) {
@@ -91,22 +98,32 @@ export function initPositionSnapshots({ rangeLab }) {
       $('position-status').textContent = error.message + (current ? ' Your previous position is still available.' : ' Check the NFT ID or try the recorded example.');
     } finally { busy = false; controls(); }
   }
+  function clearExampleLink() {
+    if (location.hash.startsWith('#example=')) history.replaceState(null, '', location.pathname + location.search + '#position-lab');
+  }
   $('position-form').addEventListener('submit', event => {
-    event.preventDefault();
+    event.preventDefault(); clearExampleLink();
     load(() => fetchPositionSnapshot($('position-id').value, { onProgress: message => { $('position-status').textContent = message; } }), 'live');
   });
   $('position-id').addEventListener('input', controls);
-  $('position-example').addEventListener('click', () => load(async () => {
-    const response = await fetch(new URL('../examples/uniswap-v3-mainnet-37.json', import.meta.url));
-    if (!response.ok) throw new Error('The recorded position could not be loaded.');
-    return parsePositionSnapshot(await response.text());
-  }, 'example'));
+  const recordedFiles = { inside: 'uniswap-v3-mainnet-in-range.json', outside: 'uniswap-v3-mainnet-37.json' };
+  async function loadRecordedExample(kind) {
+    if (!Object.hasOwn(recordedFiles, kind)) throw new Error('Choose a supported recorded example.');
+    if (busy) await pendingLoad;
+    return load(async () => {
+      const response = await fetch(new URL('../examples/' + recordedFiles[kind], import.meta.url));
+      if (!response.ok) throw new Error('The recorded position could not be loaded.');
+      return parsePositionSnapshot(await response.text());
+    }, 'example');
+  }
+  $('position-example').addEventListener('click', () => { clearExampleLink(); loadRecordedExample('outside'); });
+  $('position-example-inside').addEventListener('click', () => { clearExampleLink(); loadRecordedExample('inside'); });
   $('position-file').addEventListener('change', () => {
     const file = $('position-file').files[0]; $('position-file').value = '';
-    if (file) load(async () => {
+    if (file) { clearExampleLink(); load(async () => {
       if (file.size > MAX_SNAPSHOT_BYTES) throw new Error('Snapshot files must be at most 64 KB.');
       return parsePositionSnapshot(await file.text());
-    }, 'file');
+    }, 'file'); }
   });
   $('position-export').addEventListener('click', () => {
     if (current) downloadBlob(new Blob([positionSnapshotJSON(current)], { type: 'application/json' }), 'degenerator-uniswap-v3-position-' + current.tokenId + '-block-' + current.block.number + '.json');
@@ -118,6 +135,19 @@ export function initPositionSnapshots({ rangeLab }) {
   });
   const saved = readSavedPosition();
   if (saved.snapshot) { display(saved.snapshot, 'saved'); $('position-status').textContent = 'Restored the last saved position. Fetch again to refresh its chain data.'; }
-  else if (saved.status === 'unavailable') $('position-status').textContent = 'A saved position could not be restored. Fetch a position or open a file.';
+  else if (saved.status === 'unavailable') $('position-status').textContent = 'Browser storage is unavailable. You can load and export a position in this tab.';
+  else if (saved.status === 'invalid' || saved.status === 'incompatible') {
+    $('position-status').textContent = saved.status === 'incompatible'
+      ? 'The saved position uses an unsupported snapshot version. It has been kept in storage; open a compatible file or explicitly discard it.'
+      : 'The saved position is unreadable. It has been kept in storage; open another snapshot or discard this saved copy.';
+    $('position-clear-saved').hidden = false;
+  }
+  $('position-clear-saved').addEventListener('click', () => {
+    if (clearSnapshot(POSITION_SNAPSHOT_KEY)) {
+      $('position-clear-saved').hidden = true;
+      $('position-status').textContent = 'Unreadable saved position discarded. Your other snapshots, lessons and virtual balances are unchanged.';
+    } else $('position-status').textContent = 'Browser storage is unavailable; the saved position could not be discarded.';
+  });
   controls();
+  return { loadRecordedExample };
 }

@@ -20,5 +20,15 @@ export function initSnapshotNavigation() {
     } else if (initial) tabs.select('pool');
   }
   window.addEventListener('hashchange', () => restoreLocation());
-  return { restoreLocation: () => restoreLocation(true) };
+  return {
+    restoreLocation: () => restoreLocation(true),
+    selectSource: (key, { scroll = false } = {}) => {
+      tabs.select(key);
+      if (scroll) {
+        const perform = () => requestAnimationFrame(() => section.scrollIntoView({ block: 'start', behavior: 'instant' }));
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', perform, { once: true });
+        else perform();
+      }
+    },
+  };
 }

@@ -35,6 +35,13 @@ export function initLearning() {
       link.querySelector('.learn-step-state').textContent = progress.completed.includes(id) ? 'Checked' : id === lesson.id ? 'Now exploring' : 'Open lesson';
       link.classList.toggle('learn-step-done', progress.completed.includes(id));
     }
+    if (!matchMedia('(max-width: 750px)').matches) {
+      const sidebar = document.querySelector('.learn-sidebar');
+      const selected = document.querySelector('[data-lesson-id="' + lesson.id + '"]');
+      const bounds = selected.getBoundingClientRect(), visible = sidebar.getBoundingClientRect();
+      if (bounds.bottom > visible.bottom) sidebar.scrollTop += bounds.bottom - visible.bottom + 24;
+      else if (bounds.top < visible.top) sidebar.scrollTop += bounds.top - visible.top - 24;
+    }
   }
   function clearCard() {
     generation++;

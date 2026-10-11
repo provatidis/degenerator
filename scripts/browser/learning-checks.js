@@ -12,6 +12,8 @@ export async function checkLearning({ evaluate, click, fill, text, navigate, rel
   assert.equal(await evaluate("document.querySelector('.product-nav a[aria-current=page]').textContent"), 'Learn');
   assert.equal(await evaluate("document.querySelectorAll('[data-lesson-id]').length"), 7);
   assert.equal(await text('learn-level'), 'Stage 3 · Ranges');
+  assert.equal(await evaluate("document.querySelector('.learn-sidebar').getBoundingClientRect().height <= innerHeight - 48"), true);
+  assert.equal(await evaluate("(()=>{const sidebar=document.querySelector('.learn-sidebar').getBoundingClientRect(),active=document.querySelector('[data-lesson-id=range-boundaries]').getBoundingClientRect();return active.top>=sidebar.top&&active.bottom<=sidebar.bottom;})()"), true);
   assert.equal(await evaluate("document.querySelectorAll('.learn-path-group').length"), 4);
   assert.equal(await evaluate("document.getElementById('learn-run').disabled"), true);
   await click('learn-resume');

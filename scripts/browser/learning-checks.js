@@ -42,6 +42,13 @@ export async function checkLearning({ evaluate, click, fill, text, navigate, rel
     assert.equal(await evaluate("Array.from(document.querySelectorAll('.learn-metric, .learn-step-copy, #learn-worked-steps li, #learn-sources li')).every(el => { const text = el.textContent; return Array.from(el.children).slice(1).every(child => { const previous = child.previousElementSibling; const boundary = previous.textContent + child.textContent; return !text.includes(boundary); }); })"), true, 'Labels, values and explanation paragraphs must remain separate in copied and accessible text.');
     assert.equal(await evaluate("document.querySelectorAll('#learn-sources a').length"),2);
     assert.equal(await evaluate("Array.from(document.querySelectorAll('#learn-sources a')).every(a=>a.href.startsWith('https:')&&a.target==='_blank'&&a.rel.includes('noopener'))"),true);
+    const hasFeeCase = ['fee-break-even','range-boundaries','final-challenge'].includes(id);
+    assert.equal(await evaluate("document.getElementById('learn-fee-case').hidden"), !hasFeeCase);
+    if (hasFeeCase) {
+      assert.equal(await evaluate("document.querySelector('#learn-fee-case a').href"), base+'#example=position-fees');
+      assert.equal(await evaluate("document.querySelector('#learn-fee-case a').target"), '_blank');
+      assert.equal(await evaluate("document.querySelector('#learn-fee-case a').rel.includes('noopener')"), true);
+    }
     await evaluate("document.querySelector('#learn-math > summary').click()");
     assert.equal(await evaluate("document.getElementById('learn-math').open"),true);
     assert.equal(await evaluate("localStorage.getItem('degenerator-learning-liquidity-v1')"),beforeReading,'Reading cannot mark exercises complete or change their answers.');

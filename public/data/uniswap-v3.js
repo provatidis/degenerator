@@ -2,8 +2,8 @@ import { V3, V3_FEE_SPACING } from './config.js';
 import { RpcError } from './rpc.js';
 import { requestSnapshot } from './snapshot-request.js';
 import { finalizedBlock, confirmBlock } from './block.js';
-import { abiWords, encodeWord, encodeUint, decodeAddress, addressFromWord, uintFromWord, intFromWord } from './abi.js';
-import { positionId, validatePositionSnapshot } from './position-snapshot.js';
+import { abiWords, encodeWord, encodeUint, encodeInt, decodeAddress, addressFromWord, uintFromWord, intFromWord, intBigIntFromWord } from './abi.js';
+import { positionId, validatePositionSnapshot, positionFeeAccounting, feeSnapshotFields, POSITION_SNAPSHOT_VERSION } from './position-snapshot.js';
 import { positionAmounts } from '../models/uniswap-v3.js';
 
 // Selectors from the deployed v3 manager, factory, pool and ERC20 view interfaces.
@@ -11,7 +11,17 @@ const selectors = Object.freeze({
   positions: '0x99fbab88', getPool: '0x1698ee82', factory: '0xc45a0155',
   token0: '0x0dfe1681', token1: '0xd21220a7', fee: '0xddca3f43',
   tickSpacing: '0xd0c93a7c', slot0: '0x3850c7bd', decimals: '0x313ce567',
+  global0: '0xf3058399', global1: '0x46141319', ticks: '0xf30dba93',
 });
+function feeTick(data) {
+  const values = abiWords(data, 8);
+  const gross = uintFromWord(values[0], 128), net = intBigIntFromWord(values[1], 128);
+  if ((net < 0n ? -net : net) > gross) throw new Error('The pool returned inconsistent boundary liquidity.');
+  intBigIntFromWord(values[4], 56); uintFromWord(values[5], 160); uintFromWord(values[6], 32);
+  const initialized = uintFromWord(values[7], 1) === 1n;
+  if (initialized !== (gross > 0n)) throw new Error('The pool returned inconsistent boundary initialization.');
+  return { liquidityGross: gross.toString(), outside0X128: uintFromWord(values[2]).toString(), outside1X128: uintFromWord(values[3]).toString(), initialized };
+}
 export async function fetchPositionSnapshot(id, { onProgress = () => {}, ...options } = {}) {
   const tokenId = positionId(id);
   return requestSnapshot((rpc, provider) => readPositionSnapshot(tokenId, rpc, provider, onProgress), { ...options, onFallback: onProgress });
@@ -43,10 +53,12 @@ async function readPositionSnapshot(tokenId, rpc, provider, onProgress) {
   onProgress('Checking the pool and its recorded price…');
   const poolAddress = decodeAddress(await atBlock(V3.factory, selectors.getPool + encodeWord(V3.usdc) + encodeWord(V3.weth) + encodeUint(fee)));
   if (/^0x0{40}$/.test(poolAddress)) throw new Error('The factory did not return a pool for this position.');
-  const [factory, token0, token1, poolFee, tickSpacing, slot0, decimals0, decimals1] = await Promise.all([
+  const [factory, token0, token1, poolFee, tickSpacing, slot0, decimals0, decimals1, global0, global1, lowerTick, upperTick] = await Promise.all([
     atBlock(poolAddress, selectors.factory), atBlock(poolAddress, selectors.token0), atBlock(poolAddress, selectors.token1),
     atBlock(poolAddress, selectors.fee), atBlock(poolAddress, selectors.tickSpacing), atBlock(poolAddress, selectors.slot0),
     atBlock(V3.usdc, selectors.decimals), atBlock(V3.weth, selectors.decimals),
+    atBlock(poolAddress, selectors.global0), atBlock(poolAddress, selectors.global1),
+    atBlock(poolAddress, selectors.ticks + encodeInt(position.tickLower)), atBlock(poolAddress, selectors.ticks + encodeInt(position.tickUpper)),
   ]);
   if (decodeAddress(factory) !== V3.factory || decodeAddress(token0) !== V3.usdc || decodeAddress(token1) !== V3.weth
     || Number(uintFromWord(abiWords(poolFee, 1)[0], 24)) !== fee
@@ -58,13 +70,19 @@ async function readPositionSnapshot(tokenId, rpc, provider, onProgress) {
   for (const word of price.slice(2, 5)) uintFromWord(word, 16);
   uintFromWord(price[5], 8); uintFromWord(price[6], 1);
   const amounts = positionAmounts(BigInt(position.liquidity), sqrtPriceX96, position.tickLower, position.tickUpper);
-  onProgress('Confirming the block and exact token amounts…');
+  const pool = { sqrtPriceX96: sqrtPriceX96.toString(), tick: currentTick, tickSpacing: V3_FEE_SPACING[fee] };
+  const feeGrowth = {
+    global0X128: uintFromWord(abiWords(global0, 1)[0]).toString(), global1X128: uintFromWord(abiWords(global1, 1)[0]).toString(),
+    lower: feeTick(lowerTick), upper: feeTick(upperTick),
+  };
+  const fees = feeSnapshotFields(positionFeeAccounting(position, pool, feeGrowth));
+  onProgress('Confirming the block, principal and fee accounting…');
   await confirmBlock(rpc, tag, block);
   return validatePositionSnapshot({
-    version: 1, kind: 'uniswap-v3-position', protocol: V3.protocol, chainId: 1, tokenId,
+    version: POSITION_SNAPSHOT_VERSION, kind: 'uniswap-v3-position', protocol: V3.protocol, chainId: 1, tokenId,
     positionManager: V3.positionManager, factoryAddress: V3.factory, poolAddress, block,
     tokens: [{ address: V3.usdc, symbol: 'USDC', decimals: 6 }, { address: V3.weth, symbol: 'WETH', decimals: 18 }],
-    position, pool: { sqrtPriceX96: sqrtPriceX96.toString(), tick: currentTick, tickSpacing: V3_FEE_SPACING[fee] },
+    position, pool, feeGrowth, fees,
     principal: { amount0Raw: amounts.amount0.toString(), amount1Raw: amounts.amount1.toString() },
     capturedAt: new Date().toISOString(), provider,
   });

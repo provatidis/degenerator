@@ -516,6 +516,13 @@ try {
   console.log('PASS: mobile range setup disclosure, price checkpoints, sharing and lab switching');
   await checkMobilePositions({ evaluate, click, fill, text });
   await checkMobileLearning({ evaluate, click, fill, text, navigate, base });
+  await call('Emulation.setDeviceMetricsOverride', { width: 320, height: 740, deviceScaleFactor: 1, mobile: true });
+  await navigate(base+'#example=position-fees');
+  await evaluate("new Promise((resolve,reject)=>{const until=Date.now()+10000;const check=()=>{if(document.getElementById('position-fees').open&&document.getElementById('position-lab').getAttribute('aria-busy')==='false')resolve();else if(Date.now()>until)reject(new Error('Narrow fee example did not open'));else setTimeout(check,20)};check()})");
+  assert.equal(await text('position-collectable-value'), '$5.67');
+  await evaluate("document.querySelector('#position-fee-math > summary').click()");
+  assert.equal(await evaluate('document.documentElement.scrollWidth<=innerWidth'), true);
+  console.log('PASS: 320px navigation, pool statistics and expanded fee calculation without page overflow');
   assert.deepEqual(errors, [], 'No uncaught browser errors');
   console.log('PASS: mobile layout and interaction; no uncaught browser errors');
 } finally {

@@ -6,7 +6,7 @@ import { POSITION_STATES, positionPrice, positionPriceLabels, positionTokenAmoun
 import { usd, fmt } from '../lib/format.js';
 import { downloadBlob } from '../lib/download.js';
 
-export function initPositionSnapshots({ rangeLab }) {
+export function initPositionSnapshots({ rangeLab, positionFees }) {
   const $ = id => document.getElementById(id);
   let current = null, view = null, scenario = null, busy = false, pendingLoad = Promise.resolve();
   const setupMedia = matchMedia('(max-width: 750px)');
@@ -21,7 +21,7 @@ export function initPositionSnapshots({ rangeLab }) {
     try { positionId($('position-id').value); } catch { valid = false; }
     $('position-id').setAttribute('aria-invalid', String(!valid));
     $('position-fetch').disabled = busy || !valid;
-    for (const id of ['position-id', 'position-example', 'position-example-inside', 'position-file', 'position-clear-saved']) $(id).disabled = busy;
+    for (const id of ['position-id', 'position-example', 'position-example-inside', 'position-example-fees', 'position-file', 'position-clear-saved']) $(id).disabled = busy;
     $('position-export').disabled = busy || !current;
     $('position-apply').disabled = busy || !scenario;
     $('position-lab').setAttribute('aria-busy', String(busy));
@@ -54,12 +54,12 @@ export function initPositionSnapshots({ rangeLab }) {
     $('position-allocation-title').textContent = view.state === 'inactive' ? 'No position principal.' : fmt(share, 1) + '% WETH and ' + fmt(100 - share, 1) + '% USDC by value, excluding fees and recorded tokens owed.';
     $('position-allocation-note').textContent = view.state === 'inactive' ? 'No position principal' : fmt(share, 1) + '% WETH · ' + fmt(100 - share, 1) + '% USDC by value';
     $('position-evidence').textContent = evidence === 'live'
-      ? 'Position manager, pool identity, decimals and block checked against the contracts.'
+      ? 'Position manager, pool identity, decimals, fee growth and block checked against the contracts.'
       : evidence === 'example' ? 'Recorded example. Captured from the contracts at this block; it is not current market data.'
       : 'Saved file. Its numbers pass local checks; its chain data has not been rechecked.';
     try {
       scenario = positionScenario(current);
-      $('position-apply-note').textContent = 'Start a new experiment at this snapshot’s price, principal value and range, with zero assumed fees. This does not reconstruct the original deposit or past returns.';
+      $('position-apply-note').textContent = 'Start a principal-only experiment at this snapshot’s price and range, with zero assumed future fees. Already collectable tokens remain separate from both strategies. This does not reconstruct the original deposit or past returns.';
     } catch (error) { scenario = null; $('position-apply-note').textContent = error.message; }
     const exact = {
       'position-manager': current.positionManager, 'position-pool': current.poolAddress,
@@ -72,6 +72,7 @@ export function initPositionSnapshots({ rangeLab }) {
       'position-captured': current.capturedAt, 'position-provider': current.provider,
     };
     for (const [id, value] of Object.entries(exact)) $(id).textContent = value;
+    positionFees.render(view, { canExplore: Boolean(scenario) });
     $('position-details').hidden = false;
     if (setupMedia.matches) $('position-setup').open = false;
     controls();
@@ -93,9 +94,11 @@ export function initPositionSnapshots({ rangeLab }) {
       $('position-status').textContent = saved
         ? 'Position saved in this browser. Explore it in the range lab when you’re ready.'
         : 'Position loaded. Browser saving is unavailable; export the file to keep it.';
+      return true;
     } catch (error) {
       $('position-status').dataset.error = 'true';
       $('position-status').textContent = error.message + (current ? ' Your previous position is still available.' : ' Check the NFT ID or try the recorded example.');
+      return false;
     } finally { busy = false; controls(); }
   }
   function clearExampleLink() {
@@ -106,17 +109,19 @@ export function initPositionSnapshots({ rangeLab }) {
     load(() => fetchPositionSnapshot($('position-id').value, { onProgress: message => { $('position-status').textContent = message; } }), 'live');
   });
   $('position-id').addEventListener('input', controls);
-  const recordedFiles = { inside: 'uniswap-v3-mainnet-in-range.json', outside: 'uniswap-v3-mainnet-37.json' };
+  const recordedFiles = { inside: 'uniswap-v3-mainnet-in-range.json', outside: 'uniswap-v3-mainnet-37.json', fees: 'uniswap-v3-mainnet-fees.json' };
   async function loadRecordedExample(kind) {
     if (!Object.hasOwn(recordedFiles, kind)) throw new Error('Choose a supported recorded example.');
     if (busy) await pendingLoad;
-    return load(async () => {
+    const loaded = await load(async () => {
       const response = await fetch(new URL('../examples/' + recordedFiles[kind], import.meta.url));
       if (!response.ok) throw new Error('The recorded position could not be loaded.');
       return parsePositionSnapshot(await response.text());
     }, 'example');
+    if (loaded && kind === 'fees' && view?.fees) positionFees.openExample();
   }
   $('position-example').addEventListener('click', () => { clearExampleLink(); loadRecordedExample('outside'); });
+  $('position-example-fees').addEventListener('click', () => { clearExampleLink(); loadRecordedExample('fees'); });
   $('position-example-inside').addEventListener('click', () => { clearExampleLink(); loadRecordedExample('inside'); });
   $('position-file').addEventListener('change', () => {
     const file = $('position-file').files[0]; $('position-file').value = '';
@@ -130,7 +135,7 @@ export function initPositionSnapshots({ rangeLab }) {
   });
   $('position-apply').addEventListener('click', () => {
     if (!scenario) return;
-    rangeLab.setScenario(scenario, 'Experiment starts from Uniswap v3 position #' + current.tokenId + ' at Ethereum block ' + current.block.number + '. It uses the recorded principal and range, assumes USDC = $1 and uses the continuous lab model for future prices. Past deposits and fee history are not reconstructed.');
+    rangeLab.setScenario(scenario, 'Experiment starts from Uniswap v3 position #' + current.tokenId + ' at Ethereum block ' + current.block.number + '. It compares the recorded principal and range, leaves already collectable tokens outside both strategies, assumes USDC = $1 and uses the continuous lab model for future prices. Past deposits and fee history are not reconstructed.');
     $('position-status').textContent = 'Position applied to the range lab. Move the future price to explore its next outcome.';
   });
   const saved = readSavedPosition();

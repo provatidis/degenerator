@@ -1,3 +1,4 @@
+import { initPositionFees } from './ui/position-fees.js';
 import { initExamples } from './ui/examples.js';
 import { initPageAccess } from './ui/page-access.js';
 import { initPositionSnapshots } from './ui/positions.js';
@@ -16,7 +17,8 @@ initSandbox();
 const fullRangeLab = initFullRangeLab({ navigation });
 const rangeLab = initRangeLab({ navigation });
 initPoolSnapshots({ fullRangeLab, rangeLab });
-const positionSnapshots = initPositionSnapshots({ rangeLab });
+const positionFees = initPositionFees();
+const positionSnapshots = initPositionSnapshots({ rangeLab, positionFees });
 snapshots.restoreLocation();
 navigation.restoreLocation();
 initExamples({

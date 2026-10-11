@@ -140,6 +140,7 @@ export function initLearning() {
   }
   function renderDeeper() {
     const reading = DEEPER_READING[lesson.id];
+    $('learn-fee-case').hidden = !['fee-break-even', 'range-boundaries', 'final-challenge'].includes(lesson.id);
     $('learn-deeper-title').textContent = reading.title;
     $('learn-deeper-body').replaceChildren(...reading.paragraphs.map(text => {
       const paragraph = document.createElement('p'); paragraph.textContent = text; return paragraph;

@@ -46,7 +46,7 @@ test('the in-range fixture preserves exact principal and exposes both tokens', (
 });
 
 test('damaged, incompatible and blocked storage have distinct states and are preserved until explicitly cleared', () => {
-  const entries = new Map([[SNAPSHOT_KEY, '{'], [POSITION_SNAPSHOT_KEY, JSON.stringify({ ...outside, version: 2 })], ['learning', 'keep'], ['wallet', 'keep']]);
+  const entries = new Map([[SNAPSHOT_KEY, '{'], [POSITION_SNAPSHOT_KEY, JSON.stringify({ ...outside, version: 99 })], ['learning', 'keep'], ['wallet', 'keep']]);
   const storage = { getItem: key => entries.get(key) ?? null, removeItem: key => entries.delete(key) };
   assert.equal(readSnapshot(SNAPSHOT_KEY, parseSnapshot, () => storage).status, 'invalid');
   assert.equal(readSnapshot(POSITION_SNAPSHOT_KEY, parsePositionSnapshot, () => storage).status, 'incompatible');
@@ -127,7 +127,7 @@ test('backup serial reads avoid bursts and stop queued work after a failure', as
 
 test('example concepts rise in order, reproduce model inputs, and share the lesson stages without gates', () => {
   assert.deepEqual(EXAMPLE_STAGES.flatMap(stage => stage.lessons), LESSON_IDS);
-  assert.deepEqual(PLAYGROUND_EXAMPLES.map(example => example.level), [1, 2, 2, 3, 3, 4, 4]);
+  assert.deepEqual(PLAYGROUND_EXAMPLES.map(example => example.level), [1, 2, 2, 3, 3, 4, 4, 4]);
   for (const id of LESSON_IDS) assert.ok(stageForLesson(id));
   const a = scenarioFromHash(PLAYGROUND_EXAMPLES[0].href), b = scenarioFromHash(PLAYGROUND_EXAMPLES[1].href), c = scenarioFromHash(PLAYGROUND_EXAMPLES[2].href);
   assert.deepEqual({ ...b, futurePrice: a.futurePrice }, a);

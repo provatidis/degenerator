@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { checkPositionFees, checkMobilePositionFees } from './position-fee-checks.js';
 
 const recorded = JSON.parse(await readFile(new URL('../../public/examples/uniswap-v3-mainnet-37.json', import.meta.url), 'utf8'));
 const word = value => {
@@ -81,20 +82,23 @@ export async function checkPositions({ base, call, evaluate, click, fill, text, 
   await loadFile(exportedPath); await waitStatus('Position saved');
   assert.equal(await evaluate("document.getElementById('position-apply').disabled"),false);
 
+  await checkPositionFees({ evaluate, click, text, navigate, base, downloadFile, profile, loadFile, waitStatus });
+
   // Deterministic transport responses exercise the live UI path without relying on an external provider in CI.
   const block = {number:'0x'+BigInt(recorded.block.number).toString(16),hash:recorded.block.hash,timestamp:'0x'+BigInt(recorded.block.timestamp).toString(16)};
   const responses = {
+    '0xf3058399':encoded(0),'0x46141319':encoded(0),
     '0xc45a0155':encoded(recorded.factoryAddress),'0x0dfe1681':encoded(recorded.tokens[0].address),'0xd21220a7':encoded(recorded.tokens[1].address),
     '0xddca3f43':encoded(recorded.position.fee),'0xd0c93a7c':encoded(recorded.pool.tickSpacing),
     '0x3850c7bd':encoded(recorded.pool.sqrtPriceX96,recorded.pool.tick,0,1,1,0,1),
   };
   const position = encoded(0,0,recorded.tokens[0].address,recorded.tokens[1].address,recorded.position.fee,recorded.position.tickLower,recorded.position.tickUpper,recorded.position.liquidity,0,0,0,0);
-  await evaluate(`(()=>{const original=window.fetch;window.restorePositionFetch=()=>{window.fetch=original};window.positionRequests=[];window.positionRpcMode='valid';window.fetch=async(url,options)=>{if(String(url)!==${JSON.stringify(recorded.provider)})return original(url,options);const request=JSON.parse(options.body);window.positionRequests.push(request);let result;const data=request.params?.[0]?.data;if(request.method==='eth_chainId')result='0x1';else if(request.method==='eth_getBlockByNumber')result=${JSON.stringify(block)};else if(data.startsWith('0x99fbab88'))result=window.positionRpcMode==='invalid'?'0x':${JSON.stringify(position)};else if(data.startsWith('0x1698ee82'))result=${JSON.stringify(encoded(recorded.poolAddress))};else if(data==='0x313ce567')result=request.params[0].to===${JSON.stringify(recorded.tokens[0].address)}?${JSON.stringify(encoded(6))}:${JSON.stringify(encoded(18))};else result=${JSON.stringify(responses)}[data];return new Response(JSON.stringify({jsonrpc:'2.0',id:request.id,result}),{status:200,headers:{'Content-Type':'application/json'}})}})()`);
+  await evaluate(`(()=>{const original=window.fetch;window.restorePositionFetch=()=>{window.fetch=original};window.positionRequests=[];window.positionRpcMode='valid';window.fetch=async(url,options)=>{if(String(url)!==${JSON.stringify(recorded.provider)})return original(url,options);const request=JSON.parse(options.body);window.positionRequests.push(request);let result;const data=request.params?.[0]?.data;if(request.method==='eth_chainId')result='0x1';else if(request.method==='eth_getBlockByNumber')result=${JSON.stringify(block)};else if(data.startsWith('0x99fbab88'))result=window.positionRpcMode==='invalid'?'0x':${JSON.stringify(position)};else if(data.startsWith('0x1698ee82'))result=${JSON.stringify(encoded(recorded.poolAddress))};else if(data.startsWith('0xf30dba93'))result=${JSON.stringify(encoded(recorded.position.liquidity,0,0,0,0,0,0,1))};else if(data==='0x313ce567')result=request.params[0].to===${JSON.stringify(recorded.tokens[0].address)}?${JSON.stringify(encoded(6))}:${JSON.stringify(encoded(18))};else result=${JSON.stringify(responses)}[data];return new Response(JSON.stringify({jsonrpc:'2.0',id:request.id,result}),{status:200,headers:{'Content-Type':'application/json'}})}})()`);
   const largeId = ((1n<<256n)-1n).toString();
   await fill('position-id',largeId); await click('position-fetch'); await waitStatus('Position saved');
   assert.equal(await text('position-heading-id'),'Position #'+largeId);
   assert.match(await text('position-evidence'),/checked against the contracts/);
-  assert.equal(await evaluate('window.positionRequests.length'),14);
+  assert.equal(await evaluate('window.positionRequests.length'),18);
   assert.equal(await evaluate(`window.positionRequests.filter(request=>request.method==='eth_call').every(request=>request.params[1]===${JSON.stringify(block.number)})`),true);
   assert.equal(await evaluate('document.documentElement.scrollWidth<=window.innerWidth'),true);
   await evaluate("window.positionRpcMode='invalid'"); await fill('position-id','37');
@@ -124,6 +128,7 @@ export async function checkMobilePositions({evaluate,click,fill,text}) {
   assert.equal(await text('cl-value'),'$24.92');
   assert.equal(await evaluate("document.getElementById('cl-setup-details').open"),false);
   assert.equal(await text('portfolio'),wallet);
+  await checkMobilePositionFees({ evaluate, click, text });
   await click('cl-reset'); await click('lab-full-tab'); await click('source-pool-tab');
   console.log('PASS: mobile position editing, collapsed import controls, exact results and explicit range application');
 }

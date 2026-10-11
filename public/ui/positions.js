@@ -135,7 +135,7 @@ export function initPositionSnapshots({ rangeLab, positionFees }) {
   });
   $('position-apply').addEventListener('click', () => {
     if (!scenario) return;
-    rangeLab.setScenario(scenario, 'Experiment starts from Uniswap v3 position #' + current.tokenId + ' at Ethereum block ' + current.block.number + '. It compares the recorded principal and range, leaves already collectable tokens outside both strategies, assumes USDC = $1 and uses the continuous lab model for future prices. Past deposits and fee history are not reconstructed.');
+    rangeLab.setScenario(scenario, 'Experiment starts from Uniswap v3 position #' + current.tokenId + ' at Ethereum block ' + current.block.number + '. It compares the recorded principal and range, leaves already collectable tokens outside both strategies, assumes USDC = $1 and uses the continuous lab model for future prices. Past deposits and fee history are not reconstructed.', { kind: 'position', snapshot: current });
     $('position-status').textContent = 'Position applied to the range lab. Move the future price to explore its next outcome.';
   });
   const saved = readSavedPosition();

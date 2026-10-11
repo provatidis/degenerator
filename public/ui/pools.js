@@ -85,14 +85,14 @@ export function initPoolSnapshots({ fullRangeLab, rangeLab }) {
   $('pool-apply').addEventListener('click', () => {
     if (!current) return;
     try {
-      setStartingPrice(snapshotView(current).ethPrice, 'Starting price from the saved WETH/USDC pool at Ethereum block ' + current.block.number + '. USDC is assumed to be $1; this is a pool reserve ratio, not an external price feed.');
+      setStartingPrice(snapshotView(current).ethPrice, 'Starting price from the saved WETH/USDC pool at Ethereum block ' + current.block.number + '. USDC is assumed to be $1; this is a pool reserve ratio, not an external price feed.', { kind: 'pool', snapshot: current });
       $('pool-status').textContent = 'Snapshot price applied. Future ETH price is set to 2× and assumed fee income to $0. Your virtual swap balances are unchanged.';
     } catch (error) { $('pool-status').textContent = error.message; }
   });
   $('pool-apply-range').addEventListener('click', () => {
     if (!current) return;
     try {
-      setRangeStartingPrice(snapshotView(current).ethPrice, 'Starting price from the saved Uniswap v2 WETH/USDC snapshot at Ethereum block ' + current.block.number + '. This seeds a hypothetical range position; the reserve ratio assumes USDC = $1.');
+      setRangeStartingPrice(snapshotView(current).ethPrice, 'Starting price from the saved Uniswap v2 WETH/USDC snapshot at Ethereum block ' + current.block.number + '. This seeds a hypothetical range position; the reserve ratio assumes USDC = $1.', { kind: 'pool', snapshot: current });
       $('pool-status').textContent = 'Snapshot price applied to the range lab with a fresh range and zero assumed fees. Your saved swap sandbox is unchanged.';
     } catch (error) { $('pool-status').textContent = error.message; }
   });

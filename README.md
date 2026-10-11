@@ -1,12 +1,24 @@
 # Degenerator
 
-Your DeFi playground. Degenerator is a browser-based lab for reproducible liquidity scenarios and virtual pool experiments. Compare full-range and concentrated ETH/USDC liquidity, import public pool and position snapshots, share assumptions, export results, and explore swaps without connecting a wallet.
+Your DeFi playground. Degenerator is a browser-based lab for reproducible liquidity scenarios and virtual pool experiments. Compare full-range and concentrated ETH/USDC liquidity, keep named experiments, import public pool and position snapshots, share assumptions, export results, and explore swaps without connecting a wallet.
 
 ## Example progression
 
 Playground's **Choose an example** library follows eight ordered cases: unchanged price, a price increase, a fee target, an in-range model, its price boundary, a recorded in-range NFT, an out-of-range NFT, and a fee-accounting snapshot. Each case states what it adds. The four stages are **Foundations → Comparisons → Ranges → Applied cases**, shared with Learn's lesson groups. Every stage and lesson is directly accessible; variations practice the same concept rather than representing difficulty levels. Advanced users can open [the recorded in-range case](https://provatidis.github.io/degenerator/#example=in-range-position) without completing earlier lessons.
 
 Opening a model example carries versioned assumptions through the existing scenario link. Opening a recorded case selects the position snapshot source and saves that snapshot; calculator inputs change only when the user applies it. Examples do not change virtual balances or lesson completion.
+
+## Saved experiments
+
+Choose **Save experiment** in either liquidity lab to keep its current model, exact numeric assumptions, name and optional notes. The [Saved experiments library](https://provatidis.github.io/degenerator/#saved-experiments) can search names/notes, filter by model, edit names and notes, and reopen any setup. Reopening loads a working copy; input edits leave the original record intact, and saving again creates a variation. Removal has an Undo action until another record is removed or the tab reloads.
+
+Select two or three records to compare. Outcomes are recalculated from the saved model inputs, rather than storing potentially stale derived results. The comparison shows each LP value, holding value and difference, with expandable assumptions and notes. Its context distinguishes identical starting baskets and future prices, different future-price scenarios, and different budgets/prices/token mixes. A concentrated range and a 50/50 position can have different starting tokens even with equal budgets; each uses its own holding benchmark. Fee inputs remain assumed USD cash, with USDC = $1 and the existing model exclusions.
+
+When a setup still matches its imported pool price or NFT principal/range, saving retains the full validated source snapshot, including its block and exact integers. Changing a pool starting price, or an NFT's starting price, investment or bounds, clears that attribution. Future-price and fee-assumption changes preserve it. Reopening does not fetch the chain, contact imported provider URLs or replace the latest pool/position snapshot. Recorded collectable tokens remain outside both strategies' future principal comparison.
+
+The library uses its own degenerator-experiments-v1 storage key and version-1 JSON schema, independent of lesson progress, snapshots and the virtual sandbox. Export includes names, notes, assumptions and retained source snapshots; ordinary scenario links still contain only model inputs. Imports merge atomically, skip identical records, and keep conflicting IDs as new copies rather than overwriting either version. Limits are 50 records, 80-character names, 1,000-character notes and a 512 KB file. Unsupported models/versions, invalid sources and malformed files are rejected without altering the current collection.
+
+Storage failures keep changes for the current tab and explicitly request an export. Unreadable or newer saved copies are retained, downloadable and discarded only through their own recovery action. Each edit reads the latest stored collection to preserve another tab's additions; stale name/notes edits and removals are rejected. Data/schema/storage code lives in public/data/saved-experiments.js, calculation/presentation helpers in public/lib/saved-experiments.js, and the injected library controller in public/ui/saved-experiments.js.
 
 ## Learn: Liquidity essentials
 
@@ -284,7 +296,7 @@ The static app remains dependency-free and deployable on GitHub Pages. Calculati
 
 New financial models get their own versioned module and reference/invariant tests. New protocols get a deployment definition, adapter, exact token-unit handling and contract validation. Preserve old model links and storage keys; introduce explicit migrations when schemas change. Unit and desktop/mobile browser tests run before deployment.
 
-The next milestones are named saved experiments, read-only position discovery by wallet address, and historical price replay. A backend becomes useful for private provider credentials, shared caching, scheduled snapshots or account synchronization. Each can be added behind the data layer without rewriting the calculation models or existing labs.
+The next milestones are read-only position discovery by wallet address and historical price replay. A backend becomes useful for private provider credentials, shared caching, scheduled snapshots or account synchronization. Each can be added behind the data layer without rewriting the calculation models or existing labs.
 
 The cl-range-v1 model, links, CSV, presentation helpers and result cards are separate modules. A shared link router and accessible lab navigation coordinate the two calculators while preserving cp50-v1 links. Reference tests cover asymmetric funding, outside starts, exact boundaries, continuity, virtual-reserve conservation, wide-range limits, separate fees, numerical bounds and reproducible exports.
 

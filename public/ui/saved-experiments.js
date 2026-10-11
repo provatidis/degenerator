@@ -1,5 +1,5 @@
 import { EXPERIMENTS_KEY, MAX_LIBRARY_BYTES, emptyLibrary, readLibrary, writeLibrary, libraryJSON, parseLibrary, createExperiment, addExperiment, editExperiment, removeExperiment, mergeLibraries } from '../data/saved-experiments.js';
-import { experimentView, experimentModelName, comparisonContext, startingAssets } from '../lib/saved-experiments.js';
+import { experimentView, defaultExperimentName, comparisonContext, startingAssets } from '../lib/saved-experiments.js';
 import { usd, signedUSD, percent } from '../lib/format.js';
 import { STATE_COPY } from '../lib/range-presentation.js';
 import { downloadBlob } from '../lib/download.js';
@@ -61,8 +61,7 @@ export function initSavedExperiments({ fullRangeLab, rangeLab }) {
       + ' · ' + usd(view.result.fees) + ' assumed LP cash fees'
       + (draft.model === 'cl-range-v1' ? ' · Range ' + usd(view.result.lowerPrice) + ' – ' + usd(view.result.upperPrice) + ' · ' + usd(view.result.fullRangeFees) + ' assumed 50/50 reference fees' : '')
       + (mode === 'edit' ? '. The saved assumptions stay the same.' : '. This saves a new copy of the current assumptions.');
-    $('experiment-name').value = mode === 'edit' ? draft.name : draft.origin?.kind === 'position'
-      ? 'Position #' + draft.origin.snapshot.tokenId + ' · range scenario' : 'ETH ' + usd(view.result.initialPrice) + ' → ' + usd(view.result.futurePrice);
+    $('experiment-name').value = mode === 'edit' ? draft.name : defaultExperimentName(draft);
     $('experiment-notes').value = mode === 'edit' ? draft.notes : '';
     $('experiment-dialog-error').textContent = '';
     $('experiment-dialog').showModal(); $('experiment-name').focus(); $('experiment-name').select();
@@ -118,11 +117,12 @@ export function initSavedExperiments({ fullRangeLab, rangeLab }) {
       const header = element('div', 'experiment-entry-header'); header.append(element('p', 'experiment-model', modelName));
       const label = element('label', 'experiment-compare-toggle');
       const checkbox = element('input'); checkbox.type = 'checkbox'; checkbox.dataset.compareId = entry.id; checkbox.checked = selected.has(entry.id);
-      checkbox.setAttribute('aria-label', 'Compare ' + entry.name);
+      checkbox.setAttribute('aria-label', 'Compare ' + entry.name + ' · ' + modelName + ' · LP cash fees ' + usd(result.fees));
       checkbox.addEventListener('change', () => { if (checkbox.checked && selected.size < 3) selected.add(entry.id); else selected.delete(entry.id); $('experiments-comparison').hidden = true; renderSelection(); });
       label.append(checkbox, ' Compare'); header.append(label);
       item.append(header, element('h3', '', entry.name), element('p', 'experiment-assumptions', usd(result.investment) + ' · ETH ' + usd(result.initialPrice) + ' → ' + usd(result.futurePrice)));
       if (entry.model === 'cl-range-v1') item.append(element('p', 'experiment-assumptions', 'Range ' + usd(result.lowerPrice) + ' – ' + usd(result.upperPrice)));
+      item.append(element('p', 'experiment-assumptions', 'Assumed LP cash fees: ' + usd(result.fees) + (entry.model === 'cl-range-v1' ? ' · 50/50 reference fees: ' + usd(result.fullRangeFees) : '')));
       const numbers = element('dl', 'experiment-entry-numbers');
       pair(numbers, 'LP + assumed fees', usd(result.lpValue)); pair(numbers, 'LP minus holding', signedUSD(result.difference), result.difference >= 0 ? 'gain' : 'loss'); item.append(numbers, sourceLine(entry));
       if (entry.notes) { const notes = element('details', 'experiment-notes'); notes.append(element('summary', '', 'Notes'), element('p', '', entry.notes)); item.append(notes); }

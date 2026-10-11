@@ -11,6 +11,15 @@ export function experimentView(entry) {
     hash: entry.model === FULL_MODEL ? scenarioHash(entry.inputs) : rangeHash(entry.inputs),
     modelName: experimentModelName(entry.model) };
 }
+export function defaultExperimentName(draft) {
+  const { result } = experimentView(draft);
+  if (draft.origin?.kind === 'position') {
+    const id = draft.origin.snapshot.tokenId;
+    return 'Position #' + (id.length > 24 ? id.slice(0,18) + '…' + id.slice(-6) : id) + ' · range experiment';
+  }
+  if (draft.model === FULL_MODEL) return 'ETH ' + usd(result.initialPrice) + ' → ' + usd(result.futurePrice) + ' · fees ' + usd(result.fees);
+  return 'Range ' + usd(result.lowerPrice) + '–' + usd(result.upperPrice) + ' · ETH → ' + usd(result.futurePrice);
+}
 export function experimentOriginLabel(origin, model) {
   if (!origin) return '';
   const snapshot = origin.snapshot;

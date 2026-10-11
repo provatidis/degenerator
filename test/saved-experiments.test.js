@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { EXPERIMENTS_KEY, MAX_LIBRARY_BYTES, emptyLibrary, validateExperimentDraft, validateExperiment, validateLibrary, libraryJSON, parseLibrary, readLibrary, writeLibrary, createExperiment, addExperiment, editExperiment, removeExperiment, mergeLibraries } from '../public/data/saved-experiments.js';
-import { experimentView, comparisonContext } from '../public/lib/saved-experiments.js';
+import { experimentView, defaultExperimentName, comparisonContext } from '../public/lib/saved-experiments.js';
 import { DEFAULT_SCENARIO } from '../public/models/cp50-v1.js';
 import { DEFAULT_RANGE } from '../public/models/cl-range-v1.js';
 import { positionScenario } from '../public/data/position-snapshot.js';
@@ -109,4 +109,12 @@ test('comparisons distinguish a common starting basket from different price scen
   const symmetric=make(5,{...rangeDraft,inputs:{...DEFAULT_RANGE,lowerPrice:1000,upperPrice:4000,futurePrice:4000}});
   assert.match(comparisonContext([full,symmetric]),/share the same starting token basket/);
   assert.match(comparisonContext([full,make(6,{...fullDraft,inputs:{...DEFAULT_SCENARIO,investment:5000.01}})]),/different budgets/);
+});
+test('suggested names expose relevant assumptions and stay valid even for uint256 NFT IDs', () => {
+  assert.notEqual(defaultExperimentName(fullDraft),defaultExperimentName({...fullDraft,inputs:{...DEFAULT_SCENARIO,fees:0}}));
+  assert.match(defaultExperimentName(rangeDraft),/Range.*1,800.*2,200/);
+  const source={model:'cl-range-v1',inputs:positionScenario(position),origin:{kind:'position',snapshot:{...position,tokenId:((1n<<256n)-1n).toString()}}};
+  const name=defaultExperimentName(source);assert.ok(name.length<=80);
+  assert.match(name,/Position #.*….*range experiment/);
+  assert.equal(createExperiment(source,name,'',{id:id(1),now}).name,name);
 });

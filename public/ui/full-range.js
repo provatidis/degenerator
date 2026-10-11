@@ -6,6 +6,8 @@ import { experimentScenario } from '../models/experiments.js';
 import { fmt, usd, signedUSD, percent, compactUSD } from '../lib/format.js';
 import { downloadBlob } from '../lib/download.js';
 import { resultCardBlob } from '../lib/result-card.js';
+import { validateExperimentDraft } from '../data/saved-experiments.js';
+import { experimentOriginLabel } from '../lib/saved-experiments.js';
 
 export function initFullRangeLab({ navigation }) {
   const { selectLab } = navigation;
@@ -80,6 +82,7 @@ export function initFullRangeLab({ navigation }) {
   }
 
   function render() {
+    $('scenario-save-status').textContent = '';
     cardGeneration++;
     if (cardURL) { URL.revokeObjectURL(cardURL); cardURL = null; }
     $('scenario-card-preview').hidden = true;
@@ -104,6 +107,7 @@ export function initFullRangeLab({ navigation }) {
       $('scenario-share').disabled = false;
       $('scenario-export').disabled = false;
       $('scenario-image').disabled = false;
+      $('scenario-save').disabled = false;
       $('scenario-hold-value').textContent = usd(result.holdValue);
       $('scenario-lp-value').textContent = usd(result.lpValue);
       $('scenario-hold-return').textContent = `${percent(result.holdReturn)} vs. initial investment`;
@@ -138,6 +142,7 @@ export function initFullRangeLab({ navigation }) {
       $('scenario-share').disabled = true;
       $('scenario-export').disabled = true;
       $('scenario-image').disabled = true;
+      $('scenario-save').disabled = true;
       $('scenario-origin').hidden = true;
     }
   }
@@ -202,12 +207,12 @@ export function initFullRangeLab({ navigation }) {
     } catch (error) { $('experiment-status').textContent = error.message; }
   });
 
-  function setStartingPrice(price, label) {
+  function setStartingPrice(price, label, origin = null) {
     const input = readInputs();
     const investment = Number.isFinite(input.investment) && input.investment >= LIMITS.investment.min && input.investment <= LIMITS.investment.max
       ? input.investment : DEFAULT_SCENARIO.investment;
     const scenario = validateScenario({ investment, initialPrice: price, futurePrice: price * 2, fees: 0 });
-    startingSource = { price, label };
+    startingSource = { price, label, origin };
     fillInputs(scenario);
     render();
     selectLab('full', { scroll: true });
@@ -233,5 +238,18 @@ export function initFullRangeLab({ navigation }) {
   loadShared();
   window.addEventListener('hashchange', loadShared);
 
-  return { setStartingPrice, restoreLocation: loadShared };
+  function getExperimentDraft() {
+    if (!current) return null;
+    return validateExperimentDraft({ model: MODEL, inputs: current,
+      origin: startingSource && current.initialPrice === startingSource.price ? startingSource.origin : null });
+  }
+  function setExperiment(entry) {
+    const draft = validateExperimentDraft(entry);
+    if (draft.model !== MODEL) throw new Error('Choose a full-range experiment for this lab.');
+    startingSource = draft.origin ? { price: draft.inputs.initialPrice, origin: draft.origin, label: experimentOriginLabel(draft.origin, MODEL) } : null;
+    fillInputs(draft.inputs); render();
+    selectLab('full', { updateURL: false, scroll: true, immediate: true });
+    $('scenario-save-status').textContent = 'Opened “' + entry.name + '” as a working copy. Save again to keep a variation.';
+  }
+  return { setStartingPrice, getExperimentDraft, setExperiment, restoreLocation: loadShared };
 }

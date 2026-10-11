@@ -1,6 +1,7 @@
 import { checkExamples } from './browser/example-checks.js';
 import { checkLearning, checkMobileLearning } from './browser/learning-checks.js';
 import { checkPositions, checkMobilePositions } from './browser/position-checks.js';
+import { checkSavedExperiments, checkMobileSavedExperiments } from './browser/saved-experiment-checks.js';
 // Optional real-browser smoke test, using Chromium's DevTools protocol and Node built-ins.
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
@@ -395,6 +396,7 @@ try {
   console.log('PASS: range reference math, exact edges, slider stability, independent fees, validation, keyboard tabs, preserved setups, CSV/PNG downloads, snapshot seeding and shared range restoration');
   await checkPositions({ base, call, evaluate, click, fill, text, reload, navigate, downloadFile, profile });
   await checkExamples({ evaluate, click, fill, text, navigate, base });
+  await checkSavedExperiments({ evaluate, click, fill, text, navigate, reload, downloadFile, call, base, profile });
 
   const swappedPortfolio = await text('portfolio');
   await reload();
@@ -516,6 +518,7 @@ try {
   console.log('PASS: mobile range setup disclosure, price checkpoints, sharing and lab switching');
   await checkMobilePositions({ evaluate, click, fill, text });
   await checkMobileLearning({ evaluate, click, fill, text, navigate, base });
+  await checkMobileSavedExperiments({ evaluate, click, fill, text, navigate, base, call });
   await call('Emulation.setDeviceMetricsOverride', { width: 320, height: 740, deviceScaleFactor: 1, mobile: true });
   await navigate(base+'#example=position-fees');
   await evaluate("new Promise((resolve,reject)=>{const until=Date.now()+10000;const check=()=>{if(document.getElementById('position-fees').open&&document.getElementById('position-lab').getAttribute('aria-busy')==='false')resolve();else if(Date.now()>until)reject(new Error('Narrow fee example did not open'));else setTimeout(check,20)};check()})");
@@ -523,6 +526,14 @@ try {
   await evaluate("document.querySelector('#position-fee-math > summary').click()");
   assert.equal(await evaluate('document.documentElement.scrollWidth<=innerWidth'), true);
   console.log('PASS: 320px navigation, pool statistics and expanded fee calculation without page overflow');
+  await navigate(base+'#saved-experiments');
+  await evaluate("document.querySelectorAll('[data-compare-id]').forEach(input=>input.click())");await click('experiments-compare');
+  assert.equal(await evaluate('document.documentElement.scrollWidth<=innerWidth'),true);
+  await evaluate("document.querySelector('#experiments-list button').click()");await click('scenario-save');
+  assert.equal(await evaluate('document.documentElement.scrollWidth<=innerWidth'),true);
+  assert.equal(await evaluate("(()=>{const rect=document.getElementById('experiment-dialog').getBoundingClientRect();return rect.left>=0&&rect.right<=innerWidth;})()"),true);
+  await click('experiment-save-cancel');
+  console.log('PASS: 320px saved comparison and modal bounds without page overflow');
   assert.deepEqual(errors, [], 'No uncaught browser errors');
   console.log('PASS: mobile layout and interaction; no uncaught browser errors');
 } finally {

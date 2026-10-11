@@ -1,0 +1,78 @@
+.saved-experiments { margin-bottom: 24px; scroll-margin-top: 24px; }
+.saved-experiments:not([open]) { padding: 16px 24px; }
+.saved-experiments > summary { cursor: pointer; font-size: 16px; line-height: 1.8; min-height: 44px; }
+.saved-experiments > summary strong { font-weight: 600; }
+.saved-experiments > summary span { color: var(--muted); font-size: 13px; margin-left: 12px; }
+.saved-experiments > .body-copy { max-width: 760px; margin: 12px 0; }
+.experiment-library-tools, .experiment-empty-links { display: flex; flex-wrap: wrap; gap: 12px 22px; margin: 18px 0; align-items: center; }
+.experiment-library-tools .button { min-height: 44px; }
+.experiment-library-tools label { cursor: pointer; }
+.experiment-empty { margin-top: 20px; padding: 22px; border: 1px dashed #42513f; border-radius: 12px; }
+.experiment-empty h3 { font-size: 17px; font-weight: 500; }
+.experiment-empty-links, .experiment-lab-footer a { color: var(--accent); font-size: 14px; line-height: 1.8; }
+.experiment-library-controls { display: grid; grid-template-columns: minmax(0, 1fr) minmax(190px, 260px); gap: 20px; margin: 24px 0 18px; }
+.experiment-library-controls label { display: block; font-size: 13px; margin-bottom: 8px; }
+.experiment-library-controls input, .experiment-library-controls select { width: 100%; min-height: 46px; border: 1px solid var(--border); border-radius: 8px; padding: 11px 13px; background: var(--surface); color: var(--text); font-size: 14px; }
+.experiment-library-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; list-style: none; padding: 0; margin: 20px 0; }
+.experiment-entry { min-width: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px; }
+.experiment-entry-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+.experiment-model { font-size: 12px; color: var(--accent); margin: 0; line-height: 1.8; }
+.experiment-compare-toggle { display: flex; gap: 7px; align-items: center; min-height: 36px; color: var(--muted); font-size: 13px; cursor: pointer; }
+.experiment-compare-toggle input { width: 18px; height: 18px; accent-color: var(--accent); margin: 0; }
+.experiment-entry h3, .experiment-comparison-card h4 { font-size: 19px; font-weight: 500; letter-spacing: -.3px; line-height: 1.5; margin: 6px 0 12px; overflow-wrap: anywhere; }
+.experiment-assumptions { font-size: 13px; color: var(--muted); line-height: 1.8; margin: 6px 0; overflow-wrap: anywhere; }
+.experiment-entry-numbers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 20px 0; }
+.experiment-entry-numbers dt, .experiment-comparison-outcomes dt { font-size: 13px; line-height: 1.7; color: var(--muted); }
+.experiment-entry-numbers dd { font-size: 23px; font-weight: 500; margin: 7px 0 0; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.experiment-source { font-size: 12px; color: var(--muted); line-height: 1.9; margin: 15px 0; overflow-wrap: anywhere; }
+.experiment-source a { color: var(--accent); text-decoration: underline; }
+.experiment-source span { display: block; }
+.experiment-notes { margin: 15px 0; border-top: 1px solid var(--border); padding-top: 12px; }
+.experiment-notes summary { font-size: 14px; cursor: pointer; min-height: 32px; }
+.experiment-notes p, .experiment-comparison-notes { color: var(--muted); font-size: 14px; line-height: 1.8; white-space: pre-wrap; overflow-wrap: anywhere; }
+.experiment-saved-date { font-size: 12px; color: var(--muted); margin: 18px 0 10px; }
+.experiment-entry-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; }
+.experiment-entry-actions .button, .experiment-entry-actions .text-button { font-size: 13px; min-height: 44px; }
+.experiment-comparison-controls { display: flex; flex-wrap: wrap; gap: 12px 22px; align-items: center; padding: 16px 0 0; border-top: 1px solid var(--border); }
+.experiment-comparison-controls p { font-size: 14px; line-height: 1.8; margin: 0; flex: 1 1 280px; }
+.experiment-comparison { margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--border); scroll-margin-top: 24px; }
+.experiment-comparison-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
+.experiment-comparison-heading h3 { font-size: 20px; font-weight: 500; }
+.experiment-comparison-context { color: var(--accent); border: 1px solid #42513f; background: #17251b; border-radius: 10px; padding: 16px; font-size: 14px; line-height: 1.8; }
+.experiment-comparison-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; margin-top: 24px; }
+.experiment-comparison-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px; min-width: 0; }
+.experiment-comparison-outcomes { margin: 22px 0; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+.experiment-comparison-outcomes > div { margin-top: 14px; }
+.experiment-comparison-outcomes dd { font-size: 27px; font-weight: 500; margin: 4px 0 0; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.experiment-comparison-inputs { margin: 0; }
+.experiment-comparison-details { margin: 18px 0; }
+.experiment-comparison-details > summary { cursor: pointer; font-size: 14px; line-height: 1.8; min-height: 36px; }
+.experiment-comparison-details[open] > summary { margin-bottom: 14px; }
+.experiment-comparison-inputs > div { margin-bottom: 16px; }
+.experiment-comparison-inputs dt { color: var(--muted); font-size: 13px; line-height: 1.8; }
+.experiment-comparison-inputs dd { font-size: 15px; line-height: 1.7; margin: 4px 0 0; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.experiment-lab-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px 18px; margin-top: 14px; }
+.scenario-actions { flex-wrap: wrap; justify-content: flex-start; }
+.experiment-undo, .experiment-recovery { padding: 16px; margin: 16px 0; border: 1px solid #42513f; border-radius: 10px; font-size: 14px; line-height: 1.8; }
+.experiment-undo .text-button, .experiment-recovery .text-button { color: var(--accent); margin-left: 8px; }
+#experiments-status[data-error=true] { color: var(--error); }
+.experiment-dialog { width: min(560px, calc(100% - 32px)); max-height: calc(100dvh - 40px); margin: auto; padding: 30px; overflow-y: auto; border: 1px solid #42513f; border-radius: 16px; background: var(--card); color: var(--text); }
+.experiment-dialog::backdrop { background: #060b08cc; }
+.experiment-dialog h2 { font-size: 25px; margin: 0 0 12px; }
+.experiment-dialog .fine-print { margin: 16px 0 22px; }
+.experiment-dialog .scenario-field label { font-size: 14px; }
+.experiment-dialog .scenario-field input { font-size: 17px; }
+.experiment-dialog textarea { width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); color: var(--text); font: inherit; font-size: 15px; line-height: 1.8; resize: vertical; }
+.experiment-dialog-actions { display: flex; gap: 12px; align-items: center; }
+.experiment-dialog-actions .primary { width: auto; flex: 1; min-height: 48px; }
+.experiment-dialog-actions .secondary { min-height: 48px; }
+.experiment-dialog textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+@media (max-width: 750px) {
+  .experiment-library-controls, .experiment-library-list, .experiment-comparison-cards { grid-template-columns: minmax(0, 1fr); }
+  .experiment-entry, .experiment-comparison-card, .experiment-empty { padding: 18px; }
+  .experiment-dialog { padding: 22px; }
+  .experiment-dialog h2 { font-size: 23px; }
+  .experiment-dialog .scenario-field label { flex-wrap: wrap; }
+  .experiment-entry-numbers dd { font-size: 21px; }
+}
+@media (max-width: 360px) { .experiment-entry-numbers { grid-template-columns: 1fr; } }

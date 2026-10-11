@@ -6,6 +6,8 @@ import { fmt, usd, percent, signedUSD, compactUSD } from '../lib/format.js';
 import { STATE_COPY, rangePriceLabels, assetAmounts } from '../lib/range-presentation.js';
 import { rangeCardBlob } from '../lib/range-card.js';
 import { downloadBlob } from '../lib/download.js';
+import { validateExperimentDraft } from '../data/saved-experiments.js';
+import { experimentOriginLabel } from '../lib/saved-experiments.js';
 
 export function initRangeLab({ navigation }) {
   const { selectLab } = navigation;
@@ -34,6 +36,7 @@ export function initRangeLab({ navigation }) {
     }));
   }
   function fillInputs(input) { for (const [key, id] of Object.entries(fields)) $(id).value = input[key]; }
+  const sourceApplies = result => source && result.initialPrice === source.price && (!source.range || ['investment', 'lowerPrice', 'upperPrice'].every(key => result[key] === source.range[key]));
   function setText(id, text) { if ($(id).textContent !== text) $(id).textContent = text; }
   function updateAllocation(prefix, share) {
     const eth = Math.max(0, Math.min(100, share));
@@ -123,6 +126,7 @@ export function initRangeLab({ navigation }) {
     }
   }
   function render({ updateDomain = true } = {}) {
+    $('cl-save-status').textContent = '';
     const input = readInputs();
     cardGeneration++;
     if (cardURL) { URL.revokeObjectURL(cardURL); cardURL = null; }
@@ -142,7 +146,7 @@ export function initRangeLab({ navigation }) {
       $('cl-error').textContent = '';
       $('cl-results').hidden = false; $('cl-invalid').hidden = true;
       $('cl-starting-mix').hidden = false; $('cl-comparison-card').hidden = false;
-      for (const id of ['cl-share', 'cl-export', 'cl-image']) $(id).disabled = false;
+      for (const id of ['cl-share', 'cl-export', 'cl-image', 'cl-save']) $(id).disabled = false;
       $('cl-close-setup').disabled = false;
       const copy = STATE_COPY[result.state];
       setText('cl-state', copy.title);
@@ -178,7 +182,7 @@ export function initRangeLab({ navigation }) {
       $('cl-full-hold').textContent = usd(result.fullRange.holdValue);
       $('cl-match-fees').disabled = result.breakEvenFees > LIMITS.fees.max;
       $('cl-match-fees').textContent = result.breakEvenFees > LIMITS.fees.max ? 'Above the supported fee input limit' : 'Use break-even fees';
-      $('cl-origin').textContent = source && result.initialPrice === source.price && (!source.range || ['investment', 'lowerPrice', 'upperPrice'].every(key => result[key] === source.range[key])) ? source.label : '';
+      $('cl-origin').textContent = sourceApplies(result) ? source.label : '';
       $('cl-origin').hidden = !$('cl-origin').textContent;
       renderPresets(result); renderExplorer(result, updateDomain); renderChart(result); renderComparisons(result);
     } catch (error) {
@@ -188,7 +192,7 @@ export function initRangeLab({ navigation }) {
       $('cl-close-setup').disabled = true;
       $('cl-results').hidden = true; $('cl-invalid').hidden = false;
       $('cl-starting-mix').hidden = true; $('cl-comparison-card').hidden = true; $('cl-origin').hidden = true;
-      for (const id of ['cl-share', 'cl-export', 'cl-image']) $(id).disabled = true;
+      for (const id of ['cl-share', 'cl-export', 'cl-image', 'cl-save']) $(id).disabled = true;
       if (['fees', 'fullRangeFees'].some((key) => $(fields[key]).getAttribute('aria-invalid') === 'true')) $('cl-fee-details').open = true;
     }
   }
@@ -254,7 +258,7 @@ export function initRangeLab({ navigation }) {
       $('cl-image-status').textContent = 'Your card is ready below. Use the scenario link or CSV to reproduce exact inputs.';
     } catch (error) { if (generation === cardGeneration) $('cl-image-status').textContent = error.message; }
   });
-  function setRangeStartingPrice(price, label) {
+  function setRangeStartingPrice(price, label, origin = null) {
     const investment = current?.investment ?? DEFAULT_RANGE.investment;
     const input = {
       investment, initialPrice: price, futurePrice: Math.min(LIMITS.futurePrice.max, price * 1.05),
@@ -262,7 +266,7 @@ export function initRangeLab({ navigation }) {
       fees: 0, fullRangeFees: 0,
     };
     calculateRange(input);
-    source = { price, label }; fillInputs(input); render();
+    source = { price, label, origin }; fillInputs(input); render();
     selectLab('range', { scroll: true });
   }
   function loadShared() {
@@ -282,12 +286,23 @@ export function initRangeLab({ navigation }) {
   fillInputs(DEFAULT_RANGE); loadShared();
   window.addEventListener('hashchange', loadShared);
 
-  function setScenario(input, label) {
+  function setScenario(input, label, origin = null) {
     const result = calculateRange(input);
-    source = { price: result.initialPrice, label, range: { investment: result.investment, lowerPrice: result.lowerPrice, upperPrice: result.upperPrice } };
+    source = { price: result.initialPrice, label, origin, range: { investment: result.investment, lowerPrice: result.lowerPrice, upperPrice: result.upperPrice } };
     fillInputs(result); render();
     selectLab('range', { scroll: true });
   }
 
-  return { setStartingPrice: setRangeStartingPrice, setScenario, restoreLocation: loadShared };
+  function getExperimentDraft() {
+    if (!current) return null;
+    return validateExperimentDraft({ model: MODEL, inputs: current, origin: sourceApplies(current) ? source.origin : null });
+  }
+  function setExperiment(entry) {
+    const draft = validateExperimentDraft(entry);
+    if (draft.model !== MODEL) throw new Error('Choose a range experiment for this lab.');
+    setScenario(draft.inputs, experimentOriginLabel(draft.origin, MODEL), draft.origin);
+    if (setupMedia.matches) $('cl-setup-details').open = false;
+    $('cl-save-status').textContent = 'Opened “' + entry.name + '” as a working copy. Save again to keep a variation.';
+  }
+  return { setStartingPrice: setRangeStartingPrice, setScenario, getExperimentDraft, setExperiment, restoreLocation: loadShared };
 }

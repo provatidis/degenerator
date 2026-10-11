@@ -8,6 +8,7 @@ import { initLabNavigation } from './ui/lab-navigation.js';
 import { initFullRangeLab } from './ui/full-range.js';
 import { initRangeLab } from './ui/range.js';
 import { initPoolSnapshots } from './ui/pools.js';
+import { initSavedExperiments } from './ui/saved-experiments.js';
 
 // Compose controllers explicitly. Data adapters and calculation models never initialize UI.
 initPageAccess();
@@ -25,3 +26,4 @@ initExamples({
   positionSnapshots, snapshotNavigation: snapshots,
   restoreScenario: () => { fullRangeLab.restoreLocation(); rangeLab.restoreLocation(); navigation.restoreLocation(); },
 });
+initSavedExperiments({ fullRangeLab, rangeLab });

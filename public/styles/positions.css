@@ -41,3 +41,42 @@
   .position-setup-body { margin-top: 15px; }
   .position-form { margin-top: 0; }
 }
+
+/* Fee detail is optional; principal and range remain the first view of a position. */
+.position-fees { margin-top: 22px; border: 1px solid var(--border); border-radius: 12px; padding: 18px; background: var(--surface); scroll-margin-top: 24px; }
+.position-fees > summary { cursor: pointer; font-size: 14px; line-height: 1.8; min-height: 44px; color: var(--text); }
+.position-fees > summary strong { font-weight: 600; }
+.position-fees > summary span { display: block; margin-top: 5px; color: var(--accent); font-size: 13px; font-weight: 400; }
+.position-fees > summary #position-fee-context { color: var(--muted); font-size: 12px; overflow-wrap: anywhere; }
+.position-fee-balances { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 20px 0 0; }
+.position-fee-balances > div { min-width: 0; border: 1px solid var(--border); border-radius: 10px; padding: 20px; background: var(--card); }
+.position-fee-balances dt { color: var(--muted); font-size: 13px; line-height: 1.8; }
+.position-fee-balances dd { margin: 8px 0 0; line-height: 1.8; }
+.position-fee-balances strong { display: block; font-size: 24px; font-weight: 500; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.position-fee-balances dd span { display: block; margin-top: 5px; font-size: 14px; overflow-wrap: anywhere; }
+.position-fee-balances .position-fee-total { background: #22301f; border-color: #4d633d; }
+.position-fee-total strong { color: var(--accent); }
+.position-assets-total { font-size: 14px; line-height: 1.8; margin: 22px 0 0; }
+.position-assets-total strong { display: block; font-size: 26px; font-weight: 500; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.position-fee-walkthrough, .position-fee-math { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--border); }
+.position-fee-walkthrough > summary, .position-fee-math > summary { font-size: 14px; line-height: 1.8; cursor: pointer; min-height: 36px; }
+#position-fee-steps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 36px; padding-left: 20px; margin: 20px 0 0; }
+#position-fee-steps li { padding-left: 4px; margin-bottom: 22px; font-size: 15px; line-height: 1.85; }
+#position-fee-steps li::marker { color: var(--accent); font-size: 13px; }
+#position-fee-steps strong { font-size: 15px; font-weight: 600; }
+#position-fee-steps p { margin: 7px 0 0; color: var(--muted); }
+.position-fee-math pre { font-size: 13px; line-height: 1.8; white-space: pre-wrap; overflow-wrap: anywhere; color: var(--muted); background: var(--card); padding: 16px; border-radius: 8px; }
+.position-fee-sources { display: flex; flex-wrap: wrap; gap: 12px 22px; margin: 20px 0 0; padding-top: 16px; border-top: 1px solid var(--border); font-size: 13px; line-height: 1.8; color: var(--accent); }
+#position-fee-details { padding-top: 22px; }
+#position-fee-details h3 { font-size: 15px; color: var(--text); }
+#position-fee-empty a { color: var(--accent); }
+#position-fee-overflow { color: var(--error); }
+.example-cards > li:last-child:nth-child(odd):not(:only-child) { grid-column: 1 / -1; }
+#learn-fee-case { margin: 20px 0; }
+#learn-fee-case a { font-size: 14px; color: var(--accent); line-height: 1.8; }
+@media (max-width: 750px) {
+  .position-fees { padding: 16px; }
+  .position-fee-balances { grid-template-columns: 1fr; gap: 12px; }
+  #position-fee-steps { grid-template-columns: 1fr; gap: 0; }
+  .position-fee-sources { flex-direction: column; gap: 10px; }
+}

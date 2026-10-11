@@ -1,0 +1,71 @@
+{
+  "version": 2,
+  "kind": "uniswap-v3-position",
+  "protocol": "uniswap-v3",
+  "chainId": 1,
+  "tokenId": "1382030",
+  "positionManager": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
+  "factoryAddress": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+  "poolAddress": "0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8",
+  "block": {
+    "number": "26168941",
+    "hash": "0x7b8bdadecbb0b29aa91fd8be0cb2a1e87fef5a4a2c8ec7a3f7162b5668b08183",
+    "timestamp": 1791718487
+  },
+  "tokens": [
+    {
+      "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "symbol": "USDC",
+      "decimals": 6
+    },
+    {
+      "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "symbol": "WETH",
+      "decimals": 18
+    }
+  ],
+  "position": {
+    "fee": 3000,
+    "tickLower": 198000,
+    "tickUpper": 198120,
+    "liquidity": "159442089989790672",
+    "feeGrowthInside0LastX128": "92806954550172852055585138719786",
+    "feeGrowthInside1LastX128": "37101590913677820784947564669481211067631",
+    "tokensOwed0": "0",
+    "tokensOwed1": "0"
+  },
+  "pool": {
+    "sqrtPriceX96": "1583543970317122549486560032782253",
+    "tick": 198066,
+    "tickSpacing": 60
+  },
+  "principal": {
+    "amount0Raw": "21196370792",
+    "amount1Raw": "10623128135512649302"
+  },
+  "feeGrowth": {
+    "global0X128": "5929876870156289776388531365428271",
+    "global1X128": "2522213199377560600583886644538884674103963",
+    "lower": {
+      "liquidityGross": "168802483023453146",
+      "outside0X128": "3157019352175146196517145315400107",
+      "outside1X128": "976737511531276610317947598158043968083768",
+      "initialized": true
+    },
+    "upper": {
+      "liquidityGross": "303750294932200264",
+      "outside0X128": "2680049443840467924785036387095976",
+      "outside1X128": "1508369711195508293801417058846235066390904",
+      "initialized": true
+    }
+  },
+  "fees": {
+    "accrued0Raw": "524593",
+    "accrued1Raw": "2054973037123392",
+    "collectable0Raw": "524593",
+    "collectable1Raw": "2054973037123392",
+    "overflow": false
+  },
+  "capturedAt": "2026-10-11T11:48:53.172Z",
+  "provider": "https://ethereum-rpc.publicnode.com"
+}

@@ -40,6 +40,15 @@ export async function checkExamples({ evaluate, click, fill, text, navigate, bas
   assert.equal(await evaluate("localStorage.getItem('defi-sandbox-v1')"), saved[0]);
   assert.equal(await evaluate("localStorage.getItem('degenerator-learning-liquidity-v1')"), saved[1]);
 
+  await navigate(base+'#example=position-fees');
+  await wait("document.getElementById('position-fees').open && document.getElementById('position-fee-walkthrough').open && document.getElementById('position-lab').getAttribute('aria-busy')==='false'");
+  assert.equal(await evaluate("document.querySelectorAll('#example-cards a').length"), 3);
+  assert.equal(await evaluate("document.querySelector('[data-example-id=position-fees]').hash"), '#example=position-fees');
+  assert.match(await text('position-fee-context'), /1382030.*26168941/);
+  assert.equal(await text('position-collectable-value'), '$5.67');
+  assert.equal(await evaluate("localStorage.getItem('defi-sandbox-v1')"), saved[0]);
+  assert.equal(await evaluate("localStorage.getItem('degenerator-learning-liquidity-v1')"), saved[1]);
+
   // The live button uses a complete second-provider capture after a transport limit.
   await evaluate('window.examplePoolFixture='+JSON.stringify(pool));
   await evaluate(`(()=>{
@@ -71,7 +80,7 @@ export async function checkExamples({ evaluate, click, fill, text, navigate, bas
   await evaluate("window.restoreExampleFetch()");
 
   // Unreadable and newer-version saves remain until the user discards each one.
-  await evaluate("localStorage.setItem('degenerator-pool-snapshot-v1','{');localStorage.setItem('degenerator-v3-position-snapshot-v1',"+JSON.stringify(JSON.stringify({...outside,version:2}))+")");
+  await evaluate("localStorage.setItem('degenerator-pool-snapshot-v1','{');localStorage.setItem('degenerator-v3-position-snapshot-v1',"+JSON.stringify(JSON.stringify({...outside,version:99}))+")");
   await navigate(base);
   assert.match(await text('pool-status'), /unreadable/);
   assert.equal(await evaluate("document.getElementById('pool-clear-saved').hidden"), false);

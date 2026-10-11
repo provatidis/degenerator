@@ -13,6 +13,12 @@ export function encodeUint(value) {
   if (n < 0n || n >= 1n << 256n) fail();
   return n.toString(16).padStart(64, '0');
 }
+export function encodeInt(value, bits = 24) {
+  if (!Number.isInteger(bits) || bits < 1 || bits > 256) fail();
+  const n = BigInt(value), half = 1n << BigInt(bits - 1);
+  if (n < -half || n >= half) fail();
+  return (n < 0n ? n + (1n << 256n) : n).toString(16).padStart(64, '0');
+}
 export function addressFromWord(word) {
   if (!/^0{24}[0-9a-fA-F]{40}$/.test(word)) fail();
   return '0x' + word.slice(24).toLowerCase();
@@ -23,10 +29,11 @@ export function uintFromWord(word, bits = 256) {
   if (n >= 1n << BigInt(bits)) fail();
   return n;
 }
-export function intFromWord(word, bits) {
+export function intBigIntFromWord(word, bits) {
   const raw = uintFromWord(word);
   const signed = raw >= 1n << 255n ? raw - (1n << 256n) : raw;
   const half = 1n << BigInt(bits - 1);
   if (signed < -half || signed >= half) fail();
-  return Number(signed);
+  return signed;
 }
+export const intFromWord = (word, bits) => Number(intBigIntFromWord(word, bits));

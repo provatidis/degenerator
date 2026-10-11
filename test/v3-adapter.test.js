@@ -32,7 +32,14 @@ function v3RpcFixture(overrides = {}, calls = []) {
       assert.equal(data, '0x1698ee82' + word(V3.usdc) + word(V3.weth) + word(3000n));
       return overrides.pool ?? encoded(fixturePool);
     }
+    if (data.startsWith('0xf30dba93')) {
+      assert.equal(to, fixturePool);
+      const position = abiWords(overrides.position ?? encoded(0n, 0n, V3.usdc, V3.weth, 3000n, 192180n, 193380n, 10860507277202n, 0n, 0n, 0n, 0n), 12);
+      assert.ok([position[5],position[6]].some(tick => data === '0xf30dba93' + tick));
+      return overrides.tickData ?? encoded(10860507277202n,0n,0n,0n,0n,0n,0n,1n);
+    }
     const responses = {
+      '0xf3058399': encoded(0n), '0x46141319': encoded(0n),
       '0xc45a0155': encoded(V3.factory), '0x0dfe1681': encoded(V3.usdc), '0xd21220a7': encoded(V3.weth),
       '0xddca3f43': encoded(3000n), '0xd0c93a7c': encoded(60n),
       '0x3850c7bd': encoded(fixtureSqrt, 198113n, 0n, 1n, 1n, 0n, 1n),
@@ -49,8 +56,11 @@ test('v3 adapter verifies canonical manager, pool, token order, fee tier, spacin
   assert.equal(snapshot.principal.amount1Raw,'9999999999999133');
   assert.equal(snapshot.principal.amount0Raw,'0');
   assert.equal(snapshot.block.number,'256');
-  assert.equal(calls.filter(call=>call.method==='eth_call').length,11);
+  assert.equal(calls.filter(call=>call.method==='eth_call').length,15);
   assert.equal(progress.length,4);
+  assert.equal(snapshot.version,2);
+  assert.equal(snapshot.fees.collectable0Raw,'0');
+  assert.equal(snapshot.fees.collectable1Raw,'0');
 });
 test('wrong chain, unknown pools, inconsistent identities and decimals are rejected',async()=>{
   for(const overrides of [
@@ -95,4 +105,13 @@ test('missing or burned NFT reverts identify the ID and block without mislabelli
     };
     await assert.rejects(fetchPositionSnapshot('37', { rpc }), expected);
   }
+});
+
+test('invalid fee-growth responses and unsupported boundary liquidity cannot be saved',async()=>{
+  for(const overrides of [
+    {'0xf3058399':'0x'}, {'0x46141319':'0x'},
+    {tickData:encoded(1n,0n,0n,0n,0n,0n,0n,1n)},
+    {tickData:encoded(10860507277202n,0n,0n,0n,0n,0n,0n,0n)},
+    {tickData:encoded(10860507277202n,1n<<127n,0n,0n,0n,0n,0n,1n)},
+  ]) await assert.rejects(fetchPositionSnapshot('37',{rpc:v3RpcFixture(overrides)}));
 });

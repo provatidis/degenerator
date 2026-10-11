@@ -254,7 +254,7 @@ try {
   const badFile = join(profile, 'bad-snapshot.json');
   await writeFile(badFile, JSON.stringify({ ...exportedSnapshot, version: 99 }));
   await call('DOM.setFileInputFiles', { nodeId: fileInput.nodeId, files: [badFile] });
-  await evaluate("new Promise((resolve, reject) => { const deadline = Date.now() + 10000; const check = () => { if (document.getElementById('pool-status').textContent.includes('not a supported')) resolve(); else if (Date.now() > deadline) reject(new Error('Invalid file was not rejected')); else setTimeout(check, 50); }; check(); })");
+  await evaluate("new Promise((resolve, reject) => { const deadline = Date.now() + 10000; const check = () => { if (document.getElementById('pool-status').textContent.includes('snapshot version is not supported')) resolve(); else if (Date.now() > deadline) reject(new Error('Invalid file was not rejected')); else setTimeout(check, 50); }; check(); })");
   assert.equal(await text('pool-price'), snapshotPrice);
   await call('DOM.setFileInputFiles', { nodeId: fileInput.nodeId, files: [snapshotPath] });
   await evaluate("new Promise((resolve, reject) => { const deadline = Date.now() + 10000; const check = () => { if (document.getElementById('pool-status').textContent.includes('Snapshot saved')) resolve(); else if (Date.now() > deadline) reject(new Error('Saved file did not restore')); else setTimeout(check, 50); }; check(); })");

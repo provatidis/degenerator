@@ -1,3 +1,4 @@
+import { initLearnReturn } from './ui/learn-return.js';
 import { initPositionPeriod } from './ui/position-period.js';
 import { initWorkspaces } from './ui/workspaces.js';
 import { initPositionFees } from './ui/position-fees.js';
@@ -20,6 +21,7 @@ const snapshots = initSnapshotNavigation({ activate: () => workspaces.select('in
 initSandbox();
 const fullRangeLab = initFullRangeLab({ navigation });
 const rangeLab = initRangeLab({ navigation });
+initLearnReturn({ fullRangeLab, rangeLab, navigation });
 initPoolSnapshots({ fullRangeLab, rangeLab });
 const positionFees = initPositionFees();
 const positionSnapshots = initPositionSnapshots({ rangeLab, positionFees });

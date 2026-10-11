@@ -286,23 +286,27 @@ export function initRangeLab({ navigation }) {
   fillInputs(DEFAULT_RANGE); loadShared();
   window.addEventListener('hashchange', loadShared);
 
-  function setScenario(input, label, origin = null) {
+  function setScenario(input, label, origin = null, { navigate = true } = {}) {
     const result = calculateRange(input);
     source = { price: result.initialPrice, label, origin, range: { investment: result.investment, lowerPrice: result.lowerPrice, upperPrice: result.upperPrice } };
     fillInputs(result); render();
-    selectLab('range', { scroll: true });
+    if (navigate) selectLab('range', { scroll: true });
   }
 
   function getExperimentDraft() {
     if (!current) return null;
     return validateExperimentDraft({ model: MODEL, inputs: current, origin: sourceApplies(current) ? source.origin : null });
   }
-  function setExperiment(entry) {
+  function restoreExperimentDraft(entry) {
     const draft = validateExperimentDraft(entry);
     if (draft.model !== MODEL) throw new Error('Choose a range experiment for this lab.');
-    setScenario(draft.inputs, experimentOriginLabel(draft.origin, MODEL), draft.origin);
+    setScenario(draft.inputs, experimentOriginLabel(draft.origin, MODEL), draft.origin, { navigate: false });
+  }
+  function setExperiment(entry) {
+    restoreExperimentDraft(entry);
+    selectLab('range', { scroll: true });
     if (setupMedia.matches) $('cl-setup-details').open = false;
     $('cl-save-status').textContent = 'Opened “' + entry.name + '” as a working copy. Save again to keep a variation.';
   }
-  return { setStartingPrice: setRangeStartingPrice, setScenario, getExperimentDraft, setExperiment, restoreLocation: loadShared };
+  return { setStartingPrice: setRangeStartingPrice, setScenario, getExperimentDraft, restoreExperimentDraft, setExperiment, restoreLocation: loadShared };
 }

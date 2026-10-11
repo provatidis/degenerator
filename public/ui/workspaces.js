@@ -27,7 +27,11 @@ export function initWorkspaces() {
   function restoreLocation() {
     const key = workspaceFromHash(location.hash);
     select(key);
-    if (key === 'mechanics') {
+    if (['#experiment', '#inspect'].includes(location.hash)) {
+      const scroll = () => requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', scroll, { once: true });
+      else scroll();
+    } else if (key === 'mechanics') {
       const scroll = () => requestAnimationFrame(() => document.getElementById('swap-sandbox').scrollIntoView({ block: 'start', behavior: 'instant' }));
       if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', scroll, { once: true });
       else scroll();
@@ -39,7 +43,10 @@ export function initWorkspaces() {
     const link = event.target.closest('a');
     if (!link || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || link.target === '_blank') return;
     const url = new URL(link.href);
-    if (url.origin === location.origin && url.pathname === location.pathname && url.hash) select(workspaceFromHash(url.hash));
+    if (url.origin === location.origin && url.pathname === location.pathname && url.hash) {
+      select(workspaceFromHash(url.hash));
+      if (url.hash === location.hash && ['#experiment', '#inspect'].includes(url.hash)) restoreLocation();
+    }
   });
   restoreLocation();
   return { select, restoreLocation };

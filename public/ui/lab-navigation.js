@@ -6,6 +6,8 @@ export function initLabNavigation({ activate = () => {} } = {}) {
     range: { tab: document.getElementById('lab-range-tab'), panel: document.getElementById('range-lab'), model: 'cl-range-v1' },
   };
 
+  let selectedLab = 'full';
+
   // Pool restoration and other deferred controllers can change the height above a lab.
   // Resolve the initial deep-link scroll after all page controllers have initialized.
   let pageReady = document.readyState === 'complete';
@@ -18,6 +20,7 @@ export function initLabNavigation({ activate = () => {} } = {}) {
   function selectLab(mode, { updateURL = true, scroll = false, immediate = false, reveal = true } = {}) {
     if (!Object.hasOwn(labs, mode)) throw new Error('Choose a supported liquidity lab.');
     if (reveal) activate();
+    selectedLab = mode;
     tabs.select(mode);
     if (updateURL) {
       const model = new URLSearchParams(location.hash.replace(/^#/, '')).get('scenario');
@@ -42,9 +45,9 @@ export function initLabNavigation({ activate = () => {} } = {}) {
       selectLab(params.get('scenario') === labs.range.model ? 'range' : 'full', { updateURL: false, scroll: true, immediate: true });
     } else if (location.hash === '#range-lab' || location.hash === '#lp-lab') {
       selectLab(location.hash === '#range-lab' ? 'range' : 'full', { updateURL: false, scroll: true, immediate: true });
-    } else if (initial) selectLab('full', { updateURL: false, reveal: false });
+    } else if (initial) selectLab(selectedLab, { updateURL: false, reveal: false });
   }
   window.addEventListener('hashchange', () => fromLocation());
 
-  return { selectLab, restoreLocation: () => fromLocation(true) };
+  return { selectLab, getSelectedLab: () => selectedLab, restoreLocation: () => fromLocation(true) };
 }

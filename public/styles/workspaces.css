@@ -7,3 +7,11 @@
 #inspect-workspace .pool-section{margin-top:0}
 @media(max-width:750px){.workspace-links{gap:4px 20px}.topbar{height:auto;min-height:70px;flex-direction:column;align-items:flex-start;gap:12px;padding:16px 20px}.topbar .site-nav{display:flex;width:100%}.topbar .product-nav{gap:10px;width:100%}.topbar .product-nav a{flex:1;text-align:center}}
 @media(max-width:360px){.topbar{padding:0 12px}.brand{font-size:16px}.product-nav{gap:10px}.product-nav a{font-size:13px}}
+
+/* Keep primary navigation available; secondary tabs and lesson sidebars sit below it. */
+:root{--header-height:85px}
+html{scroll-padding-top:calc(var(--header-height) + 12px)}
+.topbar{position:sticky;top:0;z-index:30;background:var(--bg)}
+.lab-switch{top:calc(var(--header-height) + 12px)}
+@media(min-width:751px){.learn-sidebar{top:calc(var(--header-height) + 24px);max-height:calc(100dvh - var(--header-height) - 48px);overflow-y:auto}}
+@media(max-width:360px){.topbar{padding:12px}}

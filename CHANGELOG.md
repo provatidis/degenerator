@@ -1,5 +1,11 @@
 # Release history
 
+## 1.8.1 — 2026-10-12
+
+- Keep primary navigation visible and make Experiment/Inspect open their section introductions.
+- Offset anchored tools, sticky lab tabs and the learning sidebar below the measured header.
+- Preserve valid working calculator drafts when visiting Learn and returning in the same tab.
+
 ## 1.8.0 — 2026-10-11
 
 - Focus Experiment, Inspect and Pool mechanics on separate workspaces while preserving existing links and drafts.

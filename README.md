@@ -1,313 +1,39 @@
 # Degenerator
 
-Your DeFi playground. Degenerator is a browser-based lab for reproducible liquidity scenarios and virtual pool experiments. Compare full-range and concentrated ETH/USDC liquidity, keep named experiments, import public pool and position snapshots, share assumptions, export results, and explore swaps without connecting a wallet.
+A DeFi playground for learning liquidity mechanics and testing assumptions. Compare providing liquidity with holding the same starting tokens, or inspect a real Uniswap position at a recorded block.
 
-## Example progression
+[Open Experiment](https://provatidis.github.io/degenerator/) · [Learn](https://provatidis.github.io/degenerator/learn.html) · [Inspect a position](https://provatidis.github.io/degenerator/#position-lab)
 
-Playground's **Choose an example** library follows eight ordered cases: unchanged price, a price increase, a fee target, an in-range model, its price boundary, a recorded in-range NFT, an out-of-range NFT, and a fee-accounting snapshot. Each case states what it adds. The four stages are **Foundations → Comparisons → Ranges → Applied cases**, shared with Learn's lesson groups. Every stage and lesson is directly accessible; variations practice the same concept rather than representing difficulty levels. Advanced users can open [the recorded in-range case](https://provatidis.github.io/degenerator/#example=in-range-position) without completing earlier lessons.
+- **Experiment:** full-range and concentrated-liquidity calculators, ordered examples, and saved comparisons.
+- **Learn:** six interactive lessons and a final challenge. Every topic is available directly.
+- **Inspect:** Ethereum WETH/USDC pool and v3 NFT snapshots, principal, fee accounting and JSON exports.
+- **Historical case:** scrub a verified fixed-position period; inspect earned fees, range time and the holding comparison.
+- **Pool mechanics:** a separate virtual swap and liquidity sandbox, linked from Experiment and Learn.
 
-Opening a model example carries versioned assumptions through the existing scenario link. Opening a recorded case selects the position snapshot source and saves that snapshot; calculator inputs change only when the user applies it. Examples do not change virtual balances or lesson completion.
+The calculators use hypothetical prices and assumed cash fees. Position snapshots use recorded on-chain integers. Neither reconstructs a position’s lifetime profit. The interface identifies which kind of result you are viewing.
 
-## Saved experiments
+No wallet connection or transactions. The site runs on GitHub Pages; saved work stays in your browser unless exported.
 
-Choose **Save experiment** in either liquidity lab to keep its current model, exact numeric assumptions, name and optional notes. The [Saved experiments library](https://provatidis.github.io/degenerator/#saved-experiments) can search names/notes, filter by model, edit names and notes, and reopen any setup. Reopening loads a working copy; input edits leave the original record intact, and saving again creates a variation. Removal has an Undo action until another record is removed or the tab reloads.
+## Run locally
 
-Select two or three records to compare. Outcomes are recalculated from the saved model inputs, rather than storing potentially stale derived results. The comparison shows each LP value, holding value and difference, with expandable assumptions and notes. Its context distinguishes identical starting baskets and future prices, different future-price scenarios, and different budgets/prices/token mixes. A concentrated range and a 50/50 position can have different starting tokens even with equal budgets; each uses its own holding benchmark. Fee inputs remain assumed USD cash, with USDC = $1 and the existing model exclusions.
-
-When a setup still matches its imported pool price or NFT principal/range, saving retains the full validated source snapshot, including its block and exact integers. Changing a pool starting price, or an NFT's starting price, investment or bounds, clears that attribution. Future-price and fee-assumption changes preserve it. Reopening does not fetch the chain, contact imported provider URLs or replace the latest pool/position snapshot. Recorded collectable tokens remain outside both strategies' future principal comparison.
-
-The library uses its own degenerator-experiments-v1 storage key and version-1 JSON schema, independent of lesson progress, snapshots and the virtual sandbox. Export includes names, notes, assumptions and retained source snapshots; ordinary scenario links still contain only model inputs. Imports merge atomically, skip identical records, and keep conflicting IDs as new copies rather than overwriting either version. Limits are 50 records, 80-character names, 1,000-character notes and a 512 KB file. Unsupported models/versions, invalid sources and malformed files are rejected without altering the current collection.
-
-Storage failures keep changes for the current tab and explicitly request an export. Unreadable or newer saved copies are retained, downloadable and discarded only through their own recovery action. Each edit reads the latest stored collection to preserve another tab's additions; stale name/notes edits and removals are rejected. Data/schema/storage code lives in public/data/saved-experiments.js, calculation/presentation helpers in public/lib/saved-experiments.js, and the injected library controller in public/ui/saved-experiments.js.
-
-## Learn: Liquidity essentials
-
-Open [Learn](https://provatidis.github.io/degenerator/learn.html) for six independent lessons and a final challenge. Every topic is available directly, including shareable lesson fragments such as learn.html#lesson=range-boundaries. Exercises ask for a prediction, show the calculated outcome, and require both a numeric answer and sound reasoning. Hints and three repeatable variations support practice; completion records understanding checks, not simulated profit.
-
-The lessons cover swap impact, proportional pool ownership, changing token balances, impermanent loss versus dollar profit, fee break-even, and concentrated range boundaries. The final challenge compares the same starting tokens, differentiates additional fees from the total break-even target, and can export a PNG result card and a reproducible playground link.
-
-Every subject, including the final challenge, has optional Go deeper reading after its experiment explanation. Topic-specific mechanics, a worked example using the selected inputs, common misconceptions, a separately expandable math panel and two primary-source links provide a deeper path. Opening reading never affects completion; switching lessons closes both disclosures, and rerunning an edited setup refreshes its example. Editorial content lives in public/learning/deeper-reading.js and worked-example narration in public/lib/lesson-walkthrough.js.
-
-Lesson inputs and answers are stored under degenerator-learning-liquidity-v1, independently of sandbox balances, snapshot imports and playground controllers. Reopening restores the last lesson and validated exercise draft. Damaged drafts are ignored; unavailable or full storage leaves learning usable in the current tab. Playground links open a separate tab. Price/range lessons carry their exact model assumptions; swap/ownership lessons open the existing swap sandbox without replacing its saved pool or wallet.
-
-Content lives in public/learning/, pure experiment/assessment logic in public/models/lesson-experiments.js, progress persistence in public/data/learning-progress.js, and the controller in public/ui/learning.js. The learning document has its own composition root, public/learn-main.js, and shares the existing calculator models and styles. No backend, account, network request or new runtime dependency is required.
-
-## Pool snapshots
-
-The pool lab reads one supported deployment: Ethereum mainnet Uniswap v2 WETH/USDC. **Fetch latest snapshot** contacts [PublicNode](https://ethereum.publicnode.com/), with [dRPC](https://drpc.org/docs/ethereum-api) as a backup, and reads a finalized block. Every contract read uses that block number, and the block hash is checked again before accepting the result.
-
-The adapter verifies the canonical factory's pair, the pair's factory/token order, and USDC/WETH decimals. It preserves integer reserves and compares an exact integer 1 WETH quote against the supported Uniswap v2 router at the same block. This is a recorded quote, not an executable current trade. The 0.3% swap fee is separate from assumed position fee income.
-
-Snapshots retain their schema version, protocol, chain, pool/factory, block number/hash/timestamp, token addresses/order/decimals, raw reserves, fee formula, router quote, capture time, and provider. **Export snapshot** saves JSON; **Open snapshot file** restores it locally. Files are limited to 64 KB and validated before use. Provider metadata is preserved independently of the current endpoint. It must be a bounded HTTPS URL without credentials and is never contacted when opening a file. File validation checks structure and internal arithmetic; it cannot authenticate supplied chain data. Saved and imported files are labelled as not rechecked. **Load recorded example** opens a bundled snapshot from a completed contract check.
-
-Loading never changes the calculator or swap wallet automatically. **Use in 50/50 lab** explicitly applies the WETH/USDC reserve ratio, assuming USDC = $1, to the theoretical cp50-v1 lab. It retains the investment, sets the future price to 2x and assumed cash fees to zero. The reserve ratio is not an oracle or a general market-price feed. Scenario links continue to share only model assumptions; export the snapshot separately to retain chain provenance.
-
-Only the latest snapshot is saved under the degenerator-pool-snapshot-v1 key, separate from the existing sandbox storage. Unavailable storage and failed providers leave loaded data usable. Unreadable and unsupported-version saves have distinct recovery messages and remain in storage until explicitly discarded or replaced. Recovery removes only the relevant snapshot key. No RPC credentials or wallet are required. The separate v3 position adapter supports only the deployment documented below. Arbitrary assets and chains require their own explicit deployment definitions and validation.
-
-For a manual live integration check:
-
-~~~sh
-npm run check:pool
-~~~
-
-To capture a new bundled example:
-
-~~~sh
-node scripts/check-pool.js public/examples/uniswap-v2-mainnet.json
-~~~
-
-The integer quote formula follows the [Uniswap v2 periphery library](https://github.com/Uniswap/v2-periphery/blob/master/contracts/libraries/UniswapV2Library.sol), with deployments documented by [Uniswap](https://developers.uniswap.org/docs/protocols/v2/deployments).
-
-## Uniswap v3 position snapshots
-
-The snapshot source switch opens either the existing Uniswap v2 pool or a Uniswap v3 position. Enter a position NFT ID for an **Ethereum mainnet WETH/USDC** position in the canonical NonfungiblePositionManager. Supported fee tiers are 0.01%, 0.05%, 0.3% and 1%; other token pairs and chains receive an explicit unsupported message.
-
-The adapter reads a finalized block, verifies the position manager’s factory, asks that factory for the position’s pool, and checks the pool’s factory, token order, fee tier, tick spacing and token decimals. Every contract read uses the captured block number; its number, hash and timestamp are checked again before acceptance. NFT IDs remain decimal strings, including IDs larger than JavaScript’s exact integer range.
-
-Principal is calculated in exact integer token units from position liquidity, canonical Q96 tick ratios and the recorded sqrtPriceX96, rounding down as the v3 liquidity-amount formula does. Tick ratios use the MIT-licensed Uniswap v3 SDK arithmetic, with its notice under public/licenses/. The inverse ratio lookup uses integer binary search. Contract range status uses lower tick inclusive and upper tick exclusive, preserving the valid one-tick difference at an exact zero-for-one boundary.
-
-USDC is token 0 and WETH token 1. Raw ticks therefore quote WETH per USDC; the displayed USD/WETH bounds reverse the raw tick order and account for 6/18 token decimals. Dollar values use the pool ratio and USDC = $1, rather than an external price feed. Active principal excludes recorded tokens owed and fees. Recorded tokens owed may include withdrawn principal and omit fee growth since the last accounting update; they are **not presented as total uncollected fees**.
-
-Position JSON retains schema version/kind, manager/factory/pool, NFT ID, fee tier, ticks, liquidity, stored fee-growth/owed fields, sqrtPriceX96, exact principal, token metadata, block and capture provenance. Opening files validates structure, integer bounds, the canonical pool for the token pair and fee tier, tick/price consistency, principal arithmetic and (in version 2) fee growth and credit arithmetic; it does not authenticate their chain origin. Unknown fields are removed. The latest position uses a separate degenerator-v3-position-snapshot-v1 storage key and does not overwrite pool snapshots or virtual balances.
-
-**Explore this position’s range** explicitly starts a new cl-range-v1 experiment from the snapshot’s position principal value, price and bounds, with zero assumed future fees and an unchanged future price. Already collectable tokens remain separate from both the LP and holding sides of this principal-only comparison. It does not reconstruct the mint deposit or historical return. The captured principal is exact; subsequent lab projections use the existing continuous model. The source label clears when its budget, starting price or range changes. Closed, dust and out-of-limit positions remain inspectable/exportable even when they cannot seed the lab. On mobile a loaded position collapses its refresh/import controls, keeping outcomes within reach.
-
-**In-range example** opens public position #1382030 at block 26168526, with 22046660876 USDC base units and 10283485726696667741 WETH base units, worth about $47,793.97 under the recorded pool ratio and USDC = $1. **Out-of-range example** retains public position #37 from a completed contract check at block 26162627. Its recorded position principal is 0 USDC and 9999999999999133 WETH base units (0.009999999999999133 WETH). This fixture is a repeatable historical snapshot, not current market data.
-
-### V3 fee accounting
-
-New position captures use snapshot version 2 and read both global fee-growth counters and both boundary tick records at the same finalized block as principal. The pure public/models/v3-fees.js model derives inside-range growth using the contract tick, takes the uint256 growth difference from the NFT's last accounting update, and computes floor(liquidity × growth difference / 2^128) in token base units. It reproduces the manager's uint128 credit casts and owed-balance additions, with an explicit capacity-overflow flag. No floating-point arithmetic enters the fee-credit calculation.
-
-**Newly accrued fees**, **recorded tokens owed**, and **estimated collectable tokens** are separate quantities. Recorded owed balances can contain fees and principal removed by decreaseLiquidity, so their composition is not inferred. Estimated collectable tokens are the manager's new fee credits plus recorded owed balances; actual collection can be slightly lower because of core rounding. Dollar values use the recorded pool ratio and USDC = $1. Principal plus the collectable estimate describes current recorded assets, not historical profit or fees since mint.
-
-The fee disclosure is collapsed during ordinary imports. [Applied example 08](https://provatidis.github.io/degenerator/#example=position-fees) opens it directly, with a four-step walkthrough connecting the balance breakdown to a new principal-only holding comparison. Applying a position keeps already collectable tokens outside both strategies and starts with zero assumed future cash fees. Learn links to this example from its fee, range and final-challenge deeper reading. Existing lesson IDs, completion, model schemas and virtual balances remain independent.
-
-Version 1 position files continue to import, save and export unchanged. Their missing fee-growth data is shown as unavailable, never zero. Version 2 requires bounded global/outside growth, correctly initialized boundaries with enough gross liquidity for the NFT, and matching derived raw estimates. The existing storage key is retained to restore both versions; unsupported future versions still require explicit recovery.
-
-The bundled fee snapshot records position #1382030 at Ethereum block **26168941**, hash **0x7b8bdadecbb0b29aa91fd8be0cb2a1e87fef5a4a2c8ec7a3f7162b5668b08183**. Its estimated collectable amounts are **524593 USDC base units** and **2054973037123392 WETH base units**, worth about $5.67 at that snapshot. Both matched an independent read-only manager collection simulation exactly, with no transaction or wallet connection.
-
-To verify a new live capture and optionally record it:
-
-~~~sh
-npm run check:fees -- 1382030
-node scripts/check-position-fees.js 1382030 public/examples/uniswap-v3-mainnet-fees.json
-~~~
-
-The development-only verifier uses eth_call with the NFT owner's public address, checks the block again and reports any discrepancy. It only writes an example when both token estimates match the simulation exactly. The browser adapter uses only view selectors; it never simulates collection or submits a transaction. Public source references: [Uniswap fee-growth primer](https://blog.uniswap.org/uniswap-v3-math-primer-2), [Tick growth rules](https://github.com/Uniswap/v3-core/blob/main/contracts/libraries/Tick.sol), and [position manager accounting](https://github.com/Uniswap/v3-periphery/blob/main/contracts/NonfungiblePositionManager.sol).
-
-For a live read-only integration check:
-
-~~~sh
-npm run check:position -- 37
-~~~
-
-To record a new example, pass a destination:
-
-~~~sh
-node scripts/check-position.js 37 public/examples/uniswap-v3-mainnet-37.json
-~~~
-
-Sources: [Ethereum v3 deployments](https://developers.uniswap.org/docs/protocols/v3/deployments/v3-ethereum-deployments), [position manager interface](https://github.com/Uniswap/v3-periphery/blob/main/contracts/interfaces/INonfungiblePositionManager.sol), [holdings math](https://blog.uniswap.org/uniswap-v3-math-primer-2), [tick arithmetic](https://github.com/Uniswap/v3-sdk/blob/main/src/utils/tickMath.ts), and [liquidity amounts](https://github.com/Uniswap/v3-periphery/blob/main/contracts/libraries/LiquidityAmounts.sol).
-
-## Guided experiments and result cards
-
-The Pump and The Dump keep the current investment/starting price, set ETH to 2x or 0.5x, and clear assumed fees. The Harvest sets assumed fee income to the break-even amount for the current future price; it does not estimate yield.
-
-**Create result card** previews a downloadable 1200x720 PNG with the four assumptions, model version, holding/LP outcomes, before-fee IL, break-even fees, and model limitations. Input changes invalidate the preview so a card cannot silently describe an older scenario.
-
-## Concentrated-liquidity range lab
-
-Switch between **Full-range 50/50** and **Concentrated liquidity** without resetting either setup. The lab switch stays available while exploring a calculator. On mobile, budget/range inputs collapse into an editable summary; results and the price explorer remain visible, with sharing controls alongside the results. The new range lab chooses lower/upper ETH prices, computes the required starting token mix for a fixed investment, and compares:
-
-- Holding those exact starting range tokens.
-- A separate full-range 50/50 LP position funded with the same budget.
-- The concentrated range position.
-
-An asymmetric range, or an out-of-range starting price, can require a mix other than 50/50. Range IL and break-even fees therefore use the range's own initial tokens as the holding benchmark. The full-range comparison displays its separate 50/50 holding benchmark. These are equal-budget strategy comparisons, with each starting composition visible.
-
-Tight (±5%), Moderate (±10%) and Wide (±50%) presets center a range on the starting price. The future price input, keyboard-accessible slider, chart selection, exact boundary checkpoints and comparison rows all update the same scenario. The slider's domain stays stable while dragging. Allocation bars show how the position moves between ETH and USDC; below the range it is all ETH, and above it all USDC. Exact edges receive distinct labels.
-
-Each LP strategy has its own optional total cash fee assumption. Fees remain fixed across displayed prices and never compound or alter token quantities. Being out of range at the final price does not imply the position earned no fees earlier; this endpoint model does not reconstruct a trading path or estimate fee income.
-
-### Model cl-range-v1
-
-Price p is USD per ETH, assuming USDC = $1. For bounds a < b, let c = clamp(p, a, b). For liquidity L:
-
-~~~text
-ETH(c)  = L × (1 / sqrt(c) − 1 / sqrt(b))
-USDC(c) = L × (sqrt(c) − sqrt(a))
-L       = investment / (ETH_per_unit_L(start) × start + USDC_per_unit_L(start))
-~~~
-
-The implementation rationalizes square-root differences to retain precision for narrow ranges. Starting prices outside the range are supported and fund the position with a single token. This is a continuous human-unit model: it does not apply tick spacing, Q96 arithmetic, token-unit rounding, gas, incentives or automatic rebalancing. It must not be presented as an exact quote for a deployed Uniswap position.
-
-The model follows the holdings relationships in [Uniswap's math primer](https://blog.uniswap.org/uniswap-v3-math-primer-2) and [v3 whitepaper](https://app.uniswap.org/whitepaper-v3.pdf). A hand-solvable reference uses investment $5,000, starting price $4, and range $1–$9: initial assets are 500 ETH and 3,000 USDC. At $9 the range holds 6,000 USDC, versus $7,500 from holding its initial tokens. Before-fee range IL is −20% and $1,500 of assumed fees closes that gap. The separate full-range LP is worth $7,500; its own 50/50 holding benchmark is $8,125.
-
-Shared links use the versioned cl-range-v1 fragment and all seven inputs (investment, starting/future/lower/upper prices, range fees and full-range fees). They select the correct lab while leaving saved swap balances and the other lab's setup alone. CSV includes both distinct holding benchmarks and exact numeric inputs. A 1200×900 PNG result card includes the range, starting mix, separate fee assumptions and three outcomes. Editing inputs invalidates a previous card.
-
-**Use in range lab** seeds the theoretical setup with the existing v2 snapshot's reserve ratio, a fresh range and zero fee assumptions. It does not import a real v3 position. The v3 snapshot source imports an actual position and its tick-derived range separately; historical replay remains future work.
-
-## Liquidity scenario lab
-
-Enter an initial investment, starting ETH price, future ETH price, and an optional total dollar amount of fee income earned by the position. Results include:
-
-- Final dollar values and returns for holding versus providing liquidity.
-- The ETH and USDC owned by each strategy at the future price.
-- Impermanent loss before fees, the net difference after assumed fees, and fees needed to match holding.
-- A price-range chart and comparison rows with the same investment and assumed fees.
-
-The default example invests $5,000 at $2,000/ETH, then values the position at $4,000/ETH with $100 in assumed fees. Holding ends at $7,500; liquidity holds 0.883883 ETH and 3,535.53 USDC, worth $7,071.07 before fees or $7,171.07 including the assumed cash income. $428.93 in total fees would match holding.
-
-**Copy scenario link** creates a URL fragment containing only the four assumptions and model version (`cp50-v1`). Opening it restores the same scenario without changing the visitor's saved swap balances or activity. Clipboard failures show a selectable link for manual copying. Invalid or unsupported links show a message and use the default scenario. Editing a shared scenario does not change the original URL; copy a new link to share the edited assumptions. Ordinary visits use the default scenario.
-
-**Export CSV** downloads the comparison rows with the inputs, model version, token balances, dollar outcomes, before-fee impermanent loss, and break-even fee income. **Reset scenario** restores the calculator's defaults; **Reset sandbox** separately clears the virtual swap session.
-
-### Model cp50-v1
-
-The calculator models a full-range constant-product position with equal initial dollar allocations and USDC fixed at $1. Ideal, frictionless arbitrage rebalances the pool to the supplied future ETH market price, preserving the position's token product before fees. It describes endpoint balances, not a transaction path or a specific deployed protocol.
-
-For investment V, starting ETH price P0, and ratio r = P1/P0:
-
-```text
-initial ETH     = V / (2 × P0)
-initial USDC    = V / 2
-final LP ETH    = initial ETH / sqrt(r)
-final LP USDC   = initial USDC × sqrt(r)
-holding value   = V × (1 + r) / 2
-LP before fees  = V × sqrt(r)
-LP with fees    = LP before fees + assumed fee income
-IL before fees  = (LP before fees / holding value − 1) × 100%
-break-even fees = holding value − LP before fees
-```
-
-Fee income is an explicit assumption added as separate USD cash at the end; it does not compound or change the token amounts. It is held fixed across comparison rows and chart prices. The calculator does not estimate fees from volume, volatility, pool share, or a time horizon. Gas costs, incentives, depegging, and concentrated liquidity are excluded. These are hypothetical outcomes, not forecasts. Reference tests cover unchanged, falling, doubled, and quadrupled prices, asset-product preservation, fee break-even, input bounds, versioned links, and CSV output. The separate pool adapter validates recorded swap arithmetic against its supported protocol; this theoretical endpoint LP model is not a protocol-specific return forecast.
-
-## Browser identity and sharing
-
-The arrow mark is supplied as an SVG favicon and a 16/32/48-pixel ICO fallback. Opaque 180-pixel Apple touch and 192/512-pixel maskable app icons accompany a manifest scoped to the project directory. The manifest supplies home-screen identity; the app continues to read live chain data only when requested.
-
-Canonical, Open Graph and large-image social-card metadata use the published Pages URL. The 1200×630 preview is a committed PNG generated from an editable SVG. Its chart illustrates the default cl-range-v1 scenario before fees. Scenario fragments share the same site preview. A branded 404 page keeps its links inside /degenerator/, while a skip link and JavaScript-disabled notice provide clear entry points. The active skip link preserves shared scenario fragments when moving keyboard focus to the main content.
-
-The structure check verifies linked files, metadata, PNG/ICO dimensions and manifest paths. The local server supplies correct image/manifest types and also serves /degenerator/ to mirror Pages links; missing resources keep HTTP status 404.
-
-To regenerate the committed raster assets after editing the SVG sources, run node scripts/render-brand-assets.js in an environment with the optional Sharp graphics tool. SHARP_MODULE can point to its module entry file when Sharp is supplied externally. This is a maintainer-only tool, not a website dependency or required build step.
-
-## Online preview with GitHub Pages
-
-The workflow in `.github/workflows/pages.yml` tests the project and publishes only `public/` whenever `main` changes. It also runs tests on pull requests without publishing them. No hosting credentials or backend server are needed.
-
-Enable it once in the repository's **Settings → Pages → Build and deployment → Source → GitHub Actions**. If the first workflow run happened before Pages was enabled, open **Actions → Test and publish Degenerator → Run workflow** and select `main`.
-
-After a successful deployment, the preview is available at https://provatidis.github.io/degenerator/. Subsequent pushes to `main` update the same address. Repository settings and the GitHub plan must permit Pages publishing.
-
-### Existing clones and shared scenarios
-
-The repository was renamed from `GPTCloudTest` to `degenerator`. Update existing clones with:
+Node.js 22 or later; no installation step or application dependencies.
 
 ```sh
-git remote set-url origin https://github.com/provatidis/degenerator.git
-```
-
-GitHub redirects old repository links, but does not automatically redirect the old Pages site. For a previously shared scenario, replace `/GPTCloudTest/` in the URL with `/degenerator/` and retain the entire `#scenario=...` fragment. Asset and home links are relative, and new scenario links use the current site address.
-
-The browser-storage key remains `defi-sandbox-v1`, preserving saved sandbox sessions on the same `provatidis.github.io` origin. A different origin, including a custom domain, has separate browser storage. Existing local checkout directories can keep their names. If a cloud checkout directory is renamed, update its working-directory and startup configuration to the actual path.
-
-## Run
-
-Requires Node.js 22 or newer. No dependencies or installation step are needed.
-
-```sh
-git clone https://github.com/provatidis/degenerator.git
-cd degenerator
 npm start
-```
-
-For an existing clone, pull the latest `main` and run `npm start` from its checkout directory. No installation step is needed.
-
-The HTTP server defaults to loopback port 3000. Set `HOST` and `PORT` to change its binding. It serves only the `public/` directory. To verify it:
-
-```sh
-curl --fail http://127.0.0.1:3000/
-```
-
-Open http://127.0.0.1:3000/ in your browser. No wallet, API key, network connection, or blockchain node is required to run the app locally.
-
-## Test
-
-```sh
 npm test
+npm run check
 ```
 
-Tests cover swap pricing, reserve conservation, fees, stale-quote rejection, balance validation, liquidity accounting, withdrawals, storage restoration and failures, plus the scenario model, versioned links, and CSV exports.
+The development server prints its local address. Browser interaction checks run in CI before publication; see [development](docs/development.md) for the Chromium setup.
 
-For an optional browser smoke test, install Chromium or set `CHROMIUM_BIN` to its executable, then run `npm run test:browser`. It starts temporary servers and checks actual page interactions at desktop and mobile sizes, including calculator results, copied links, CSV downloads, shared-link restoration, and persistence. The cloud container uses Chromium with its browser sandbox disabled for this local test; the app itself needs no browser installation to serve its files.
+## Documentation
 
-Set `TEST_BASE_URL` to a deployed site or a local server with a project subpath to test that target instead of starting the Node server. The browser smoke test checks that the home link, scripts, styles, and swaps work at that base URL.
+- [Using the tools and saved experiments](docs/guide.md)
+- [Calculation models and assumptions](docs/models.md)
+- [Historical replay method and recorded evidence](docs/replay.md)
+- [Chain reads, fee accounting and snapshot validation](docs/data.md)
+- [Architecture, local checks and deployment](docs/development.md)
+- [Product decisions](DECISIONS.md)
+- [Release history](CHANGELOG.md)
 
-## Experiments
-
-- Compare 1 ETH and 5 ETH swaps to see how trade size changes price impact.
-- Change future prices and assumed fees in the liquidity scenario lab, then share a scenario link or export its comparison.
-- Reverse the swap direction to trade USDC for ETH.
-- Deposit matching ETH and USDC to receive LP tokens, then make a swap and withdraw your pool share.
-- Move the impermanent-loss slider to compare liquidity provision with holding the initial assets.
-- Reset to restore the initial pool and virtual wallet.
-
-## Model and limitations
-
-The starting pool holds 100 ETH and 200,000 USDC. Your virtual wallet starts with 10 ETH and 20,000 USDC. Exact-input swaps use `output = reserveOut × (input × 0.997) / (reserveIn + input × 0.997)`. The 0.3% input fee stays in the pool, so the reserve product grows with trades. Price impact excludes this fee and compares execution against the fee-adjusted pre-trade spot quote.
-
-Liquidity deposits match the pool ratio; LP tokens represent proportional ownership. Portfolio and pool values use a fixed $2,000 ETH reference price. The pool exchange rate changes with trades. The curve axes rescale with reserves.
-
-The impermanent-loss calculator is a separate hypothetical 50/50 pool, assumes arbitrage after a market-price change, and excludes trading fees. It does not change the active simulation. Slippage tolerance protects the displayed quote, though this single-user simulator has no external trades or transaction delays.
-
-Pool reserves, virtual wallet balances, and the latest 50 activity entries are saved in this browser's `localStorage` after successful transactions. The total action count is retained. Refreshing or reopening the site restores the saved sandbox; Reset sandbox removes it and restores the starting balances. Form inputs and the independent impermanent-loss slider start at their defaults on reload.
-
-Saved data is versioned and validated before use. Invalid or incompatible sessions fall back to the starting sandbox. If browser storage is unavailable or full, the app remains usable and displays a notice that changes may not survive refresh. Storage is specific to this browser and site; it does not sync across devices. Open tabs keep their own in-memory state, and the last successful save wins. Clearing browser data removes the saved session. No credentials or real assets are stored.
-
-Calculations use JavaScript floating-point numbers for learning, not production financial accounting. Pool snapshots read existing contracts through a public provider. There are no real-fund transactions, user accounts, or investment recommendations.
-
-## Project structure
-
-- public/main.js: the single composition root. It initializes each UI controller and supplies the lab interfaces they need.
-- public/ui/: explicit initializers for the sandbox, full-range lab, range lab, pool snapshots and navigation. Importing a controller does not start it.
-- public/models/: pure calculations and protocol arithmetic. They do not read the DOM, browser storage or network.
-- public/data/: chain deployment configuration, read-only RPC adapters, snapshot schemas and persistence.
-- public/lib/: scenario links, exports, formatting and rendering utilities.
-- public/styles/: shared foundation and components followed by feature styles. public/styles.css preserves the existing cascade order.
-- public/index.html: semantic, static markup. Each feature owns its IDs; the structure check rejects duplicates.
-- scripts/: development, integration and browser checks; test/: reference calculations and adapter/storage contracts.
-- server.js: a local static server; GitHub Pages deploys public/ directly.
-
-Run npm run check to verify module paths, circular dependencies, architectural boundaries, stylesheet imports, unique HTML IDs and the single entry point. CI runs this before calculation and browser tests. Existing scenario.js, amm.js and storage.js exports and storage keys remain compatible.
-
-The structure review keeps the current dependency-free deployment. Explicit startup removes cross-controller import side effects; feature styles reduce collisions as labs grow. Shared tab behavior handles keyboard navigation consistently across the sandbox, labs and snapshot sources. ABI decoding, block pinning and snapshot-file/storage handling are shared by both protocol adapters; protocol identity checks remain adapter-specific. Static HTML remains appropriate at this size. Split markup or add a build step when repeated page layouts actually need it. A framework, database or application backend is not needed for read-only, public-chain imports.
-
-## Architecture and extension policy
-
-The static app remains dependency-free and deployable on GitHub Pages. Calculation models, transport/adapters, versioned persistence, exports and DOM controllers have separate responsibilities:
-
-- public/models/: pure theoretical scenario calculations, guided experiments, and exact protocol arithmetic.
-- public/data/: deployment configuration, read-only RPC transport, the Uniswap v2 adapter, snapshot schemas and storage.
-- public/lib/: formatting, compatible scenario links, CSV output, download handling and result-card rendering.
-- public/ui/: interface controllers, composed by public/main.js.
-- public/scenario.js: compatibility exports for existing integrations and tests.
-- public/examples/: recorded chain fixtures that work without an RPC request.
-
-New financial models get their own versioned module and reference/invariant tests. New protocols get a deployment definition, adapter, exact token-unit handling and contract validation. Preserve old model links and storage keys; introduce explicit migrations when schemas change. Unit and desktop/mobile browser tests run before deployment.
-
-The next milestones are read-only position discovery by wallet address and historical price replay. A backend becomes useful for private provider credentials, shared caching, scheduled snapshots or account synchronization. Each can be added behind the data layer without rewriting the calculation models or existing labs.
-
-The cl-range-v1 model, links, CSV, presentation helpers and result cards are separate modules. A shared link router and accessible lab navigation coordinate the two calculators while preserving cp50-v1 links. Reference tests cover asymmetric funding, outside starts, exact boundaries, continuity, virtual-reserve conservation, wide-range limits, separate fees, numerical bounds and reproducible exports.
-
-## Provider failures and production policy
-
-Captures attempt each configured public endpoint at most once. Only typed network, timeout, HTTP capacity/server errors or recognized JSON-RPC rate limits trigger fallback. The entire capture restarts on the next provider, with a new finalized block and a final block-identity check; reads from different providers are never combined. Backup requests are sequential to avoid bursts, and a failed serial capture stops its queued reads. The exported provider is the successful source. Public endpoints can both be unavailable; recorded examples and saved files remain usable.
-
-A manager revert with the specific Invalid token ID reason identifies a nonexistent or burned NFT at the captured block. Other reverts and identity/schema failures keep their own error path. Imported provider metadata remains descriptive, not proof of chain origin.
-
-The HTML entry points carry a restrictive Content Security Policy for GitHub Pages, including the two configured RPC origins. The local server also sends it as a header, with frame-ancestors protection (which cannot be enforced by a meta policy). Script/style assets remain local.
-
-## License
-
-Degenerator's own code is [MIT licensed](LICENSE), copyright 2026 Apostolos Provatidis. The adapted Uniswap v3 SDK TickMath implementation retains its separate [Uniswap MIT notice](public/licenses/uniswap-v3-sdk.txt).
+MIT licensed. The adapted Uniswap tick arithmetic retains its [separate notice](public/licenses/uniswap-v3-sdk.txt).

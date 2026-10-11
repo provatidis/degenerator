@@ -23,7 +23,7 @@ export function initExamples({ positionSnapshots, snapshotNavigation, restoreSce
         if (location.hash === example.href) {
           event.preventDefault();
           if (example.recorded) requestRecorded(example.recorded);
-          else restoreScenario();
+          else if (example.href.startsWith('#scenario=')) restoreScenario();
         }
       });
       li.append(link); return [li];

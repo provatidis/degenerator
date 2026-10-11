@@ -86,6 +86,8 @@ export function initSavedExperiments({ fullRangeLab, rangeLab }) {
   });
   $('experiment-save-cancel').addEventListener('click', () => $('experiment-dialog').close());
   $('experiment-dialog').addEventListener('close', () => {
+    // A previous close event can arrive after this native dialog has reopened.
+    if ($('experiment-dialog').open) return;
     const previous = editor;
     editor = null;
     if (returnFocus?.isConnected) returnFocus.focus({ preventScroll: true });

@@ -121,7 +121,7 @@ export async function checkMobileSavedExperiments({ evaluate, click, fill, text,
   assert.equal(await evaluate("document.querySelectorAll('#experiments-comparison-cards article').length"),2);
   await evaluate("document.querySelector('#experiments-list button').click()");
   assert.equal(await evaluate("document.getElementById('lab-full-tab').getAttribute('aria-selected')"),'true');
-  await click('scenario-save');await call('Input.dispatchKeyEvent',{type:'keyDown',key:'Escape',code:'Escape'});await call('Input.dispatchKeyEvent',{type:'keyUp',key:'Escape',code:'Escape'});
+  await click('scenario-save');await call('Input.dispatchKeyEvent',{type:'keyDown',key:'Escape',code:'Escape',windowsVirtualKeyCode:27,nativeVirtualKeyCode:27});await call('Input.dispatchKeyEvent',{type:'keyUp',key:'Escape',code:'Escape',windowsVirtualKeyCode:27,nativeVirtualKeyCode:27});
   await waitFor(evaluate,"!document.getElementById('experiment-dialog').open&&document.activeElement.id==='scenario-save'");
   assert.equal(await evaluate("document.getElementById('experiment-dialog').open"),false);
   assert.equal(await evaluate('document.activeElement.id'),'scenario-save');

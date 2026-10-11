@@ -152,7 +152,7 @@ try {
   assert.equal(await evaluate('document.activeElement.id'), 'main-content');
   assert.equal(await evaluate('location.hash'), initialHash, 'Skipping preserves shared scenario fragments.');
   assert.equal(await text('portfolio'), '$40,000.00');
-  assert.equal(await evaluate("document.querySelector('.brand').href"), base, 'Home link stays inside the project path');
+  assert.equal(await evaluate("document.querySelector('.brand').href"), base + '#experiment', 'Home link opens the experiment workspace inside the project path');
   assert.equal(await text('scenario-hold-value'), '$7,500.00');
   assert.equal(await text('scenario-lp-value'), '$7,171.07');
   assert.equal(await text('scenario-break-even'), '$428.93');

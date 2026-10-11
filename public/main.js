@@ -1,3 +1,4 @@
+import { initLearnReturn } from './ui/learn-return.js';
 import { initPositionPeriod } from './ui/position-period.js';
 import { initWorkspaces } from './ui/workspaces.js';
 import { initPositionFees } from './ui/position-fees.js';
@@ -13,13 +14,14 @@ import { initPoolSnapshots } from './ui/pools.js';
 import { initSavedExperiments } from './ui/saved-experiments.js';
 
 // Compose controllers explicitly. Data adapters and calculation models never initialize UI.
-initPageAccess();
+const pageAccess = initPageAccess();
 const workspaces = initWorkspaces();
-const navigation = initLabNavigation({ activate: () => workspaces.select('experiment') });
+const navigation = initLabNavigation({ activate: () => { workspaces.select('experiment'); pageAccess.refreshOffsets(); } });
 const snapshots = initSnapshotNavigation({ activate: () => workspaces.select('inspect') });
 initSandbox();
 const fullRangeLab = initFullRangeLab({ navigation });
 const rangeLab = initRangeLab({ navigation });
+initLearnReturn({ fullRangeLab, rangeLab, navigation });
 initPoolSnapshots({ fullRangeLab, rangeLab });
 const positionFees = initPositionFees();
 const positionSnapshots = initPositionSnapshots({ rangeLab, positionFees });

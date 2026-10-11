@@ -1,3 +1,4 @@
+import { checkNavigation, checkMobileNavigation } from './browser/navigation-checks.js';
 import { checkWorkspaces } from './browser/workspace-checks.js';
 import { checkExamples } from './browser/example-checks.js';
 import { checkLearning, checkMobileLearning } from './browser/learning-checks.js';
@@ -151,7 +152,7 @@ try {
   assert.equal(await evaluate('document.activeElement.id'), 'main-content');
   assert.equal(await evaluate('location.hash'), initialHash, 'Skipping preserves shared scenario fragments.');
   assert.equal(await text('portfolio'), '$40,000.00');
-  assert.equal(await evaluate("document.querySelector('.brand').href"), base, 'Home link stays inside the project path');
+  assert.equal(await evaluate("document.querySelector('.brand').href"), base + '#experiment', 'Home link opens the experiment workspace inside the project path');
   assert.equal(await text('scenario-hold-value'), '$7,500.00');
   assert.equal(await text('scenario-lp-value'), '$7,171.07');
   assert.equal(await text('scenario-break-even'), '$428.93');
@@ -399,6 +400,7 @@ try {
   await checkExamples({ evaluate, click, fill, text, navigate, base });
   await checkSavedExperiments({ evaluate, click, fill, text, navigate, reload, downloadFile, call, base, profile });
   await checkWorkspaces({ evaluate, click, fill, text, navigate, base, downloadFile });
+  await checkNavigation({ evaluate, click, fill, navigate, base, nextEvent, call });
 
   const swappedPortfolio = await text('portfolio');
   await reload();
@@ -541,6 +543,7 @@ try {
   assert.equal(await text('period-fees'),'$2.36');assert.equal(await evaluate('document.documentElement.scrollWidth<=innerWidth'),true);
   await fill('period-checkpoint','0');assert.equal(await text('period-lp'),await text('period-hold'));
   console.log('PASS: 320px historical case, checkpoint scrubbing and initial holding equality');
+  await checkMobileNavigation({ evaluate, click, navigate, base, call });
   assert.deepEqual(errors, [], 'No uncaught browser errors');
   console.log('PASS: mobile layout and interaction; no uncaught browser errors');
 } finally {

@@ -243,13 +243,16 @@ export function initFullRangeLab({ navigation }) {
     return validateExperimentDraft({ model: MODEL, inputs: current,
       origin: startingSource && current.initialPrice === startingSource.price ? startingSource.origin : null });
   }
-  function setExperiment(entry) {
+  function restoreExperimentDraft(entry) {
     const draft = validateExperimentDraft(entry);
     if (draft.model !== MODEL) throw new Error('Choose a full-range experiment for this lab.');
     startingSource = draft.origin ? { price: draft.inputs.initialPrice, origin: draft.origin, label: experimentOriginLabel(draft.origin, MODEL) } : null;
     fillInputs(draft.inputs); render();
+  }
+  function setExperiment(entry) {
+    restoreExperimentDraft(entry);
     selectLab('full', { updateURL: false, scroll: true, immediate: true });
     $('scenario-save-status').textContent = 'Opened “' + entry.name + '” as a working copy. Save again to keep a variation.';
   }
-  return { setStartingPrice, getExperimentDraft, setExperiment, restoreLocation: loadShared };
+  return { setStartingPrice, getExperimentDraft, restoreExperimentDraft, setExperiment, restoreLocation: loadShared };
 }

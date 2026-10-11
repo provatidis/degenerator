@@ -32,7 +32,11 @@ export async function checkSavedExperiments({ evaluate, click, fill, text, navig
   await click('experiment-save-cancel');await waitFor(evaluate,"document.activeElement.id==='scenario-save'");assert.equal(await evaluate('document.activeElement.id'),'scenario-save');
   await save('scenario-save','Price doubles · no fees','Baseline\nSame starting tokens.');
   const baseline=(await library()).experiments[0];assert.equal(baseline.inputs.fees,0);
-  await fill('scenario-fees','500');await save('scenario-save','Price doubles · assumed fees','An assumption, not a yield forecast.');
+  await fill('scenario-fees','500');await click('scenario-save');
+  // Reproduce a delayed close notification from the preceding use of this native dialog.
+  await evaluate("document.getElementById('experiment-dialog').dispatchEvent(new Event('close'))");
+  await fill('experiment-name','Price doubles · assumed fees');await fill('experiment-notes','An assumption, not a yield forecast.');await click('experiment-save-confirm');
+  assert.equal(await evaluate("document.getElementById('experiment-dialog').open"),false,'A stale close notification must not discard the new editor.');
   const fees=(await library()).experiments[0];
   await navigate(base+'#saved-experiments');assert.equal(await cards(),2);
   assert.deepEqual((await library()).experiments.map(entry=>entry.inputs.fees),[500,0]);
@@ -113,6 +117,8 @@ export async function checkMobileSavedExperiments({ evaluate, click, fill, text,
   await fill('experiment-name','Mobile setup');await fill('experiment-notes','A note saved from a small screen.');await click('experiment-save-confirm');
   assert.match(await text('scenario-save-status'),/Saved/);
   await fill('scenario-fees','500');await click('scenario-save');await fill('experiment-name','Mobile fee variation');await click('experiment-save-confirm');
+  assert.equal(await evaluate("document.getElementById('experiment-dialog').open"),false);
+  assert.equal(await evaluate("JSON.parse(localStorage.getItem('degenerator-experiments-v1')).experiments.length"),2);
   await navigate(base+'#saved-experiments');
   assert.equal(await evaluate("document.getElementById('saved-experiments').open"),true);
   assert.equal(await evaluate('document.documentElement.scrollWidth<=innerWidth'),true);

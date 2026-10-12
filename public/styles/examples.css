@@ -36,3 +36,12 @@
 }
 
 .example-cards:has(>li:only-child){grid-template-columns:1fr}
+
+/* Keep the calculator close to the introduction; expanded libraries use the full row. */
+.experiment-libraries{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:16px;margin-bottom:24px;align-items:stretch}
+.experiment-libraries>details{margin-bottom:0;padding:16px 20px}
+.experiment-libraries:not(:has(>details[open])) .saved-experiments>summary{height:100%}
+.experiment-libraries:has(>details[open]){display:block}
+.experiment-libraries:has(>details[open])>details+details{margin-top:16px}
+.experiment-libraries .example-library>summary strong{font-size:16px}
+@media(max-width:750px){.experiment-libraries{grid-template-columns:1fr;gap:12px}.experiment-libraries>details{padding:16px 18px}}

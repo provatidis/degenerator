@@ -187,10 +187,17 @@ export function initSavedExperiments({ fullRangeLab, rangeLab }) {
     $('experiments-comparison').scrollIntoView({ block: 'start', behavior: 'instant' });
   });
   $('experiments-close-comparison').addEventListener('click', () => { $('experiments-comparison').hidden = true; $('experiments-compare').focus({ preventScroll: true }); });
-  $('experiments-clear-selection').addEventListener('click', () => { selected.clear(); $('experiments-comparison').hidden = true; renderList(); });
+  $('experiments-clear-selection').addEventListener('click', () => {
+    selected.clear(); $('experiments-comparison').hidden = true; renderList();
+    ($('experiments-list').querySelector('[data-compare-id]') || $('saved-experiments').querySelector('summary')).focus({ preventScroll: true });
+  });
   $('experiments-undo').addEventListener('click', () => {
     if (!removed) return;
-    try { const name = removed.name, persisted = commit(base => addExperiment(base, removed)); removed = null; render(); status('Restored “' + name + '”' + (persisted ? '.' : ' for this tab only.')); }
+    try {
+      const { id, name } = removed, persisted = commit(base => addExperiment(base, removed));
+      removed = null; render(); status('Restored “' + name + '”' + (persisted ? '.' : ' for this tab only.'));
+      ($('experiments-list').querySelector('[data-experiment-id="' + id + '"] button') || $('saved-experiments').querySelector('summary')).focus({ preventScroll: true });
+    }
     catch (error) { status(error.message, true); }
   });
   $('experiments-export').addEventListener('click', () => downloadBlob(new Blob([libraryJSON(library)], { type: 'application/json' }), 'degenerator-experiments-v1.json'));

@@ -24,7 +24,7 @@ npm test
 npm run check
 ```
 
-The development server prints its local address. Browser interaction checks run in CI before publication; see [development](docs/development.md) for the Chromium setup.
+Open http://127.0.0.1:3000/ after starting the development server. Browser interaction checks run in CI before publication; see [development](docs/development.md) for the Chromium setup.
 
 ## Documentation
 

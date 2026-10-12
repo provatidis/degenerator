@@ -1,5 +1,13 @@
 # Release history
 
+## 1.9.1 — 2026-10-12
+
+- Keep keyboard focus on a selected price when either calculator redraws its comparison table. Clearing a saved comparison and undoing a removal return focus to available controls.
+- Preserve readable chart-label sizes as cards shrink on mobile, including charts revealed after switching workspaces. Add sideways-scroll hints to mobile comparison tables and visible disclosure focus outlines.
+- Place collapsed example and saved-experiment controls together on desktop; expanded libraries retain the full available width.
+- Define LP on the calculator entry screen, clarify cumulative replay fees and show each recorded case’s dates. Order the position examples from in-range to out-of-range to fee accounting.
+- Align the guide’s experiment names and local startup instructions with the current interface. Add browser regressions for comparison keyboard continuity, saved-library focus and all four charts at 390px and 320px.
+
 ## 1.9.0 — 2026-10-12
 
 - Add a second verified fixed-position case: 17 checkpoints over 33 hours 27 minutes, with exits, returns and 41.7% time in range.

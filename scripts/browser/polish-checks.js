@@ -19,13 +19,15 @@ export async function checkPolish({ evaluate, navigate, call, base }) {
     await navigate(base + '#' + fragment);
     await evaluate(`document.getElementById('${fragment === 'lp-lab' ? 'scenario-reset' : 'cl-reset'}').click()`);
     if (fragment === 'range-lab') await evaluate("document.querySelector('#cl-comparison-card > summary').click()");
+    await settle(evaluate);
     await evaluate(`document.querySelector('#${body} button').focus()`);
-    await call('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13 });
-    await call('Input.dispatchKeyEvent', { type: 'keyUp', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13 });
+    assert.ok(await evaluate(`document.activeElement.matches('#${body} button')`), 'The comparison button is focused before activation.');
+    await call('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13, text: '\r', unmodifiedText: '\r' });
+    await call('Input.dispatchKeyEvent', { type: 'keyUp', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13 });
     assert.equal(await evaluate(`document.getElementById('${input}').value`), price);
     assert.ok(await evaluate(`document.activeElement.matches('#${body} .selected-scenario button')`), 'Selecting a price must retain keyboard focus.');
-    await call('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Tab', code: 'Tab', windowsVirtualKeyCode: 9 });
-    await call('Input.dispatchKeyEvent', { type: 'keyUp', key: 'Tab', code: 'Tab', windowsVirtualKeyCode: 9 });
+    await call('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Tab', code: 'Tab', windowsVirtualKeyCode: 9, nativeVirtualKeyCode: 9 });
+    await call('Input.dispatchKeyEvent', { type: 'keyUp', key: 'Tab', code: 'Tab', windowsVirtualKeyCode: 9, nativeVirtualKeyCode: 9 });
     assert.ok(await evaluate(`document.activeElement.matches('#${body} button')`), 'Tab must continue to the next comparison price.');
   }
 

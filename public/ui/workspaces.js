@@ -3,6 +3,7 @@ import { workspaceFromHash } from '../lib/workspace-links.js';
 export function initWorkspaces() {
   const panels = Object.fromEntries(['experiment', 'inspect', 'mechanics', 'replay'].map(key => [key, document.getElementById(key + '-workspace')]));
   const title = document.getElementById('workspace-title');
+  const entry = document.getElementById('experiment-entry') || document.querySelector('.intro-actions, .intro-range-link');
   const copy = {
     experiment: ['HYPOTHETICAL MODELS', 'Compare liquidity scenarios', 'Change a price, range or fee assumption. Compare the outcome with holding.'],
     inspect: ['RECORDED SNAPSHOTS', 'Inspect a pool or position', 'Read principal and fee accounting at one recorded Ethereum block.'],
@@ -16,7 +17,7 @@ export function initWorkspaces() {
     document.getElementById('workspace-eyebrow').textContent = copy[key][0];
     title.textContent = copy[key][1];
     document.getElementById('workspace-subtitle').textContent = copy[key][2];
-    document.querySelector('.intro-actions').hidden = key !== 'experiment';
+    if (entry) entry.hidden = key !== 'experiment';
     for (const name of ['experiment', 'inspect']) {
       const link = document.getElementById('nav-' + name);
       if (key === name || (name === 'experiment' && key === 'mechanics') || (name === 'inspect' && key === 'replay')) link.setAttribute('aria-current', 'page');
@@ -50,8 +51,13 @@ export function initWorkspaces() {
     if (!link || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || link.target === '_blank') return;
     const url = new URL(link.href);
     if (url.origin === location.origin && url.pathname === location.pathname && url.hash) {
-      select(workspaceFromHash(url.hash));
-      if (url.hash === location.hash && ['#experiment', '#inspect'].includes(url.hash)) restoreLocation();
+      if (['#experiment', '#inspect'].includes(url.hash)) {
+        // Commit primary routes before changing layout or moving focus. Touch
+        // navigation must not depend on the browser's later anchor default action.
+        event.preventDefault();
+        if (url.hash !== location.hash) location.hash = url.hash;
+        restoreLocation();
+      } else select(workspaceFromHash(url.hash));
     }
   });
   restoreLocation();

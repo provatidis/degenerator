@@ -30,9 +30,11 @@ npm test
 
 Tests cover the sandbox and both hypothetical models, versioned links and exports, v2/v3 snapshot validation, exact v3 fee accounting, fixed-position period accounting and continuity evidence, learning assessments, saved comparisons, Learn-return drafts and storage failures. The bundled historical records are checked locally without RPC calls; `npm run check:replay` separately recaptures and verifies chain history through public providers.
 
-For a local browser smoke test, install Chromium or set `CHROMIUM_BIN` to its executable, then run `npm run test:browser`. It starts temporary servers and checks actual page interactions at desktop and mobile sizes, including calculators, learning, snapshot imports, saved comparisons, the historical checkpoint slider, downloads and persistence. Navigation checks cover sticky-header offsets, direct tool fragments, browser history and returning from Learn. The same suite runs in CI before deployment. The test runner launches Chromium with its browser sandbox disabled; serving the app itself requires no browser installation.
+For a local browser smoke test, install Chromium or set `CHROMIUM_BIN` to its executable, then run `npm run test:browser`. It starts temporary servers and checks actual page interactions at desktop and mobile sizes, including calculators, learning, snapshot imports, saved comparisons, the historical checkpoint slider, downloads and persistence. Navigation checks cover sticky-header offsets, direct tool fragments, browser history and returning from Learn. The same suite runs in CI before deployment. Its mobile routing checks use touch events as well as keyboard and mouse input. The test runner launches Chromium with its browser sandbox disabled; serving the app itself requires no browser installation.
 
 Set `TEST_BASE_URL` to a deployed site or a local server with a project subpath to test that target instead of starting the Node server. The browser smoke test checks that the home link, scripts, styles, and swaps work at that base URL.
+
+When changing the package version, run `npm run release:assets` before the checks. This stamps page entry points, UI-controller imports and stylesheet imports so a browser retaining the previous release fetches the new UI. The structure check rejects stale release queries. Storage keys, exported schemas and model versions are independent of these asset URLs.
 
 ## Focused workspaces and historical records
 

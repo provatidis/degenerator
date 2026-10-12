@@ -7,10 +7,10 @@ A DeFi playground for learning liquidity mechanics and testing assumptions. Comp
 - **Experiment:** full-range and concentrated-liquidity calculators, ordered examples, and saved comparisons.
 - **Learn:** six interactive lessons and a final challenge. Every topic is available directly.
 - **Inspect:** Ethereum WETH/USDC pool and v3 NFT snapshots, principal, fee accounting and JSON exports.
-- **Historical case:** scrub a verified fixed-position period; inspect earned fees, range time and the holding comparison.
+- **Historical cases:** start with an in-range baseline, then follow a 33-hour position through exits and returns. Inspect interval fees, active/outside time and the holding comparison.
 - **Pool mechanics:** a separate virtual swap and liquidity sandbox, linked from Experiment and Learn.
 
-The calculators use hypothetical prices and assumed cash fees. Snapshots record on-chain state at one block. The historical case calculates earned fee tokens and time in range over nine checkpoints and 4,992 seconds, with independent accounting checks. These tools do not reconstruct a position’s lifetime profit; the fixed-position replay is not an arbitrary-range backtester. The interface identifies which kind of result you are viewing.
+The calculators use hypothetical prices and assumed cash fees. Snapshots record on-chain state at one block. Historical cases calculate earned fee tokens and time in range from recorded periods, with independent accounting checks. These tools do not reconstruct a position’s lifetime profit; the fixed-position replay is not an arbitrary-range backtester. The interface identifies which kind of result you are viewing.
 
 No wallet connection or transactions. The site runs on GitHub Pages; saved work stays in your browser unless exported.
 

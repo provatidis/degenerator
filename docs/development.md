@@ -38,7 +38,7 @@ Set `TEST_BASE_URL` to a deployed site or a local server with a project subpath 
 
 `public/ui/workspaces.js` controls visibility and top-level navigation without rebuilding feature controllers. `public/lib/workspace-links.js` maps existing fragments to Experiment, Inspect or Pool mechanics; `#historical-case` opens the recorded replay. Lab and snapshot controllers receive an activation callback from `main.js`, so explicit handoffs reveal the correct workspace while preserving drafts. Learn remains a separate document. Primary fragments `#experiment` and `#inspect` open section introductions; existing tool fragments still open their targets. `page-access.js` measures the sticky header for native anchor offsets, lab tabs and the learning sidebar.
 
-The period model lives in `public/models/fixed-position-period.js`; record validation is in `public/data/position-period.js`; values for display are in `public/lib/period-presentation.js`; the DOM controller is in `public/ui/position-period.js`. The development-only `scripts/check-replay.js` captures and independently checks a bounded fixed-position period. See [the replay method](replay.md).
+The period model lives in `public/models/fixed-position-period.js`; record validation is in `public/data/position-period.js`; values for display are in `public/lib/period-presentation.js`; the DOM controller is in `public/ui/position-period.js`. The development-only `scripts/check-replay.js` captures and independently checks a bounded fixed-position period, with an optional 2–32 checkpoint count. It validates the complete record before writing it. `public/data/replay-cases.js` orders the bundled cases and preserves the original fragment while adding `#historical-case=range-return`. Case selection keeps separate checkpoint positions in the current document; late responses cannot replace a newer selection. Interval presentation uses cumulative credit differences and cumulative range-time counters. See [the replay method](replay.md).
 
 ## Project structure
 
@@ -47,7 +47,7 @@ The period model lives in `public/models/fixed-position-period.js`; record valid
 - public/models/: pure hypothetical calculations, lesson experiments and exact protocol/period arithmetic. They do not read the DOM, browser storage or network.
 - public/data/: deployment configuration, read-only Uniswap v2/v3 adapters, snapshot/period schemas, saved experiments, learning progress and temporary Learn-return storage.
 - public/lib/: compatible scenario links, exports, formatting and rendering utilities.
-- public/learning/: lesson definitions, optional deeper reading and the nine-example progression.
+- public/learning/: lesson definitions, optional deeper reading and the ten-example progression.
 - public/examples/: bundled pool/position snapshots and the verified fixed-position period record; these open without RPC requests.
 - public/styles/: shared foundation and components followed by feature styles. public/styles.css preserves the existing cascade order.
 - public/index.html and public/learn.html: semantic, static markup with one module entry point per document. Each feature owns its IDs; the structure check rejects duplicates.
@@ -64,7 +64,7 @@ The static app remains dependency-free and deployable on GitHub Pages. Keep the 
 
 New financial models get their own versioned module and reference/invariant tests. New protocols get a deployment definition, adapter, exact token-unit handling and contract validation. Preserve old model links and storage keys; introduce explicit migrations when schemas change. Unit and desktop/mobile browser tests run before deployment.
 
-Release 1.8.0 shipped the first verified fixed-position period: nine checkpoints over 4,992 seconds for position #1382030 in Ethereum's WETH/USDC 0.3% pool. Next validation cases are longer periods with exits/re-entry and comparisons of existing ranges in the 0.05% pool. Editable historical bounds/windows and arbitrary-range backtesting remain future work; they require evidence beyond sampled prices and global fee growth. See [replay.md](replay.md#next-validation-cases) before extending the model.
+Release 1.8.0 shipped the first verified fixed-position period: nine checkpoints over 4,992 seconds for position #1382030 in Ethereum's WETH/USDC 0.3% pool. Release 1.9.0 adds a 17-checkpoint exit-and-return case spanning 120,468 seconds for position #1375047 in the same pool. The next validation case is a comparison of existing ranges in the 0.05% pool. Editable historical bounds/windows and arbitrary-range backtesting remain future work; they require evidence beyond sampled prices and global fee growth. See [replay.md](replay.md#next-validation-cases) before extending the model.
 
 A backend becomes useful for private provider credentials, shared caching, scheduled snapshots or account synchronization. Each can be added behind the data layer without rewriting the calculation models or existing labs. No scheduled collector or backend is part of the shipped replay.
 

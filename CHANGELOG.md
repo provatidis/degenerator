@@ -1,5 +1,13 @@
 # Release history
 
+## 1.9.0 — 2026-10-12
+
+- Add a second verified fixed-position case: 17 checkpoints over 33 hours 27 minutes, with exits, returns and 41.7% time in range.
+- Keep the in-range baseline first and add the longer case as example 10, with a direct link and recorded-case selector.
+- Explain interval fee credits, active/outside time, and activity hidden between sampled prices; preserve cumulative integer rounding.
+- Add checkpoint milestones, a price chart focused on relevant bounds, exact evidence/export and a principal-only Playground handoff.
+- Reject impossible adjacent range-time counters and decreasing cumulative fee credits; handle delayed case loads and retries.
+
 ## 1.8.1 — 2026-10-12
 
 - Keep primary navigation visible and make Experiment/Inspect open their section introductions.

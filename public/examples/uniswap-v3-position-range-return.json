@@ -1,0 +1,1474 @@
+{
+  "version": 1,
+  "kind": "fixed-position-period",
+  "id": "position-1375047",
+  "chainId": 1,
+  "points": [
+    {
+      "snapshot": {
+        "version": 2,
+        "kind": "uniswap-v3-position",
+        "protocol": "uniswap-v3",
+        "chainId": 1,
+        "tokenId": "1375047",
+        "positionManager": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
+        "factoryAddress": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+        "poolAddress": "0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8",
+        "block": {
+          "number": "26080000",
+          "hash": "0xf5fdcd13f98a7de5ee64939e4357cc65b020678047f9b06fb97f7b8820e6b87d",
+          "timestamp": 1790647283
+        },
+        "tokens": [
+          {
+            "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+            "symbol": "USDC",
+            "decimals": 6
+          },
+          {
+            "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "symbol": "WETH",
+            "decimals": 18
+          }
+        ],
+        "position": {
+          "fee": 3000,
+          "tickLower": 197400,
+          "tickUpper": 203880,
+          "liquidity": "350853357174328",
+          "feeGrowthInside0LastX128": "2772075867700490478768169541108008",
+          "feeGrowthInside1LastX128": "1350599617323957497086206987811402466257886",
+          "tokensOwed0": "0",
+          "tokensOwed1": "0"
+        },
+        "pool": {
+          "sqrtPriceX96": "1534991955788059327012847334915312",
+          "tick": 197443,
+          "tickSpacing": 60
+        },
+        "principal": {
+          "amount0Raw": "4982691068",
+          "amount1Raw": "14920139441099507"
+        },
+        "feeGrowth": {
+          "global0X128": "5922401009773932540657575766542909",
+          "global1X128": "2518846488217663680022195294859923414171449",
+          "lower": {
+            "liquidityGross": "1282198022103661",
+            "outside0X128": "2727734731779326541384077498609566",
+            "outside1X128": "810968595230183245674221272761134773011461",
+            "initialized": true
+          },
+          "upper": {
+            "liquidityGross": "17270821091412797",
+            "outside0X128": "422376932565162010946961223388016",
+            "outside1X128": "357162008198308790520567490799174932020117",
+            "initialized": true
+          }
+        },
+        "fees": {
+          "accrued0Raw": "220109",
+          "accrued1Raw": "119879354518568",
+          "collectable0Raw": "220109",
+          "collectable1Raw": "119879354518568",
+          "overflow": false
+        },
+        "capturedAt": "2026-10-12T13:12:06.492Z",
+        "provider": "https://eth.drpc.org"
+      },
+      "secondsInside": "91960849",
+      "simulatedCollect": [
+        "220109",
+        "119879354518568"
+      ]
+    },
+    {
+      "snapshot": {
+        "version": 2,
+        "kind": "uniswap-v3-position",
+        "protocol": "uniswap-v3",
+        "chainId": 1,
+        "tokenId": "1375047",
+        "positionManager": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
+        "factoryAddress": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+        "poolAddress": "0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8",
+        "block": {
+          "number": "26080625",
+          "hash": "0xcc7e47881468e418b55a17b34508b7bf976f350b6f6e90ad8c2bacd65499cb9f",
+          "timestamp": 1790654819
+        },
+        "tokens": [
+          {
+            "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+            "symbol": "USDC",
+            "decimals": 6
+          },
+          {
+            "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "symbol": "WETH",
+            "decimals": 18
+          }
+        ],
+        "position": {
+          "fee": 3000,
+          "tickLower": 197400,
+          "tickUpper": 203880,
+          "liquidity": "350853357174328",
+          "feeGrowthInside0LastX128": "2772075867700490478768169541108008",
+          "feeGrowthInside1LastX128": "1350599617323957497086206987811402466257886",
+          "tokensOwed0": "0",
+          "tokensOwed1": "0"
+        },
+        "pool": {
+          "sqrtPriceX96": "1536073302996597925353492924940069",
+          "tick": 197458,
+          "tickSpacing": 60
+        },
+        "principal": {
+          "amount0Raw": "4969942766",
+          "amount1Raw": "19708768715677834"
+        },
+        "feeGrowth": {
+          "global0X128": "5922415754540336208182833709888827",
+          "global1X128": "2518863677925697197753932393560877905507248",
+          "lower": {
+            "liquidityGross": "1282198022103661",
+            "outside0X128": "2727734731779326541384077498609566",
+            "outside1X128": "810968595230183245674221272761134773011461",
+            "initialized": true
+          },
+          "upper": {
+            "liquidityGross": "17270821091412797",
+            "outside0X128": "422376932565162010946961223388016",
+            "outside1X128": "357162008198308790520567490799174932020117",
+            "initialized": true
+          }
+        },
+        "fees": {
+          "accrued0Raw": "235312",
+          "accrued1Raw": "137603066819557",
+          "collectable0Raw": "235312",
+          "collectable1Raw": "137603066819557",
+          "overflow": false
+        },
+        "capturedAt": "2026-10-12T13:12:55.324Z",
+        "provider": "https://eth.drpc.org"
+      },
+      "secondsInside": "91968385",
+      "simulatedCollect": [
+        "235312",
+        "137603066819557"
+      ]
+    },
+    {
+      "snapshot": {
+        "version": 2,
+        "kind": "uniswap-v3-position",
+        "protocol": "uniswap-v3",
+        "chainId": 1,
+        "tokenId": "1375047",
+        "positionManager": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
+        "factoryAddress": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+        "poolAddress": "0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8",
+        "block": {
+          "number": "26081250",
+          "hash": "0x58bce0d5adca1f2ec0aeec87b3031063a0e54b02af5a7971f8182a27e7658a37",
+          "timestamp": 1790662331
+        },
+        "tokens": [
+          {
+            "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+            "symbol": "USDC",
+            "decimals": 6
+          },
+          {
+            "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "symbol": "WETH",
+            "decimals": 18
+          }
+        ],
+        "position": {
+          "fee": 3000,
+          "tickLower": 197400,
+          "tickUpper": 203880,
+          "liquidity": "350853357174328",
+          "feeGrowthInside0LastX128": "2772075867700490478768169541108008",
+          "feeGrowthInside1LastX128": "1350599617323957497086206987811402466257886",
+          "tokensOwed0": "0",
+          "tokensOwed1": "0"
+        },
+        "pool": {
+          "sqrtPriceX96": "1529809371988648584165785568859672",
+          "tick": 197376,
+          "tickSpacing": 60
+        },
+        "principal": {
+          "amount0Raw": "5022526922",
+          "amount1Raw": "0"
+        },
+        "feeGrowth": {
+          "global0X128": "5922614278442522845553930918249307",
+          "global1X128": "2518870555881008381889017180030231574254431",
+          "lower": {
+            "liquidityGross": "1282198022103661",
+            "outside0X128": "3194827227034382911921183214597413",
+            "outside1X128": "1707901960640253951004666703753820470904630",
+            "initialized": true
+          },
+          "upper": {
+            "liquidityGross": "17270821091412797",
+            "outside0X128": "422376932565162010946961223388016",
+            "outside1X128": "357162008198308790520567490799174932020117",
+            "initialized": true
+          }
+        },
+        "fees": {
+          "accrued0Raw": "386058",
+          "accrued1Raw": "144694677308586",
+          "collectable0Raw": "386058",
+          "collectable1Raw": "144694677308586",
+          "overflow": false
+        },
+        "capturedAt": "2026-10-12T13:13:15.604Z",
+        "provider": "https://eth.drpc.org"
+      },
+      "secondsInside": "91975705",
+      "simulatedCollect": [
+        "386058",
+        "144694677308586"
+      ]
+    },
+    {
+      "snapshot": {
+        "version": 2,
+        "kind": "uniswap-v3-position",
+        "protocol": "uniswap-v3",
+        "chainId": 1,
+        "tokenId": "1375047",
+        "positionManager": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
+        "factoryAddress": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+        "poolAddress": "0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8",
+        "block": {
+          "number": "26081875",
+          "hash": "0x92dd14f3ae977b33b556e1d71f803308e9f08501d269ee607c1677fe855a78d9",
+          "timestamp": 1790669879
+        },
+        "tokens": [
+          {
+            "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+            "symbol": "USDC",
+            "decimals": 6
+          },
+          {
+            "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "symbol": "WETH",
+            "decimals": 18
+          }
+        ],
+        "position": {
+          "fee": 3000,
+          "tickLower": 197400,
+          "tickUpper": 203880,
+          "liquidity": "350853357174328",
+          "feeGrowthInside0LastX128": "2772075867700490478768169541108008",
+          "feeGrowthInside1LastX128": "1350599617323957497086206987811402466257886",
+          "tokensOwed0": "0",
+          "tokensOwed1": "0"
+        },
+        "pool": {
+          "sqrtPriceX96": "1521671367626668920669776585424896",
+          "tick": 197269,
+          "tickSpacing": 60
+        },
+        "principal": {
+          "amount0Raw": "5022526922",
+          "amount1Raw": "0"
+        },
+        "feeGrowth": {
+          "global0X128": "5922852850295048541969440279413353",
+          "global1X128": "2518871384886900621510806289681534531122044",
+          "lower": {
+            "liquidityGross": "1282198022103661",
+            "outside0X128": "3194827227034382911921183214597413",
+            "outside1X128": "1707901960640253951004666703753820470904630",
+            "initialized": true
+          },
+          "upper": {
+            "liquidityGross": "17270821091412797",
+            "outside0X128": "422376932565162010946961223388016",
+            "outside1X128": "357162008198308790520567490799174932020117",
+            "initialized": true
+          }
+        },
+        "fees": {
+          "accrued0Raw": "386058",
+          "accrued1Raw": "144694677308586",
+          "collectable0Raw": "386058",
+          "collectable1Raw": "144694677308586",
+          "overflow": false
+        },
+        "capturedAt": "2026-10-12T13:13:36.328Z",
+        "provider": "https://eth.drpc.org"
+      },
+      "secondsInside": "91975705",
+      "simulatedCollect": [
+        "386058",
+        "144694677308586"
+      ]
+    },
+    {
+      "snapshot": {
+        "version": 2,
+        "kind": "uniswap-v3-position",
+        "protocol": "uniswap-v3",
+        "chainId": 1,
+        "tokenId": "1375047",
+        "positionManager": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
+        "factoryAddress": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+        "poolAddress": "0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8",
+        "block": {
+          "number": "26082500",
+          "hash": "0x493ebcffbda78adf0b839b10e4e1351e78ce2e8e45a31c4d7e4b24542d7228fa",
+          "timestamp": 1790677403
+        },
+        "tokens": [
+          {
+            "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+            "symbol": "USDC",
+            "decimals": 6
+          },
+          {
+            "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "symbol": "WETH",
+            "decimals": 18
+          }
+        ],
+        "position": {
+          "fee": 3000,
+          "tickLower": 197400,
+          "tickUpper": 203880,
+          "liquidity": "350853357174328",
+          "feeGrowthInside0LastX128": "2772075867700490478768169541108008",
+          "feeGrowthInside1LastX128": "1350599617323957497086206987811402466257886",
+          "tokensOwed0": "0",
+          "tokensOwed1": "0"
+        },
+        "pool": {
+          "sqrtPriceX96": "1521230864944008861500477460743465",
+          "tick": 197263,
+          "tickSpacing": 60
+        },
+        "principal": {
+          "amount0Raw": "5022526922",
+          "amount1Raw": "0"
+        },
+        "feeGrowth": {
+          "global0X128": "5922975470210444100169277424890670",
+          "global1X128": "2518911790144534313512551596879629698643621",
+          "lower": {
+            "liquidityGross": "1282198022103661",
+            "outside0X128": "3194827227034382911921183214597413",
+            "outside1X128": "1707901960640253951004666703753820470904630",
+            "initialized": true
+          },
+          "upper": {
+            "liquidityGross": "17270821091412797",
+            "outside0X128": "422376932565162010946961223388016",
+            "outside1X128": "357162008198308790520567490799174932020117",
+            "initialized": true
+          }
+        },
+        "fees": {
+          "accrued0Raw": "386058",
+          "accrued1Raw": "144694677308586",
+          "collectable0Raw": "386058",
+          "collectable1Raw": "144694677308586",
+          "overflow": false
+        },
+        "capturedAt": "2026-10-12T13:13:56.712Z",
+        "provider": "https://eth.drpc.org"
+      },
+      "secondsInside": "91975705",
+      "simulatedCollect": [
+        "386058",
+        "144694677308586"
+      ]
+    },
+    {
+      "snapshot": {
+        "version": 2,
+        "kind": "uniswap-v3-position",
+        "protocol": "uniswap-v3",
+        "chainId": 1,
+        "tokenId": "1375047",
+        "positionManager": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
+        "factoryAddress": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+        "poolAddress": "0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8",
+        "block": {
+          "number": "26083125",
+          "hash": "0x761a39cf43dfc08fafa95cb6024f0684ed22db80af18f6845a9b5a4ff2d75a2f",
+          "timestamp": 1790684939
+        },
+        "tokens": [
+          {
+            "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+            "symbol": "USDC",
+            "decimals": 6
+          },
+          {
+            "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "symbol": "WETH",
+            "decimals": 18
+          }
+        ],
+        "position": {
+          "fee": 3000,
+          "tickLower": 197400,
+          "tickUpper": 203880,
+          "liquidity": "350853357174328",
+          "feeGrowthInside0LastX128": "2772075867700490478768169541108008",
+          "feeGrowthInside1LastX128": "1350599617323957497086206987811402466257886",
+          "tokensOwed0": "0",
+          "tokensOwed1": "0"
+        },
+        "pool": {
+          "sqrtPriceX96": "1514531639373873407007091062488034",
+          "tick": 197175,
+          "tickSpacing": 60
+        },
+        "principal": {
+          "amount0Raw": "5022526922",
+          "amount1Raw": "0"
+        },
+        "feeGrowth": {
+          "global0X128": "5923173483252743399493401090130538",
+          "global1X128": "2518912321053465648148151582632163771841746",
+          "lower": {
+            "liquidityGross": "1282198022103661",
+            "outside0X128": "3194827227034382911921183214597413",
+            "outside1X128": "1707901960640253951004666703753820470904630",
+            "initialized": true
+          },
+          "upper": {
+            "liquidityGross": "17270821091412797",
+            "outside0X128": "422376932565162010946961223388016",
+            "outside1X128": "357162008198308790520567490799174932020117",
+            "initialized": true
+          }
+        },
+        "fees": {
+          "accrued0Raw": "386058",
+          "accrued1Raw": "144694677308586",
+          "collectable0Raw": "386058",
+          "collectable1Raw": "144694677308586",
+          "overflow": false
+        },
+        "capturedAt": "2026-10-12T13:14:37.204Z",
+        "provider": "https://eth.drpc.org"
+      },
+      "secondsInside": "91975705",
+      "simulatedCollect": [
+        "386058",
+        "144694677308586"
+      ]
+    },
+    {
+      "snapshot": {
+        "version": 2,
+        "kind": "uniswap-v3-position",
+        "protocol": "uniswap-v3",
+        "chainId": 1,
+        "tokenId": "1375047",
+        "positionManager": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
+        "factoryAddress": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+        "poolAddress": "0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8",
+        "block": {
+          "number": "26083750",
+          "hash": "0xff3fbb04b1cf6e1ce9b86117778ed7cceb52a6c182ecd2f59b7fe9b47f3e79a3",
+          "timestamp": 1790692439
+        },
+        "tokens": [
+          {
+            "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+            "symbol": "USDC",
+            "decimals": 6
+          },
+          {
+            "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "symbol": "WETH",
+            "decimals": 18
+          }
+        ],
+        "position": {
+          "fee": 3000,
+          "tickLower": 197400,
+          "tickUpper": 203880,
+          "liquidity": "350853357174328",
+          "feeGrowthInside0LastX128": "2772075867700490478768169541108008",
+          "feeGrowthInside1LastX128": "1350599617323957497086206987811402466257886",
+          "tokensOwed0": "0",
+          "tokensOwed1": "0"
+        },
+        "pool": {
+          "sqrtPriceX96": "1519158691279064696903979648263159",
+          "tick": 197236,
+          "tickSpacing": 60
+        },
+        "principal": {
+          "amount0Raw": "5022526922",
+          "amount1Raw": "0"
+        },
+        "feeGrowth": {
+          "global0X128": "5923277961234072007886488598351427",
+          "global1X128": "2519000433278836200834737187937860026501085",
+          "lower": {
+            "liquidityGross": "1282198022103661",
+            "outside0X128": "3194827227034382911921183214597413",
+            "outside1X128": "1707901960640253951004666703753820470904630",
+            "initialized": true
+          },
+          "upper": {
+            "liquidityGross": "17270821091412797",
+            "outside0X128": "422376932565162010946961223388016",
+            "outside1X128": "357162008198308790520567490799174932020117",
+            "initialized": true
+          }
+        },
+        "fees": {
+          "accrued0Raw": "386058",
+          "accrued1Raw": "144694677308586",
+          "collectable0Raw": "386058",
+          "collectable1Raw": "144694677308586",
+          "overflow": false
+        },
+        "capturedAt": "2026-10-12T13:14:57.304Z",
+        "provider": "https://eth.drpc.org"
+      },
+      "secondsInside": "91975705",
+      "simulatedCollect": [
+        "386058",
+        "144694677308586"
+      ]
+    },
+    {
+      "snapshot": {
+        "version": 2,
+        "kind": "uniswap-v3-position",
+        "protocol": "uniswap-v3",
+        "chainId": 1,
+        "tokenId": "1375047",
+        "positionManager": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
+        "factoryAddress": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+        "poolAddress": "0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8",
+        "block": {
+          "number": "26084375",
+          "hash": "0xc1ceafcd8a47234f438dd3978df425f590dd2704fc1fe2bd8d99e47009a6bb6f",
+          "timestamp": 1790699963
+        },
+        "tokens": [
+          {
+            "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+            "symbol": "USDC",
+            "decimals": 6
+          },
+          {
+            "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "symbol": "WETH",
+            "decimals": 18
+          }
+        ],
+        "position": {
+          "fee": 3000,
+          "tickLower": 197400,
+          "tickUpper": 203880,
+          "liquidity": "350853357174328",
+          "feeGrowthInside0LastX128": "2772075867700490478768169541108008",
+          "feeGrowthInside1LastX128": "1350599617323957497086206987811402466257886",
+          "tokensOwed0": "0",
+          "tokensOwed1": "0"
+        },
+        "pool": {
+          "sqrtPriceX96": "1531231027156329573533344193106014",
+          "tick": 197394,
+          "tickSpacing": 60
+        },
+        "principal": {
+          "amount0Raw": "5022526922",
+          "amount1Raw": "0"
+        },
+        "feeGrowth": {
+          "global0X128": "5923281461659729176365984449219747",
+          "global1X128": "2519131753282892660127506946147308666208932",
+          "lower": {
+            "liquidityGross": "1282198022103661",
+            "outside0X128": "3194827227034382911921183214597413",
+            "outside1X128": "1707901960640253951004666703753820470904630",
+            "initialized": true
+          },
+          "upper": {
+            "liquidityGross": "17270821091412797",
+            "outside0X128": "422376932565162010946961223388016",
+            "outside1X128": "357162008198308790520567490799174932020117",
+            "initialized": true
+          }
+        },
+        "fees": {
+          "accrued0Raw": "386058",
+          "accrued1Raw": "144694677308586",
+          "collectable0Raw": "386058",
+          "collectable1Raw": "144694677308586",
+          "overflow": false
+        },
+        "capturedAt": "2026-10-12T13:15:17.311Z",
+        "provider": "https://eth.drpc.org"
+      },
+      "secondsInside": "91975705",
+      "simulatedCollect": [
+        "386058",
+        "144694677308586"
+      ]
+    },
+    {
+      "snapshot": {
+        "version": 2,
+        "kind": "uniswap-v3-position",
+        "protocol": "uniswap-v3",
+        "chainId": 1,
+        "tokenId": "1375047",
+        "positionManager": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
+        "factoryAddress": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+        "poolAddress": "0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8",
+        "block": {
+          "number": "26085000",
+          "hash": "0xb1a9f37a7e4da0ac7def7608b72b3150b1974b61b3d81b4c173500d771b923d6",
+          "timestamp": 1790707523
+        },
+        "tokens": [
+          {
+            "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+            "symbol": "USDC",
+            "decimals": 6
+          },
+          {
+            "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "symbol": "WETH",
+            "decimals": 18
+          }
+        ],
+        "position": {
+          "fee": 3000,
+          "tickLower": 197400,
+          "tickUpper": 203880,
+          "liquidity": "350853357174328",
+          "feeGrowthInside0LastX128": "2772075867700490478768169541108008",
+          "feeGrowthInside1LastX128": "1350599617323957497086206987811402466257886",
+          "tokensOwed0": "0",
+          "tokensOwed1": "0"
+        },
+        "pool": {
+          "sqrtPriceX96": "1528194098503821545841736446484578",
+          "tick": 197355,
+          "tickSpacing": 60
+        },
+        "principal": {
+          "amount0Raw": "5022526922",
+          "amount1Raw": "0"
+        },
+        "feeGrowth": {
+          "global0X128": "5923393400313477647617935085920389",
+          "global1X128": "2519140797744320859163736019965793542586725",
+          "lower": {
+            "liquidityGross": "1282198022103661",
+            "outside0X128": "3194839199501403954879886240950641",
+            "outside1X128": "1707906436176599508781618481824793469215841",
+            "initialized": true
+          },
+          "upper": {
+            "liquidityGross": "17270821091412797",
+            "outside0X128": "422376932565162010946961223388016",
+            "outside1X128": "357162008198308790520567490799174932020117",
+            "initialized": true
+          }
+        },
+        "fees": {
+          "accrued0Raw": "398402",
+          "accrued1Raw": "149309247749609",
+          "collectable0Raw": "398402",
+          "collectable1Raw": "149309247749609",
+          "overflow": false
+        },
+        "capturedAt": "2026-10-12T13:15:38.370Z",
+        "provider": "https://eth.drpc.org"
+      },
+      "secondsInside": "91978429",
+      "simulatedCollect": [
+        "398402",
+        "149309247749609"
+      ]
+    },
+    {
+      "snapshot": {
+        "version": 2,
+        "kind": "uniswap-v3-position",
+        "protocol": "uniswap-v3",
+        "chainId": 1,
+        "tokenId": "1375047",
+        "positionManager": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
+        "factoryAddress": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+        "poolAddress": "0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8",
+        "block": {
+          "number": "26085625",
+          "hash": "0x14f54a5ab44bb9f583ffea0339c28c25f509c7806ef8941ee0508bc371f11071",
+          "timestamp": 1790715035
+        },
+        "tokens": [
+          {
+            "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+            "symbol": "USDC",
+            "decimals": 6
+          },
+          {
+            "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "symbol": "WETH",
+            "decimals": 18
+          }
+        ],
+        "position": {
+          "fee": 3000,
+          "tickLower": 197400,
+          "tickUpper": 203880,
+          "liquidity": "350853357174328",
+          "feeGrowthInside0LastX128": "2772075867700490478768169541108008",
+          "feeGrowthInside1LastX128": "1350599617323957497086206987811402466257886",
+          "tokensOwed0": "0",
+          "tokensOwed1": "0"
+        },
+        "pool": {
+          "sqrtPriceX96": "1527336498005938211605220269261506",
+          "tick": 197343,
+          "tickSpacing": 60
+        },
+        "principal": {
+          "amount0Raw": "5022526922",
+          "amount1Raw": "0"
+        },
+        "feeGrowth": {
+          "global0X128": "5923421039776347081228452916023439",
+          "global1X128": "2519141838463084513395841264024169514921274",
+          "lower": {
+            "liquidityGross": "1282198022103661",
+            "outside0X128": "3194839199501403954879886240950641",
+            "outside1X128": "1707906436176599508781618481824793469215841",
+            "initialized": true
+          },
+          "upper": {
+            "liquidityGross": "17270821091412797",
+            "outside0X128": "422376932565162010946961223388016",
+            "outside1X128": "357162008198308790520567490799174932020117",
+            "initialized": true
+          }
+        },
+        "fees": {
+          "accrued0Raw": "398402",
+          "accrued1Raw": "149309247749609",
+          "collectable0Raw": "398402",
+          "collectable1Raw": "149309247749609",
+          "overflow": false
+        },
+        "capturedAt": "2026-10-12T13:15:58.229Z",
+        "provider": "https://eth.drpc.org"
+      },
+      "secondsInside": "91978429",
+      "simulatedCollect": [
+        "398402",
+        "149309247749609"
+      ]
+    },
+    {
+      "snapshot": {
+        "version": 2,
+        "kind": "uniswap-v3-position",
+        "protocol": "uniswap-v3",
+        "chainId": 1,
+        "tokenId": "1375047",
+        "positionManager": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
+        "factoryAddress": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+        "poolAddress": "0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8",
+        "block": {
+          "number": "26086250",
+          "hash": "0x3666b5fee34f9b372e2d14fc8047f6468d0dfc44b756ee8c706a7dc349f23784",
+          "timestamp": 1790722571
+        },
+        "tokens": [
+          {
+            "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+            "symbol": "USDC",
+            "decimals": 6
+          },
+          {
+            "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "symbol": "WETH",
+            "decimals": 18
+          }
+        ],
+        "position": {
+          "fee": 3000,
+          "tickLower": 197400,
+          "tickUpper": 203880,
+          "liquidity": "350853357174328",
+          "feeGrowthInside0LastX128": "2772075867700490478768169541108008",
+          "feeGrowthInside1LastX128": "1350599617323957497086206987811402466257886",
+          "tokensOwed0": "0",
+          "tokensOwed1": "0"
+        },
+        "pool": {
+          "sqrtPriceX96": "1529900729008326553959116767742305",
+          "tick": 197377,
+          "tickSpacing": 60
+        },
+        "principal": {
+          "amount0Raw": "5022526922",
+          "amount1Raw": "0"
+        },
+        "feeGrowth": {
+          "global0X128": "5923421358334034020206915963368696",
+          "global1X128": "2519169573060536550892600681631628570355829",
+          "lower": {
+            "liquidityGross": "1282198022103661",
+            "outside0X128": "3194839199501403954879886240950641",
+            "outside1X128": "1707906436176599508781618481824793469215841",
+            "initialized": true
+          },
+          "upper": {
+            "liquidityGross": "17270821091412797",
+            "outside0X128": "422376932565162010946961223388016",
+            "outside1X128": "357162008198308790520567490799174932020117",
+            "initialized": true
+          }
+        },
+        "fees": {
+          "accrued0Raw": "398402",
+          "accrued1Raw": "149309247749609",
+          "collectable0Raw": "398402",
+          "collectable1Raw": "149309247749609",
+          "overflow": false
+        },
+        "capturedAt": "2026-10-12T13:16:24.386Z",
+        "provider": "https://eth.drpc.org"
+      },
+      "secondsInside": "91978429",
+      "simulatedCollect": [
+        "398402",
+        "149309247749609"
+      ]
+    },
+    {
+      "snapshot": {
+        "version": 2,
+        "kind": "uniswap-v3-position",
+        "protocol": "uniswap-v3",
+        "chainId": 1,
+        "tokenId": "1375047",
+        "positionManager": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
+        "factoryAddress": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+        "poolAddress": "0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8",
+        "block": {
+          "number": "26086875",
+          "hash": "0x9c06bd330c8c4a24e57d1491449ad3ddde086c67fbc35dc12bc3d22841908900",
+          "timestamp": 1790730095
+        },
+        "tokens": [
+          {
+            "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+            "symbol": "USDC",
+            "decimals": 6
+          },
+          {
+            "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "symbol": "WETH",
+            "decimals": 18
+          }
+        ],
+        "position": {
+          "fee": 3000,
+          "tickLower": 197400,
+          "tickUpper": 203880,
+          "liquidity": "350853357174328",
+          "feeGrowthInside0LastX128": "2772075867700490478768169541108008",
+          "feeGrowthInside1LastX128": "1350599617323957497086206987811402466257886",
+          "tokensOwed0": "0",
+          "tokensOwed1": "0"
+        },
+        "pool": {
+          "sqrtPriceX96": "1531850279455897023617895417396979",
+          "tick": 197402,
+          "tickSpacing": 60
+        },
+        "principal": {
+          "amount0Raw": "5019831268",
+          "amount1Raw": "1007565258960426"
+        },
+        "feeGrowth": {
+          "global0X128": "5923421734520478149458389126759753",
+          "global1X128": "2519190709481599760528658398553055803264560",
+          "lower": {
+            "liquidityGross": "1282198022103661",
+            "outside0X128": "2728582510445562965069881751950344",
+            "outside1X128": "811281813747807647709641980399910492972595",
+            "initialized": true
+          },
+          "upper": {
+            "liquidityGross": "17270821091412797",
+            "outside0X128": "422376932565162010946961223388016",
+            "outside1X128": "357162008198308790520567490799174932020117",
+            "initialized": true
+          }
+        },
+        "fees": {
+          "accrued0Raw": "398428",
+          "accrued1Raw": "151845211943098",
+          "collectable0Raw": "398428",
+          "collectable1Raw": "151845211943098",
+          "overflow": false
+        },
+        "capturedAt": "2026-10-12T13:16:44.652Z",
+        "provider": "https://eth.drpc.org"
+      },
+      "secondsInside": "91980889",
+      "simulatedCollect": [
+        "398428",
+        "151845211943098"
+      ]
+    },
+    {
+      "snapshot": {
+        "version": 2,
+        "kind": "uniswap-v3-position",
+        "protocol": "uniswap-v3",
+        "chainId": 1,
+        "tokenId": "1375047",
+        "positionManager": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
+        "factoryAddress": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+        "poolAddress": "0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8",
+        "block": {
+          "number": "26087500",
+          "hash": "0x9ea90df97837bb397424a43a0308f2913075e1909542531a096fc3e68a73a63a",
+          "timestamp": 1790737631
+        },
+        "tokens": [
+          {
+            "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+            "symbol": "USDC",
+            "decimals": 6
+          },
+          {
+            "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "symbol": "WETH",
+            "decimals": 18
+          }
+        ],
+        "position": {
+          "fee": 3000,
+          "tickLower": 197400,
+          "tickUpper": 203880,
+          "liquidity": "350853357174328",
+          "feeGrowthInside0LastX128": "2772075867700490478768169541108008",
+          "feeGrowthInside1LastX128": "1350599617323957497086206987811402466257886",
+          "tokensOwed0": "0",
+          "tokensOwed1": "0"
+        },
+        "pool": {
+          "sqrtPriceX96": "1532384376957513742796592958769985",
+          "tick": 197409,
+          "tickSpacing": 60
+        },
+        "principal": {
+          "amount0Raw": "5013506542",
+          "amount1Raw": "3372758336193652"
+        },
+        "feeGrowth": {
+          "global0X128": "5923422150422719516302097734471718",
+          "global1X128": "2519196617071447979475368815645971521135223",
+          "lower": {
+            "liquidityGross": "1282198022103661",
+            "outside0X128": "2728582510445562965069881751950344",
+            "outside1X128": "811281813747807647709641980399910492972595",
+            "initialized": true
+          },
+          "upper": {
+            "liquidityGross": "17270821091412797",
+            "outside0X128": "422376932565162010946961223388016",
+            "outside1X128": "357162008198308790520567490799174932020117",
+            "initialized": true
+          }
+        },
+        "fees": {
+          "accrued0Raw": "398857",
+          "accrued1Raw": "157936323127646",
+          "collectable0Raw": "398857",
+          "collectable1Raw": "157936323127646",
+          "overflow": false
+        },
+        "capturedAt": "2026-10-12T13:17:04.845Z",
+        "provider": "https://eth.drpc.org"
+      },
+      "secondsInside": "91988425",
+      "simulatedCollect": [
+        "398857",
+        "157936323127646"
+      ]
+    },
+    {
+      "snapshot": {
+        "version": 2,
+        "kind": "uniswap-v3-position",
+        "protocol": "uniswap-v3",
+        "chainId": 1,
+        "tokenId": "1375047",
+        "positionManager": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
+        "factoryAddress": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+        "poolAddress": "0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8",
+        "block": {
+          "number": "26088125",
+          "hash": "0x0e0a2a31aa2f873c97b1e87fc6b0ecce7c72a68575c1b45751ee0ba6d3b2d646",
+          "timestamp": 1790745155
+        },
+        "tokens": [
+          {
+            "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+            "symbol": "USDC",
+            "decimals": 6
+          },
+          {
+            "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "symbol": "WETH",
+            "decimals": 18
+          }
+        ],
+        "position": {
+          "fee": 3000,
+          "tickLower": 197400,
+          "tickUpper": 203880,
+          "liquidity": "350853357174328",
+          "feeGrowthInside0LastX128": "2772075867700490478768169541108008",
+          "feeGrowthInside1LastX128": "1350599617323957497086206987811402466257886",
+          "tokensOwed0": "0",
+          "tokensOwed1": "0"
+        },
+        "pool": {
+          "sqrtPriceX96": "1532384693500511796983686394447935",
+          "tick": 197409,
+          "tickSpacing": 60
+        },
+        "principal": {
+          "amount0Raw": "5013502795",
+          "amount1Raw": "3374160112658395"
+        },
+        "feeGrowth": {
+          "global0X128": "5923422672792648844853916505814654",
+          "global1X128": "2519196815893094193923508280049457305732144",
+          "lower": {
+            "liquidityGross": "1282198022103661",
+            "outside0X128": "2728582510445562965069881751950344",
+            "outside1X128": "811281813747807647709641980399910492972595",
+            "initialized": true
+          },
+          "upper": {
+            "liquidityGross": "17270821091412797",
+            "outside0X128": "422376932565162010946961223388016",
+            "outside1X128": "357162008198308790520567490799174932020117",
+            "initialized": true
+          }
+        },
+        "fees": {
+          "accrued0Raw": "399395",
+          "accrued1Raw": "158141321237553",
+          "collectable0Raw": "399395",
+          "collectable1Raw": "158141321237553",
+          "overflow": false
+        },
+        "capturedAt": "2026-10-12T13:17:30.758Z",
+        "provider": "https://eth.drpc.org"
+      },
+      "secondsInside": "91995949",
+      "simulatedCollect": [
+        "399395",
+        "158141321237553"
+      ]
+    },
+    {
+      "snapshot": {
+        "version": 2,
+        "kind": "uniswap-v3-position",
+        "protocol": "uniswap-v3",
+        "chainId": 1,
+        "tokenId": "1375047",
+        "positionManager": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
+        "factoryAddress": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+        "poolAddress": "0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8",
+        "block": {
+          "number": "26088750",
+          "hash": "0xc86f32a552aabb62bb993e2f0b002e376c5fe9403e28f2f784cdaee9353ebb01",
+          "timestamp": 1790752679
+        },
+        "tokens": [
+          {
+            "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+            "symbol": "USDC",
+            "decimals": 6
+          },
+          {
+            "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "symbol": "WETH",
+            "decimals": 18
+          }
+        ],
+        "position": {
+          "fee": 3000,
+          "tickLower": 197400,
+          "tickUpper": 203880,
+          "liquidity": "350853357174328",
+          "feeGrowthInside0LastX128": "2772075867700490478768169541108008",
+          "feeGrowthInside1LastX128": "1350599617323957497086206987811402466257886",
+          "tokensOwed0": "0",
+          "tokensOwed1": "0"
+        },
+        "pool": {
+          "sqrtPriceX96": "1534817941907912088269376978850277",
+          "tick": 197441,
+          "tickSpacing": 60
+        },
+        "principal": {
+          "amount0Raw": "4984744244",
+          "amount1Raw": "14149537774885202"
+        },
+        "feeGrowth": {
+          "global0X128": "5923422982183008390957090723405309",
+          "global1X128": "2519223137299556326239912818416523819791537",
+          "lower": {
+            "liquidityGross": "1282198022103661",
+            "outside0X128": "2728582510445562965069881751950344",
+            "outside1X128": "811281813747807647709641980399910492972595",
+            "initialized": true
+          },
+          "upper": {
+            "liquidityGross": "17270821091412797",
+            "outside0X128": "422376932565162010946961223388016",
+            "outside1X128": "357162008198308790520567490799174932020117",
+            "initialized": true
+          }
+        },
+        "fees": {
+          "accrued0Raw": "399714",
+          "accrued1Raw": "185280411359536",
+          "collectable0Raw": "399714",
+          "collectable1Raw": "185280411359536",
+          "overflow": false
+        },
+        "capturedAt": "2026-10-12T13:17:50.969Z",
+        "provider": "https://eth.drpc.org"
+      },
+      "secondsInside": "92003473",
+      "simulatedCollect": [
+        "399714",
+        "185280411359536"
+      ]
+    },
+    {
+      "snapshot": {
+        "version": 2,
+        "kind": "uniswap-v3-position",
+        "protocol": "uniswap-v3",
+        "chainId": 1,
+        "tokenId": "1375047",
+        "positionManager": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
+        "factoryAddress": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+        "poolAddress": "0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8",
+        "block": {
+          "number": "26089375",
+          "hash": "0x828150839440ba8427209f40f428d000d33ecb09ac22e5c05aa6d50ef274125e",
+          "timestamp": 1790760215
+        },
+        "tokens": [
+          {
+            "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+            "symbol": "USDC",
+            "decimals": 6
+          },
+          {
+            "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "symbol": "WETH",
+            "decimals": 18
+          }
+        ],
+        "position": {
+          "fee": 3000,
+          "tickLower": 197400,
+          "tickUpper": 203880,
+          "liquidity": "350853357174328",
+          "feeGrowthInside0LastX128": "2772075867700490478768169541108008",
+          "feeGrowthInside1LastX128": "1350599617323957497086206987811402466257886",
+          "tokensOwed0": "0",
+          "tokensOwed1": "0"
+        },
+        "pool": {
+          "sqrtPriceX96": "1532506534742917250037509756653089",
+          "tick": 197411,
+          "tickSpacing": 60
+        },
+        "principal": {
+          "amount0Raw": "5012060582",
+          "amount1Raw": "3913720889832141"
+        },
+        "feeGrowth": {
+          "global0X128": "5923489991766894675061992386078709",
+          "global1X128": "2519223353618519254026767749332070553433491",
+          "lower": {
+            "liquidityGross": "1282198022103661",
+            "outside0X128": "2728582510445562965069881751950344",
+            "outside1X128": "811281813747807647709641980399910492972595",
+            "initialized": true
+          },
+          "upper": {
+            "liquidityGross": "17270821091412797",
+            "outside0X128": "422376932565162010946961223388016",
+            "outside1X128": "357162008198308790520567490799174932020117",
+            "initialized": true
+          }
+        },
+        "fees": {
+          "accrued0Raw": "468805",
+          "accrued1Raw": "185503450346394",
+          "collectable0Raw": "468805",
+          "collectable1Raw": "185503450346394",
+          "overflow": false
+        },
+        "capturedAt": "2026-10-12T13:18:10.974Z",
+        "provider": "https://eth.drpc.org"
+      },
+      "secondsInside": "92011009",
+      "simulatedCollect": [
+        "468805",
+        "185503450346394"
+      ]
+    },
+    {
+      "snapshot": {
+        "version": 2,
+        "kind": "uniswap-v3-position",
+        "protocol": "uniswap-v3",
+        "chainId": 1,
+        "tokenId": "1375047",
+        "positionManager": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
+        "factoryAddress": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+        "poolAddress": "0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8",
+        "block": {
+          "number": "26090000",
+          "hash": "0x840d79113ef656f97e3723ec9a14c9f24d4cd64ef29c30645973978fcb0ffc3b",
+          "timestamp": 1790767751
+        },
+        "tokens": [
+          {
+            "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+            "symbol": "USDC",
+            "decimals": 6
+          },
+          {
+            "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "symbol": "WETH",
+            "decimals": 18
+          }
+        ],
+        "position": {
+          "fee": 3000,
+          "tickLower": 197400,
+          "tickUpper": 203880,
+          "liquidity": "350853357174328",
+          "feeGrowthInside0LastX128": "2772075867700490478768169541108008",
+          "feeGrowthInside1LastX128": "1350599617323957497086206987811402466257886",
+          "tokensOwed0": "0",
+          "tokensOwed1": "0"
+        },
+        "pool": {
+          "sqrtPriceX96": "1528006974380758663445395324743023",
+          "tick": 197352,
+          "tickSpacing": 60
+        },
+        "principal": {
+          "amount0Raw": "5022526922",
+          "amount1Raw": "0"
+        },
+        "feeGrowth": {
+          "global0X128": "5923620330091895313708083654943152",
+          "global1X128": "2519223517000894731526893694608250226185495",
+          "lower": {
+            "liquidityGross": "1282198022103661",
+            "outside0X128": "3194932935174607354324205493245798",
+            "outside1X128": "1707941539870711606317125768932160060460896",
+            "initialized": true
+          },
+          "upper": {
+            "liquidityGross": "17270821091412797",
+            "outside0X128": "422376932565162010946961223388016",
+            "outside1X128": "357162008198308790520567490799174932020117",
+            "initialized": true
+          }
+        },
+        "fees": {
+          "accrued0Raw": "495050",
+          "accrued1Raw": "185503450346394",
+          "collectable0Raw": "495050",
+          "collectable1Raw": "185503450346394",
+          "overflow": false
+        },
+        "capturedAt": "2026-10-12T13:12:28.629Z",
+        "provider": "https://eth.drpc.org"
+      },
+      "secondsInside": "92011105",
+      "simulatedCollect": [
+        "495050",
+        "185503450346394"
+      ]
+    }
+  ],
+  "eventQueries": [
+    {
+      "provider": "https://rpc.mevblocker.io",
+      "fromBlock": "26080001",
+      "toBlock": "26080500",
+      "matchingEvents": 0
+    },
+    {
+      "provider": "https://rpc.mevblocker.io",
+      "fromBlock": "26080501",
+      "toBlock": "26081000",
+      "matchingEvents": 0
+    },
+    {
+      "provider": "https://rpc.mevblocker.io",
+      "fromBlock": "26081001",
+      "toBlock": "26081500",
+      "matchingEvents": 0
+    },
+    {
+      "provider": "https://rpc.mevblocker.io",
+      "fromBlock": "26081501",
+      "toBlock": "26082000",
+      "matchingEvents": 0
+    },
+    {
+      "provider": "https://rpc.mevblocker.io",
+      "fromBlock": "26082001",
+      "toBlock": "26082500",
+      "matchingEvents": 0
+    },
+    {
+      "provider": "https://rpc.mevblocker.io",
+      "fromBlock": "26082501",
+      "toBlock": "26083000",
+      "matchingEvents": 0
+    },
+    {
+      "provider": "https://rpc.mevblocker.io",
+      "fromBlock": "26083001",
+      "toBlock": "26083500",
+      "matchingEvents": 0
+    },
+    {
+      "provider": "https://rpc.mevblocker.io",
+      "fromBlock": "26083501",
+      "toBlock": "26084000",
+      "matchingEvents": 0
+    },
+    {
+      "provider": "https://rpc.mevblocker.io",
+      "fromBlock": "26084001",
+      "toBlock": "26084500",
+      "matchingEvents": 0
+    },
+    {
+      "provider": "https://rpc.mevblocker.io",
+      "fromBlock": "26084501",
+      "toBlock": "26085000",
+      "matchingEvents": 0
+    },
+    {
+      "provider": "https://rpc.mevblocker.io",
+      "fromBlock": "26085001",
+      "toBlock": "26085500",
+      "matchingEvents": 0
+    },
+    {
+      "provider": "https://rpc.mevblocker.io",
+      "fromBlock": "26085501",
+      "toBlock": "26086000",
+      "matchingEvents": 0
+    },
+    {
+      "provider": "https://rpc.mevblocker.io",
+      "fromBlock": "26086001",
+      "toBlock": "26086500",
+      "matchingEvents": 0
+    },
+    {
+      "provider": "https://rpc.mevblocker.io",
+      "fromBlock": "26086501",
+      "toBlock": "26087000",
+      "matchingEvents": 0
+    },
+    {
+      "provider": "https://rpc.mevblocker.io",
+      "fromBlock": "26087001",
+      "toBlock": "26087500",
+      "matchingEvents": 0
+    },
+    {
+      "provider": "https://rpc.mevblocker.io",
+      "fromBlock": "26087501",
+      "toBlock": "26088000",
+      "matchingEvents": 0
+    },
+    {
+      "provider": "https://rpc.mevblocker.io",
+      "fromBlock": "26088001",
+      "toBlock": "26088500",
+      "matchingEvents": 0
+    },
+    {
+      "provider": "https://rpc.mevblocker.io",
+      "fromBlock": "26088501",
+      "toBlock": "26089000",
+      "matchingEvents": 0
+    },
+    {
+      "provider": "https://rpc.mevblocker.io",
+      "fromBlock": "26089001",
+      "toBlock": "26089500",
+      "matchingEvents": 0
+    },
+    {
+      "provider": "https://rpc.mevblocker.io",
+      "fromBlock": "26089501",
+      "toBlock": "26090000",
+      "matchingEvents": 0
+    }
+  ],
+  "validation": {
+    "method": "unchanged-nft-and-collect-difference",
+    "earnedRaw": [
+      "274940",
+      "65624095827826"
+    ],
+    "collectDeltaRaw": [
+      "274941",
+      "65624095827826"
+    ],
+    "roundingDeltaRaw": [
+      "1",
+      "0"
+    ],
+    "durationSeconds": 120468,
+    "secondsInRange": 50256
+  },
+  "capturedAt": "2026-10-12T13:18:14.654Z"
+}

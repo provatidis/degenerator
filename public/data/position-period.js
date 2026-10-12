@@ -26,16 +26,21 @@ export function validatePositionPeriod(input) {
   const first=points[0],last=points.at(-1),start=periodModelPoint(first);
   if(input.id!=='position-'+first.snapshot.tokenId)throw new Error('Historical position ID differs.');
   const initialPosition=JSON.stringify(first.snapshot.position);
-  let previous=null;
+  let previous=null, previousResult=null;
   for(const point of points){
     if(point.snapshot.tokenId!==first.snapshot.tokenId||point.snapshot.poolAddress!==first.snapshot.poolAddress||JSON.stringify(point.snapshot.position)!==initialPosition)throw new Error('Position accounting changed during the historical case.');
     if(previous&&(BigInt(point.snapshot.block.number)<=BigInt(previous.snapshot.block.number)||point.snapshot.block.timestamp<=previous.snapshot.block.timestamp))throw new Error('Historical checkpoints must be ordered.');
     const result=calculateFixedPositionPeriod(start,periodModelPoint(point));
+    if (previous) {
+      // A plausible total can still conceal an impossible adjacent interval.
+      if (result.earned0 < previousResult.earned0 || result.earned1 < previousResult.earned1) throw new Error('Historical period fee credits cannot decrease.');
+      calculateFixedPositionPeriod(periodModelPoint(previous), periodModelPoint(point));
+    }
     for(const [i,earned] of [result.earned0,result.earned1].entries()){
       const delta=BigInt(point.simulatedCollect[i])-BigInt(first.simulatedCollect[i]);
       if(delta<earned||delta-earned>1n)throw new Error('Historical fees disagree with the independent check.');
     }
-    previous=point;
+    previous=point; previousResult=result;
   }
   const startBlock=BigInt(first.snapshot.block.number),endBlock=BigInt(last.snapshot.block.number);
   if(endBlock-startBlock>10000n)throw new Error('Historical case exceeds the supported block span.');

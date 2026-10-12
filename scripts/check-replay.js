@@ -6,24 +6,27 @@ import { confirmBlock, finalizedBlock } from '../public/data/block.js';
 import { abiWords, encodeInt, encodeUint, encodeWord, uintFromWord, decodeAddress } from '../public/data/abi.js';
 import { V3 } from '../public/data/config.js';
 import { feeGrowthInside, subtractGrowth, Q128 } from '../public/models/v3-fees.js';
+import { validatePositionPeriod } from '../public/data/position-period.js';
 
 // Development-only: read a bounded period for one unchanged NFT. No transactions.
 const endpoint = process.env.REPLAY_RPC || 'https://eth.drpc.org';
 const id = process.argv[2] || '1382030';
 const startNumber = BigInt(process.argv[3] || '26168526');
 const endNumber = BigInt(process.argv[4] || '26168941');
+const checkpointCount = Number(process.argv[6] || 9);
 assert.ok(startNumber > 0n && endNumber > startNumber && endNumber - startNumber <= 10000n, 'Choose a period of 1–10,000 blocks.');
+assert.ok(Number.isInteger(checkpointCount) && checkpointCount >= 2 && checkpointCount <= 32 && BigInt(checkpointCount - 1) <= endNumber - startNumber, 'Choose 2–32 distinct checkpoints.');
 const baseClient=createRpcClient({endpoint});
 let queue=Promise.resolve();
 const client=(method,params=[])=>{
   const task=queue.then(async()=>{
-    await new Promise(resolve=>setTimeout(resolve,200));
+    await new Promise(resolve=>setTimeout(resolve,800));
     for(let attempt=0;;attempt++){
       try{return await baseClient(method,params);}
       catch(error){if(!error.retryable||attempt>=3)throw error;console.log('Provider busy; retrying read '+(attempt+1)+'…');await new Promise(resolve=>setTimeout(resolve,2000*2**attempt));}
     }
   });
-  queue=task.catch(()=>{});return task;
+  queue=task;return task;
 };
 const latest = await finalizedBlock(client);
 assert.ok(endNumber <= BigInt(latest.block.number), 'Both endpoints must already be finalized.');
@@ -49,7 +52,7 @@ assert.ok(BigInt(start.snapshot.position.liquidity)>0n,'The position must exist 
 // IncreaseLiquidity, DecreaseLiquidity and Collect index tokenId first. Reject any
 // matching manager event: equal endpoint balances alone do not establish continuity.
 const eventQueries=[];
-const eventProvider=process.env.REPLAY_LOG_RPC || 'https://ethereum-rpc.publicnode.com';
+const eventProvider=process.env.REPLAY_LOG_RPC || 'https://rpc.mevblocker.io';
 const eventClient=createRpcClient({endpoint:eventProvider,serial:true});
 for(const point of [start,end])await confirmBlock(eventClient,'0x'+BigInt(point.snapshot.block.number).toString(16),point.snapshot.block);
 for(let from=startNumber+1n;from<=endNumber;from+=500n){
@@ -72,8 +75,9 @@ const duration=end.snapshot.block.timestamp-start.snapshot.block.timestamp;
 const seconds=Number((BigInt(end.secondsInside)-BigInt(start.secondsInside)+(1n<<32n))%(1n<<32n));
 assert.ok(duration>0&&duration<2**32&&seconds<=duration,'The range-time counter is inconsistent.');
 const checkpoints=[start];
-for(let i=1;i<8;i++){
-  const number=startNumber+(endNumber-startNumber)*BigInt(i)/8n;
+console.log('Captured start/end and verified position continuity. Reading '+checkpointCount+' checkpoints…');
+for(let i=1;i<checkpointCount-1;i++){
+  const number=startNumber+(endNumber-startNumber)*BigInt(i)/BigInt(checkpointCount-1);
   if(number<=BigInt(checkpoints.at(-1).snapshot.block.number)||number===endNumber)continue;
   const checkpoint=await point(number);
   assert.deepEqual(checkpoint.snapshot.position,start.snapshot.position,'An intermediate position checkpoint differs.');
@@ -84,8 +88,9 @@ for(let i=1;i<8;i++){
     assert.ok(delta>=credits[token]&&delta-credits[token]<=1n,'An intermediate fee check differs.');
   }
   checkpoints.push(checkpoint);
+  console.log('Captured checkpoint '+(i+1)+' of '+checkpointCount+' at block '+number+'.');
 }
 checkpoints.push(end);
-const result={version:1,kind:'fixed-position-period',id:'position-'+id,chainId:1,points:checkpoints,eventQueries,validation:{method:'unchanged-nft-and-collect-difference',earnedRaw:earned.map(String),collectDeltaRaw:collectDelta.map(String),roundingDeltaRaw:collectDelta.map((value,i)=>(value-earned[i]).toString()),durationSeconds:duration,secondsInRange:seconds},capturedAt:new Date().toISOString()};
+const result=validatePositionPeriod({version:1,kind:'fixed-position-period',id:'position-'+id,chainId:1,points:checkpoints,eventQueries,validation:{method:'unchanged-nft-and-collect-difference',earnedRaw:earned.map(String),collectDeltaRaw:collectDelta.map(String),roundingDeltaRaw:collectDelta.map((value,i)=>(value-earned[i]).toString()),durationSeconds:duration,secondsInRange:seconds},capturedAt:new Date().toISOString()});
 console.log(JSON.stringify({id,fee:start.snapshot.position.fee,blocks:[startNumber.toString(),endNumber.toString()],checkpoints:checkpoints.length,validation:result.validation},null,2));
 if(process.argv[5]){await writeFile(process.argv[5],JSON.stringify(result,null,2)+'\n');console.log('Saved '+process.argv[5]);}

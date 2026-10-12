@@ -54,5 +54,5 @@ summary:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-
 
 /* Keep every topic reachable when the larger desktop course list exceeds the screen. */
 @media(min-width:751px){
- .learn-sidebar{max-height:calc(100dvh - 48px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:#52694a transparent;padding:4px}
+ .learn-sidebar{max-height:calc(100dvh - 48px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border-strong) transparent;padding:4px}
 }

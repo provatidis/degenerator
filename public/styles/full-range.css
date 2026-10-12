@@ -9,17 +9,17 @@
 .scenario-field{margin:0 0 18px}
 .scenario-field label{font-size:12px; color:var(--text); display:flex; justify-content:space-between; gap:10px; margin-bottom:9px}
 .scenario-field label span{font-size:10px; color:var(--muted)}
-.scenario-field input{display:block; width:100%; background:var(--surface); border:1px solid var(--border); color:var(--text); padding:12px 14px; border-radius:8px; font-size:20px; font-variant-numeric:tabular-nums}
+.scenario-field input{display:block; width:100%; background:var(--surface); border:1px solid var(--border-strong); color:var(--text); padding:12px 14px; border-radius:8px; font-size:20px; font-variant-numeric:tabular-nums}
 .scenario-field .fine-print{margin-top:9px}
 .scenario-presets{display:flex; gap:7px; margin:-7px 0 23px}
-.scenario-presets button{flex:1; font-size:11px; padding:7px 5px; border:1px solid var(--border); background:var(--surface); color:var(--muted); border-radius:6px}
-.scenario-presets button[aria-pressed=true]{background:#304b3d; color:var(--accent); border-color:#637e6d}
+.scenario-presets button{flex:1; font-size:11px; padding:7px 5px; border:1px solid var(--border-strong); background:var(--surface); color:var(--muted); border-radius:6px}
+.scenario-presets button[aria-pressed=true]{background:var(--accent); color:var(--accent-ink); border-color:var(--accent)}
 .scenario-actions{display:flex; gap:12px; align-items:center; justify-content:space-between; margin-top:13px}
 .scenario-actions .secondary{font-size:12px; padding:10px 12px}
 .text-button{border:0; background:none; color:var(--muted); font-size:12px; padding:8px 0}
 .text-button:hover{color:var(--text)}
 .share-wrap{margin-top:15px; font-size:11px; color:var(--muted); line-height:1.7}
-.share-wrap input{width:100%; border:1px solid var(--border); background:var(--surface); color:var(--text); padding:10px; border-radius:6px; font-size:11px}
+.share-wrap input{width:100%; border:1px solid var(--border-strong); background:var(--surface); color:var(--text); padding:10px; border-radius:6px; font-size:11px}
 .scenario-totals{display:grid; grid-template-columns:1fr 1fr; gap:18px}
 .scenario-totals>div{padding:18px; border:1px solid var(--border); border-radius:10px; background:var(--surface); min-width:0}
 .scenario-totals strong{display:block; font-size:clamp(22px,2.4vw,33px); letter-spacing:-1px; font-weight:500; margin:12px 0 8px; overflow-wrap:anywhere; font-variant-numeric:tabular-nums}
@@ -35,12 +35,12 @@
 .chart-legend{display:flex; gap:13px; font-size:10px; color:var(--muted)}
 .chart-legend span{display:flex; align-items:center; gap:5px}
 .chart-legend i{display:inline-block; width:15px; height:3px}
-.legend-hold{background:#b0bdb3}
+.legend-hold{background:#a9c7f5}
 .legend-lp{background:var(--accent)}
 #scenario-chart{display:block; width:100%; margin-top:15px}
-.scenario-hold-line{fill:none; stroke:#b0bdb3; stroke-width:2; stroke-dasharray:6 5}
-.scenario-hold-dot{fill:#b0bdb3}
-.scenario-marker{fill:none; stroke:#617457; stroke-width:1; stroke-dasharray:4 4}
+.scenario-hold-line{fill:none; stroke:#a9c7f5; stroke-width:2; stroke-dasharray:6 5}
+.scenario-hold-dot{fill:#a9c7f5}
+.scenario-marker{fill:none; stroke:var(--border-strong); stroke-width:1; stroke-dasharray:4 4}
 .scenario-figure .fine-print{margin:0}
 .scenario-assets{display:grid; grid-template-columns:1fr 1fr; gap:22px; border-top:1px solid var(--border); padding-top:18px}
 .scenario-assets h3{font-size:12px; color:var(--muted); font-weight:500; margin-bottom:12px}
@@ -53,7 +53,7 @@
 .scenario-table thead th{font-size:10px; font-weight:500; color:var(--muted); background:var(--surface)}
 .scenario-table tbody th{font-weight:400}
 .scenario-table tr:last-child th,.scenario-table tr:last-child td{border-bottom:0}
-.selected-scenario{background:#2a4437}
+.selected-scenario{background:var(--highlight);box-shadow:inset 3px 0 var(--accent)}
 .scenario-row-button{background:none; border:0; color:var(--text); padding:0; font-size:12px; text-align:left}
 .scenario-row-button:hover{color:var(--accent)}
 .model-details{margin-top:18px; border:1px solid var(--border); border-radius:10px; padding:16px 20px; color:var(--muted); font-size:12px; line-height:1.8}

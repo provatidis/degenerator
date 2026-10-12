@@ -1,14 +1,14 @@
 {
   "id": "./",
-  "name": "Degenerator · Your DeFi playground",
-  "short_name": "Degenerator",
+  "name": "Passiko · See for yourself",
+  "short_name": "Passiko",
   "description": "Explore liquidity ranges, public position snapshots and virtual swaps.",
   "lang": "en",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#101714",
-  "theme_color": "#101714",
+  "background_color": "#172c24",
+  "theme_color": "#172c24",
   "icons": [
     {
       "src": "assets/icon-192.png",

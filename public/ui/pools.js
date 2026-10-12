@@ -80,7 +80,7 @@ export function initPoolSnapshots({ fullRangeLab, rangeLab }) {
     }, 'file');
   });
   $('pool-export').addEventListener('click', () => {
-    if (current) downloadBlob(new Blob([snapshotJSON(current)], { type: 'application/json' }), 'degenerator-ethereum-uniswap-v2-block-' + current.block.number + '.json');
+    if (current) downloadBlob(new Blob([snapshotJSON(current)], { type: 'application/json' }), 'passiko-ethereum-uniswap-v2-block-' + current.block.number + '.json');
   });
   $('pool-apply').addEventListener('click', () => {
     if (!current) return;

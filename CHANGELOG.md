@@ -1,5 +1,11 @@
 # Release history
 
+## 1.10.0 — 2026-10-12
+
+- Rename the app to Passiko and publish at `/passiko/`, with an open-frame p, outlined lowercase wordmark, soft sage accents and forest-green surfaces.
+- Update the site, Learn, error page, metadata, social preview, touch/app icons, result cards, download filenames and documentation together.
+- Preserve existing saved experiments, lesson progress, snapshots, working-draft keys and exported JSON schemas. Previously shared fragments work when moved to the new site path.
+
 ## 1.9.1 — 2026-10-12
 
 - Keep keyboard focus on a selected price when either calculator redraws its comparison table. Clearing a saved comparison and undoing a removal return focus to available controls.
@@ -40,4 +46,4 @@
 - Add block-pinned v3 fee accounting and distinguish new fee credits, recorded owed tokens and estimated collectable balances.
 - Add an applied fee-accounting example and read-only collection verification.
 
-Earlier changes are available in the [commit history](https://github.com/provatidis/degenerator/commits/main/).
+Earlier changes are available in the [commit history](https://github.com/provatidis/passiko/commits/main/).

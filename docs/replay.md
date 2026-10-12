@@ -1,6 +1,6 @@
 # Historical cases: fixed positions
 
-[In-range baseline](https://provatidis.github.io/degenerator/#historical-case) · [Exit and return](https://provatidis.github.io/degenerator/#historical-case=range-return) · [Project overview](../README.md)
+[In-range baseline](https://provatidis.github.io/passiko/#historical-case) · [Exit and return](https://provatidis.github.io/passiko/#historical-case=range-return) · [Project overview](../README.md)
 
 The recorded cases follow unchanged Ethereum Uniswap v3 WETH/USDC positions in the 0.3% pool. Each retains validated snapshots, cumulative range-time counters and independent read-only collection checks. They are fixed-position replays, not arbitrary-range backtests.
 

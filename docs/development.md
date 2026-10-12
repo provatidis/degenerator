@@ -7,8 +7,8 @@
 Requires Node.js 22 or newer. No dependencies or installation step are needed.
 
 ```sh
-git clone https://github.com/provatidis/degenerator.git
-cd degenerator
+git clone https://github.com/provatidis/passiko.git
+cd passiko
 npm start
 ```
 
@@ -72,11 +72,11 @@ The cl-range-v1 model, links, CSV, presentation helpers and result cards are sep
 
 ## Browser identity and sharing
 
-The arrow mark is supplied as an SVG favicon and a 16/32/48-pixel ICO fallback. Opaque 180-pixel Apple touch and 192/512-pixel maskable app icons accompany a manifest scoped to the project directory. The manifest supplies home-screen identity; the app continues to read live chain data only when requested.
+The open-frame p is supplied as an SVG favicon and a 16/32/48-pixel ICO fallback. Opaque 180-pixel Apple touch and 192/512-pixel maskable app icons with inset artwork accompany a manifest scoped to the project directory. The outlined lowercase wordmark in `public/assets/passiko-logo.svg` is shared by all page headers and exported result cards, with no font download. Forest green, soft sage and warm paper define the identity. The manifest supplies home-screen identity; the app continues to read live chain data only when requested.
 
-Canonical, Open Graph and large-image social-card metadata use the published Pages URL. The 1200×630 preview is a committed PNG generated from an editable SVG. Its chart illustrates the default cl-range-v1 scenario before fees. Scenario fragments share the same site preview. A branded 404 page keeps its links inside /degenerator/, while a skip link and JavaScript-disabled notice provide clear entry points. The active skip link preserves shared scenario fragments when moving keyboard focus to the main content.
+Canonical, Open Graph and large-image social-card metadata use the published Pages URL. The 1200×630 preview is a committed PNG generated from an editable SVG. Its chart illustrates the default cl-range-v1 scenario before fees. Scenario fragments share the same site preview. A branded 404 page keeps its links inside /passiko/, while a skip link and JavaScript-disabled notice provide clear entry points. The active skip link preserves shared scenario fragments when moving keyboard focus to the main content.
 
-The structure check verifies linked files, metadata, PNG/ICO dimensions and manifest paths. The local server supplies correct image/manifest types and also serves /degenerator/ to mirror Pages links; missing resources keep HTTP status 404.
+The structure check verifies linked files, metadata, PNG/ICO dimensions and manifest paths. The local server supplies correct image/manifest types and also serves /passiko/ to mirror Pages links; missing resources keep HTTP status 404.
 
 To regenerate the committed raster assets after editing the SVG sources, run node scripts/render-brand-assets.js in an environment with the optional Sharp graphics tool. SHARP_MODULE can point to its module entry file when Sharp is supplied externally. This is a maintainer-only tool, not a website dependency or required build step.
 
@@ -84,21 +84,21 @@ To regenerate the committed raster assets after editing the SVG sources, run nod
 
 The workflow in `.github/workflows/pages.yml` tests the project and publishes only `public/` whenever `main` changes. It also runs tests on pull requests without publishing them. No hosting credentials or backend server are needed.
 
-Enable it once in the repository's **Settings → Pages → Build and deployment → Source → GitHub Actions**. If the first workflow run happened before Pages was enabled, open **Actions → Test and publish Degenerator → Run workflow** and select `main`.
+Enable it once in the repository's **Settings → Pages → Build and deployment → Source → GitHub Actions**. If the first workflow run happened before Pages was enabled, open **Actions → Test and publish Passiko → Run workflow** and select `main`.
 
-After a successful deployment, the preview is available at https://provatidis.github.io/degenerator/. Subsequent pushes to `main` update the same address. Repository settings and the GitHub plan must permit Pages publishing.
+After a successful deployment, the preview is available at https://provatidis.github.io/passiko/. Subsequent pushes to `main` update the same address. Repository settings and the GitHub plan must permit Pages publishing.
 
 ### Existing clones and shared scenarios
 
-The repository was renamed from `GPTCloudTest` to `degenerator`. Update existing clones with:
+The repository was renamed from `GPTCloudTest` to `degenerator`, then to `passiko` for release 1.10.0. Update existing clones with:
 
 ```sh
-git remote set-url origin https://github.com/provatidis/degenerator.git
+git remote set-url origin https://github.com/provatidis/passiko.git
 ```
 
-GitHub redirects old repository links, but does not automatically redirect the old Pages site. For a previously shared scenario, replace `/GPTCloudTest/` in the URL with `/degenerator/` and retain the entire `#scenario=...` fragment. Asset and home links are relative, and new scenario links use the current site address.
+GitHub redirects old repository links, but does not automatically redirect the old Pages site. For a previously shared scenario, replace `/GPTCloudTest/` or `/degenerator/` in the URL with `/passiko/` and retain the entire `#scenario=...` fragment. Asset and home links are relative, and new scenario links use the current site address.
 
-The browser-storage key remains `defi-sandbox-v1`, preserving saved sandbox sessions on the same `provatidis.github.io` origin. A different origin, including a custom domain, has separate browser storage. Existing local checkout directories can keep their names. If a cloud checkout directory is renamed, update its working-directory and startup configuration to the actual path.
+The sandbox key remains `defi-sandbox-v1`; the `degenerator-*` keys for saved experiments, lesson progress, pool/position snapshots and same-tab Learn drafts also stay unchanged. Exported experiment libraries retain their version-1 `degenerator-experiments` kind, so older backups still import. Visible names and new download filenames use Passiko. Keeping these identifiers preserves saved work on the same `provatidis.github.io` origin. A different origin, including a custom domain, has separate browser storage. Existing local checkout directories can keep their names. If a cloud checkout directory is renamed, update its working-directory and startup configuration to the actual path.
 
 
 ## Working drafts during a Learn visit

@@ -1,4 +1,4 @@
-name: Test and publish Degenerator
+name: Test and publish Passiko
 
 on:
   push:

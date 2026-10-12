@@ -1,3 +1,4 @@
+// Keep legacy storage and format identifiers so existing work survives rebranding.
 import { MODEL as FULL_MODEL, validateScenario } from '../models/cp50-v1.js';
 import { MODEL as RANGE_MODEL, validateRange } from '../models/cl-range-v1.js';
 import { validateSnapshot, snapshotView } from './snapshot.js';
@@ -51,7 +52,7 @@ export function validateExperiment(input) {
 }
 export function validateLibrary(input) {
   if (input?.version !== 1) throw new ExperimentVersionError();
-  if (input.kind !== 'degenerator-experiments' || !Array.isArray(input.experiments)) throw new Error('This file is not a Degenerator experiment library.');
+  if (input.kind !== 'degenerator-experiments' || !Array.isArray(input.experiments)) throw new Error('This file is not a Passiko experiment library.');
   if (input.experiments.length > MAX_EXPERIMENTS) throw new Error('Keep at most 50 experiments in one library. Export a backup before making room.');
   const experiments = input.experiments.map(validateExperiment);
   if (new Set(experiments.map(item => item.id)).size !== experiments.length) throw new Error('The experiment file contains repeated IDs.');

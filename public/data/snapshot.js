@@ -1,3 +1,4 @@
+// Keep legacy storage and format identifiers so existing work survives rebranding.
 import { validateProvider } from './provenance.js';
 import { parseSnapshotFile, readSnapshot, writeSnapshot } from './snapshot-store.js';
 export { MAX_SNAPSHOT_BYTES } from './snapshot-store.js';

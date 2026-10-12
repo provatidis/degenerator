@@ -181,7 +181,7 @@ export function initFullRangeLab({ navigation }) {
     }
   });
   $('scenario-export').addEventListener('click', () => {
-    if (current) downloadBlob(new Blob([scenarioCSV(current)], { type: 'text/csv;charset=utf-8' }), 'degenerator-liquidity-scenarios-cp50-v1.csv');
+    if (current) downloadBlob(new Blob([scenarioCSV(current)], { type: 'text/csv;charset=utf-8' }), 'passiko-liquidity-scenarios-cp50-v1.csv');
   });
 
   $('scenario-image').addEventListener('click', async () => {

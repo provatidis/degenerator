@@ -1,3 +1,4 @@
+// Keep legacy storage and format identifiers so existing work survives rebranding.
 import { validateExperimentDraft } from './saved-experiments.js';
 
 export const LEARN_RETURN_KEY = 'degenerator-learn-return-v1';

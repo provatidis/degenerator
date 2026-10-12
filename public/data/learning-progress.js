@@ -1,3 +1,4 @@
+// Keep legacy storage and format identifiers so existing work survives rebranding.
 import { LESSON_IDS, VARIANTS, validateLessonInputs } from '../models/lesson-experiments.js';
 export const LEARNING_KEY = 'degenerator-learning-liquidity-v1';
 export function emptyProgress() { return { version: 1, completed: [], lastLesson: LESSON_IDS[0], drafts: {} }; }

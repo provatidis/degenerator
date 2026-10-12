@@ -1,0 +1,53 @@
+/* Keep the working inputs first; libraries and exports follow the analysis. */
+.intro-actions{display:flex;flex-direction:column;gap:12px;flex:0 0 auto;max-width:100%}
+.intro-actions .primary{width:auto;gap:16px;justify-content:center;min-height:48px}
+.intro-actions>a:last-child{color:var(--accent);font-size:14px;line-height:1.7;text-align:center}
+.quick-changes{border:1px solid var(--border);border-radius:12px;padding:14px 18px;margin:0 0 18px;background:var(--surface)}
+.quick-changes>summary{cursor:pointer;font-size:14px;min-height:28px}
+.quick-changes .guided-experiments{margin:18px 0 0}
+.quick-changes .experiment-card{padding:16px}
+.quick-changes .experiment-card .eyebrow{margin-bottom:8px}
+.quick-changes .experiment-card strong{margin-bottom:6px}
+.scenario-share-card{margin-top:20px}
+.scenario-share-card h3{font-size:18px}
+.scenario-share-card .body-copy{margin:8px 0 18px}
+.scenario-share-card .primary{width:auto;gap:24px}
+.scenario-share-card .scenario-actions{margin-top:0}
+.scenario-share-card .experiment-lab-footer{margin-top:18px}
+.experiment-libraries{margin-top:28px}
+.field-error{color:var(--error);font-size:13px;line-height:1.7;margin:8px 0 0}
+.lab-quick-result{display:none}
+#scenario-results{scroll-margin-top:calc(var(--lab-tabs-height) + 24px)}
+#scenario-controls{scroll-margin-top:calc(var(--lab-tabs-height) + 24px)}
+#scenario-controls:focus{outline:none}
+#scenario-results:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+.mobile-cell-label{display:none}
+.learn-takeaway{font-size:16px;line-height:1.8;color:var(--text);border-left:2px solid var(--accent);padding-left:14px;margin:0 0 18px}
+.evidence-badge{display:inline-flex;align-items:center;border:1px solid var(--border-strong);background:var(--surface);color:var(--muted);border-radius:20px;padding:6px 11px;font-size:12px;line-height:1.6;white-space:normal}
+.lab-heading>.small-badge{max-width:250px}
+@media(max-width:750px){
+ .intro-actions{width:100%;gap:10px}
+ .intro-actions .primary{width:100%;padding:12px 16px}
+ .quick-changes{padding:13px 16px}
+ .quick-changes .guided-experiments{grid-template-columns:1fr}
+ .lab-quick-result{display:block;position:sticky;top:calc(var(--header-height) + var(--lab-tabs-height) + 24px);z-index:21;padding:12px 14px;margin:0 -6px 22px;border:1px solid var(--border-strong);border-radius:10px;background:var(--surface);box-shadow:0 6px 18px #0004}
+ .quick-result-heading{display:flex;align-items:center;justify-content:space-between;gap:10px}
+ .quick-result-heading strong{font-size:16px;font-weight:500;line-height:1.5;overflow-wrap:anywhere}
+ .quick-result-heading .text-button{color:var(--accent);font-size:12px;flex-shrink:0;padding:0;min-height:44px}
+ .lab-quick-result p{font-size:12px;line-height:1.6;color:var(--muted);margin:3px 0 0;overflow-wrap:anywhere}
+ .scenario-section .scenario-field input,.scenario-section .scenario-presets button,.scenario-section .cl-range-presets button{scroll-margin-top:calc(var(--lab-tabs-height) + var(--lab-feedback-height,0px) + 36px)}
+ .scenario-share-card{padding:22px}
+ .scenario-share-card .scenario-actions{gap:10px}
+ .comparison-card .table-scroll,.cl-comparisons .table-scroll{overflow:visible;border:0;border-radius:0}
+ .comparison-card .scenario-table,.cl-comparisons .scenario-table{display:block;min-width:0;width:100%}
+ .comparison-card .scenario-table thead,.cl-comparisons .scenario-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+ .comparison-card .scenario-table tbody,.cl-comparisons .scenario-table tbody{display:grid;gap:14px}
+ .comparison-card .scenario-table tr,.cl-comparisons .scenario-table tr{display:block;border:1px solid var(--border);border-radius:10px;padding:6px 16px;background:var(--surface)}
+ .comparison-card .scenario-table tr.selected-scenario,.cl-comparisons .scenario-table tr.selected-scenario{border-color:var(--accent);background:var(--highlight)}
+ .comparison-card .scenario-table tbody th,.cl-comparisons .scenario-table tbody th{display:block;padding:8px 0;border-bottom:1px solid var(--border)}
+ .comparison-card .scenario-table td,.cl-comparisons .scenario-table td{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:8px 0;white-space:normal;text-align:right;border-bottom:0;font-size:14px}
+ .comparison-card .scenario-row-button,.cl-comparisons .scenario-row-button{font-size:15px;min-height:44px;width:100%;white-space:normal}
+ .scenario-table td>span:last-child{min-width:0;overflow-wrap:anywhere}
+ .mobile-cell-label{display:block;color:var(--muted);font-size:12px;text-align:left}
+ .comparison-card .table-scroll-hint,.cl-comparisons .table-scroll-hint{display:none}
+}

@@ -4,9 +4,9 @@ export function initWorkspaces() {
   const panels = Object.fromEntries(['experiment', 'inspect', 'mechanics', 'replay'].map(key => [key, document.getElementById(key + '-workspace')]));
   const title = document.getElementById('workspace-title');
   const copy = {
-    experiment: ['DEFI PLAYGROUND', 'Compare liquidity scenarios', 'Change a price, range or fee assumption. Compare the outcome with holding.'],
-    inspect: ['RECORDED CHAIN DATA', 'Inspect a pool or position', 'Read principal and fee accounting at one recorded Ethereum block.'],
-    replay: ['RECORDED HISTORY', 'Replay a fixed-range position', 'Follow principal, earned fees and holding through a recorded period.'],
+    experiment: ['HYPOTHETICAL MODELS', 'Compare liquidity scenarios', 'Change a price, range or fee assumption. Compare the outcome with holding.'],
+    inspect: ['RECORDED SNAPSHOTS', 'Inspect a pool or position', 'Read principal and fee accounting at one recorded Ethereum block.'],
+    replay: ['VERIFIED HISTORICAL CASE', 'Replay a fixed-range position', 'Follow principal, earned fees and holding through a recorded period.'],
     mechanics: ['VIRTUAL POOL', 'Explore pool mechanics', 'Swap, deposit and withdraw virtual tokens. Follow the changing reserves.'],
   };
   function select(key) {
@@ -16,11 +16,17 @@ export function initWorkspaces() {
     document.getElementById('workspace-eyebrow').textContent = copy[key][0];
     title.textContent = copy[key][1];
     document.getElementById('workspace-subtitle').textContent = copy[key][2];
-    document.querySelector('.intro-range-link').hidden = key !== 'experiment';
+    document.querySelector('.intro-actions').hidden = key !== 'experiment';
     for (const name of ['experiment', 'inspect']) {
       const link = document.getElementById('nav-' + name);
-      if (key === name || (name === 'experiment' && ['mechanics','replay'].includes(key))) link.setAttribute('aria-current', 'page');
+      if (key === name || (name === 'experiment' && key === 'mechanics') || (name === 'inspect' && key === 'replay')) link.setAttribute('aria-current', 'page');
       else link.removeAttribute('aria-current');
+    }
+    const tools = document.querySelector('.workspace-links');
+    tools.hidden = key === 'mechanics';
+    tools.setAttribute('aria-label', key === 'inspect' ? 'Inspect tools' : key === 'replay' ? 'Recorded history tools' : key === 'mechanics' ? 'Pool mechanics tools' : 'Experiment tools');
+    for (const link of tools.querySelectorAll('[data-workspaces]')) {
+      link.hidden = !link.dataset.workspaces.split(' ').includes(key);
     }
     if (focusWasHidden) title.focus({ preventScroll: true });
   }

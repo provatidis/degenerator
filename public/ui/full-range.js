@@ -1,3 +1,4 @@
+import { labFeedback } from '../lib/lab-feedback.js';
 import { MODEL, DEFAULT_SCENARIO, LIMITS, validateScenario, calculateScenario, comparisonScenarios } from '../models/cp50-v1.js';
 import { scenarioHash } from '../lib/scenario-links.js';
 import { readSharedScenario, RANGE_MODEL } from '../lib/link-router.js';
@@ -13,6 +14,7 @@ export function initFullRangeLab({ navigation }) {
   const { selectLab } = navigation;
   const $ = (id) => document.getElementById(id);
   const fields = { investment: 'scenario-investment', initialPrice: 'scenario-start', futurePrice: 'scenario-future', fees: 'scenario-fees' };
+  const feedback = labFeedback({ prefix: 'scenario', fields, limits: LIMITS, optional: ['fees'] });
   let current = null;
   let startingSource = null;
   let cardURL = null;
@@ -55,11 +57,11 @@ export function initFullRangeLab({ navigation }) {
   function renderTable(result) {
     $('scenario-comparisons').replaceChildren();
     for (const comparison of comparisonScenarios(result)) {
-      const row = document.createElement('tr');
+      const row = document.createElement('tr'); row.setAttribute('role', 'row');
       const selected = comparison.futurePrice === result.futurePrice;
       if (selected) row.className = 'selected-scenario';
       const priceCell = document.createElement('th');
-      priceCell.scope = 'row';
+      priceCell.scope = 'row'; priceCell.setAttribute('role', 'rowheader');
       const button = document.createElement('button');
       button.type = 'button';
       button.className = 'scenario-row-button';
@@ -71,13 +73,16 @@ export function initFullRangeLab({ navigation }) {
       });
       priceCell.append(button);
       row.append(priceCell);
-      for (const [value, className] of [
-        [usd(comparison.holdValue), ''], [usd(comparison.lpValue), ''],
-        [signedUSD(comparison.difference), comparison.difference >= 0 ? 'gain' : 'loss'],
-        [percent(comparison.impermanentLoss), 'muted'],
+      for (const [label, value, className] of [
+        ['Holding', usd(comparison.holdValue), ''], ['LP + assumed fees', usd(comparison.lpValue), ''],
+        ['LP minus holding', signedUSD(comparison.difference), comparison.difference >= 0 ? 'gain' : 'loss'],
+        ['IL before fees', percent(comparison.impermanentLoss), 'muted'],
       ]) {
         const cell = document.createElement('td');
-        cell.textContent = value;
+        cell.setAttribute('role', 'cell');
+        const name = document.createElement('span'); name.className = 'mobile-cell-label'; name.setAttribute('aria-hidden', 'true'); name.textContent = label;
+        const amount = document.createElement('span'); amount.textContent = value;
+        cell.append(name, amount);
         cell.className = className;
         row.append(cell);
       }
@@ -93,15 +98,14 @@ export function initFullRangeLab({ navigation }) {
     $('scenario-image-status').textContent = '';
     $('experiment-status').textContent = '';
     const inputs = readInputs();
-    for (const [key, id] of Object.entries(fields)) {
-      const { min, max } = LIMITS[key];
-      $(id).setAttribute('aria-invalid', String(!Number.isFinite(inputs[key]) || inputs[key] < min || inputs[key] > max));
-    }
+    const fieldError = feedback.validate(inputs);
     $('scenario-share-wrap').hidden = true;
     $('scenario-link-status').textContent = '';
     try {
+      if (fieldError) throw new Error(fieldError);
       const result = calculateScenario(inputs);
       current = result;
+      feedback.result(result);
       $('scenario-origin').textContent = startingSource && result.initialPrice === startingSource.price ? startingSource.label : '';
       $('scenario-origin').hidden = !$('scenario-origin').textContent;
       $('scenario-error').textContent = '';
@@ -139,7 +143,7 @@ export function initFullRangeLab({ navigation }) {
       renderTable(result);
     } catch (error) {
       current = null;
-      $('scenario-error').textContent = error.message;
+      feedback.invalid(error.message);
       $('scenario-results').hidden = true;
       $('scenario-comparison-card').hidden = true;
       $('scenario-invalid').hidden = false;

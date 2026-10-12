@@ -18,6 +18,7 @@ export async function checkNavigation({evaluate,click,fill,navigate,base,nextEve
  const completed=await evaluate("JSON.parse(localStorage.getItem('degenerator-learning-liquidity-v1')||'{\"completed\":[]}').completed");
  await click('nav-inspect');await settle(evaluate);assert.equal(await evaluate('location.hash'),'#inspect');assert.ok(await evaluate('scrollY<=1'));
  await evaluate('scrollTo(0,document.body.scrollHeight)');await click('nav-inspect');await settle(evaluate);assert.ok(await evaluate('scrollY<=1'),'Clicking the active primary link returns to its introduction.');
+ await click('nav-experiment');
  await evaluate("document.querySelector('.workspace-links a[href=\"#lp-lab\"]').click()");await targetClear(evaluate,'lp-lab');
  const tabs=await evaluate("document.querySelector('.lab-switch').getBoundingClientRect().top");const header=await headerVisible(evaluate);assert.ok(tabs>=header.bottom+10,'Lab tabs sit below primary navigation.');
  await evaluate("document.getElementById('lab-full-tab').focus()");

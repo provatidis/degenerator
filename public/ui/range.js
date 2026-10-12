@@ -1,3 +1,4 @@
+import { labFeedback } from '../lib/lab-feedback.js';
 import { MODEL, DEFAULT_RANGE, LIMITS, calculateRange, comparisonRanges, explorerDomain, rangePreset, futurePricePreset, matchHoldingFees } from '../models/cl-range-v1.js';
 import { rangeHash } from '../lib/range-links.js';
 import { readSharedScenario } from '../lib/link-router.js';
@@ -16,6 +17,7 @@ export function initRangeLab({ navigation }) {
     investment: 'cl-investment', initialPrice: 'cl-start', futurePrice: 'cl-future',
     lowerPrice: 'cl-lower', upperPrice: 'cl-upper', fees: 'cl-fees', fullRangeFees: 'cl-full-fees',
   };
+  const feedback = labFeedback({ prefix: 'cl', fields, limits: LIMITS, optional: ['fees', 'fullRangeFees'], range: true });
   let current = null;
   let domain = null;
   let source = null;
@@ -108,9 +110,9 @@ export function initRangeLab({ navigation }) {
   function renderComparisons(result) {
     $('cl-comparisons').replaceChildren();
     for (const row of comparisonRanges(result)) {
-      const tr = document.createElement('tr');
+      const tr = document.createElement('tr'); tr.setAttribute('role', 'row');
       if (row.futurePrice === result.futurePrice) tr.className = 'selected-scenario';
-      const th = document.createElement('th'); th.scope = 'row';
+      const th = document.createElement('th'); th.scope = 'row'; th.setAttribute('role', 'rowheader');
       const button = document.createElement('button');
       button.type = 'button'; button.className = 'scenario-row-button';
       button.textContent = usd(row.futurePrice) + (row.futurePrice === result.futurePrice ? ' · selected' : '');
@@ -120,11 +122,13 @@ export function initRangeLab({ navigation }) {
         if (focused) $('cl-comparisons').querySelector('.selected-scenario button')?.focus({ preventScroll: true });
       });
       th.append(button); tr.append(th);
-      for (const [text, style] of [
-        [STATE_COPY[row.state].title, 'muted'], [usd(row.holdValue), ''], [usd(row.fullRange.lpValue), ''],
-        [usd(row.lpValue), ''], [signedUSD(row.difference), row.difference >= 0 ? 'gain' : 'loss'],
+      for (const [label, text, style] of [
+        ['Range status', STATE_COPY[row.state].title, 'muted'], ['Hold starting mix', usd(row.holdValue), ''], ['50/50 LP', usd(row.fullRange.lpValue), ''],
+        ['Your range LP', usd(row.lpValue), ''], ['Range LP minus holding', signedUSD(row.difference), row.difference >= 0 ? 'gain' : 'loss'],
       ]) {
-        const td = document.createElement('td'); td.textContent = text; td.className = style; tr.append(td);
+        const td = document.createElement('td'); td.setAttribute('role', 'cell'); td.className = style;
+        const name = document.createElement('span'); name.className = 'mobile-cell-label'; name.setAttribute('aria-hidden', 'true'); name.textContent = label;
+        const amount = document.createElement('span'); amount.textContent = text; td.append(name, amount); tr.append(td);
       }
       $('cl-comparisons').append(tr);
     }
@@ -139,14 +143,11 @@ export function initRangeLab({ navigation }) {
     $('cl-share-wrap').hidden = true;
     $('cl-link-status').textContent = '';
     $('cl-link-status').hidden = true;
-    for (const [key, id] of Object.entries(fields)) {
-      const { min, max } = LIMITS[key];
-      const invalid = !Number.isFinite(input[key]) || input[key] < min || input[key] > max
-        || (['lowerPrice', 'upperPrice'].includes(key) && input.lowerPrice >= input.upperPrice);
-      $(id).setAttribute('aria-invalid', String(invalid));
-    }
+    const fieldError = feedback.validate(input);
     try {
+      if (fieldError) throw new Error(fieldError);
       const result = calculateRange(input); current = result;
+      feedback.result(result, STATE_COPY[result.state].title);
       $('cl-error').textContent = '';
       $('cl-results').hidden = false; $('cl-invalid').hidden = true;
       $('cl-starting-mix').hidden = false; $('cl-comparison-card').hidden = false;
@@ -191,7 +192,7 @@ export function initRangeLab({ navigation }) {
       renderPresets(result); renderExplorer(result, updateDomain); renderChart(result); renderComparisons(result);
     } catch (error) {
       current = null;
-      $('cl-error').textContent = error.message;
+      feedback.invalid(error.message);
       $('cl-setup-details').open = true;
       $('cl-close-setup').disabled = true;
       $('cl-results').hidden = true; $('cl-invalid').hidden = false;

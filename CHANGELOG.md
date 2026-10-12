@@ -1,5 +1,13 @@
 # Release history
 
+## 1.11.0 — 2026-10-12
+
+- Open a simple zero-fee baseline directly at the inputs, with a separate entry to Learn. Keep examples and saved libraries below the working labs.
+- Show a compact mobile comparison while editing, put errors beside individual fields, and place save/share controls after the full outcome.
+- Present all comparison columns as labelled rows on mobile. Preserve price selection and keyboard focus.
+- Make secondary navigation specific to each workspace and group verified history under Inspect. Separate quick changes from the ordered example numbering.
+- Distinguish hypothetical models, recorded snapshots and verified history at the workspace entrance. Show the lesson takeaway before its detailed explanation and use a first-visit Start label.
+
 ## 1.10.1 — 2026-10-12
 
 - Separate the charcoal page background, lighter cards and recessed inputs; strengthen control borders and secondary text.

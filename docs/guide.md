@@ -4,9 +4,17 @@
 
 ## Finding a tool and returning to your setup
 
-The top navigation stays visible while scrolling. **Experiment** opens the calculator workspace introduction; **Inspect** opens the pool/position workspace introduction. The tool links below the introduction open a specific lab, saved experiments, the historical cases or the separate Pool mechanics workspace. **Learn** opens the learning document. Existing tool and shared-scenario links still open their targets directly.
+The top navigation stays visible while scrolling. **Experiment** opens the calculator workspace introduction; **Inspect** opens the pool/position workspace introduction. The tool links below the introduction follow the current workspace: calculator tools in Experiment, snapshot sources in Inspect, and a return to experiments from recorded history or Pool mechanics. Historical cases belong to Inspect and remain directly accessible from Experiment. **Learn** opens the learning document. Existing tool and shared-scenario links still open their targets directly.
 
 Switching workspaces or calculator tabs preserves their current inputs. Clicking a same-tab Learn link temporarily retains valid calculator inputs, the selected lab and any matching source snapshot. Returning restores those working drafts; an explicit shared scenario takes precedence. This handoff uses per-tab session storage and is consumed after restoration. If storage is blocked, navigation still works but the handoff cannot be saved. Invalid/incomplete inputs are not captured. Use **Save experiment** and export the library for a durable, portable copy.
+
+## Starting and comparing an experiment
+
+**Start with a simple example** opens the unchanged-price, zero-fee baseline directly at its inputs. **Learn from the beginning** opens the first lesson; advanced users can use **Examples** to open any stage. The example and saved libraries sit after the working labs so they do not delay editing. **Try a quick change** is an optional, unnumbered set of shortcuts; the ordered library remains the progression.
+
+On mobile, a compact comparison of **LP vs holding** stays visible above the fields while you edit. It includes the current assumed cash fees and uses the same result as the full analysis. **Full results** opens the detailed outcome without changing inputs. Incomplete or invalid fields show a nearby message and clear the compact outcome. Optional empty fee inputs mean zero. Save, share and export controls follow the result.
+
+Price-comparison tables keep their columns on desktop. On mobile, each price becomes a labelled card showing all values, including the gap to holding, without horizontal scrolling. Selecting a price still updates the lab and retains keyboard focus.
 
 ## Example progression
 
@@ -57,7 +65,7 @@ Storage failures keep changes for the current tab and explicitly request an expo
 
 ## Learn: Liquidity essentials
 
-Open [Learn](https://provatidis.github.io/passiko/learn.html) for six independent lessons and a final challenge. Every topic is available directly, including shareable lesson fragments such as learn.html#lesson=range-boundaries. Exercises ask for a prediction, show the calculated outcome, and require both a numeric answer and sound reasoning. Hints and three repeatable variations support practice; completion records understanding checks, not simulated profit.
+Open [Learn](https://provatidis.github.io/passiko/learn.html) for six independent lessons and a final challenge. Every topic is available directly, including shareable lesson fragments such as learn.html#lesson=range-boundaries. Exercises ask for a prediction, show the calculated outcome, and require both a numeric answer and sound reasoning. Each result starts with a short takeaway before the detailed explanation. Hints and three repeatable variations support practice; completion records understanding checks, not simulated profit.
 
 The lessons cover swap impact, proportional pool ownership, changing token balances, impermanent loss versus dollar profit, fee break-even, and concentrated range boundaries. The final challenge compares the same starting tokens, differentiates additional fees from the total break-even target, and can export a PNG result card and a reproducible playground link.
 

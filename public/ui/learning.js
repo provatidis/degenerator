@@ -18,6 +18,9 @@ export function initLearning() {
   const courseDetails = $('learn-course');
   courseDetails.open = !matchMedia('(max-width: 750px)').matches;
   function persist() {
+    const started = draft.prediction || draft.ran || draft.answer || draft.variant > 0 || progress.completed.includes(lesson.id);
+    const index = LESSON_IDS.indexOf(lesson.id);
+    $('learn-resume').textContent = started ? 'Continue: ' + lesson.short + ' ↓' : index === 6 ? 'Open the final challenge ↓' : 'Start lesson ' + (index + 1) + ' ↓';
     progress.lastLesson = lesson.id;
     progress.drafts[lesson.id] = draft;
     available = saveProgress(progress);

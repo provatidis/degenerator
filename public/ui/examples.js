@@ -2,6 +2,22 @@ import { EXAMPLE_STAGES, PLAYGROUND_EXAMPLES } from '../learning/example-path.js
 
 export function initExamples({ positionSnapshots, snapshotNavigation, restoreScenario }) {
   const library = document.getElementById('example-library');
+  const start = document.getElementById('example-start');
+  let starting = false;
+  function startAtInputs() {
+    starting = false;
+    requestAnimationFrame(() => {
+      const inputs = document.getElementById('scenario-controls');
+      inputs.focus({ preventScroll: true });
+      inputs.scrollIntoView({ block: 'start', behavior: 'instant' });
+    });
+  }
+  start.href = PLAYGROUND_EXAMPLES[0].href;
+  start.addEventListener('click', event => {
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    if (location.hash === PLAYGROUND_EXAMPLES[0].href) { event.preventDefault(); restoreScenario(); startAtInputs(); }
+    else starting = true;
+  });
   const buttons = document.getElementById('example-levels');
   const cards = document.getElementById('example-cards');
   const note = document.getElementById('example-level-note');
@@ -56,6 +72,7 @@ export function initExamples({ positionSnapshots, snapshotNavigation, restoreSce
     selectLevel(example.level);
     library.open = true;
     if (example.recorded) requestRecorded(example.recorded);
+    if (starting) startAtInputs();
   }
   selectLevel(1);
   window.addEventListener('hashchange', restoreLocation);

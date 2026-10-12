@@ -71,7 +71,7 @@ export async function checkMobileReplay({ evaluate, click, fill, text, navigate,
     await evaluate("document.querySelector('.period-details>summary').click()");
     assert.equal(await evaluate('document.documentElement.scrollWidth<=innerWidth'), true);
     await fill('period-checkpoint', '0'); assert.equal(await text('period-lp'), await text('period-hold'));
-    await click('nav-experiment'); assert.ok(await evaluate('scrollY<=1'));
+    await click('nav-experiment'); await wait(evaluate, "location.hash==='#experiment'&&scrollY<=1");
   }
   console.log('PASS: 390px/320px historical case, milestone controls, exact evidence, anchor clearance and preserved primary navigation');
 }

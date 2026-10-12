@@ -246,7 +246,7 @@ export function initRangeLab({ navigation }) {
     }
   });
   $('cl-export').addEventListener('click', () => {
-    if (current) downloadBlob(new Blob([rangeCSV(current)], { type: 'text/csv;charset=utf-8' }), 'degenerator-range-scenarios-cl-range-v1.csv');
+    if (current) downloadBlob(new Blob([rangeCSV(current)], { type: 'text/csv;charset=utf-8' }), 'passiko-range-scenarios-cl-range-v1.csv');
   });
   $('cl-image').addEventListener('click', async () => {
     if (!current) return;

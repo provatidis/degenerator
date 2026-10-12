@@ -22,7 +22,7 @@ const server = http.createServer(async (request, response) => {
   try {
     const pathname = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);
     // Also mirror the Pages subpath locally so icon and error-page links can be checked.
-    const publicPath = pathname.startsWith('/degenerator/') ? pathname.slice('/degenerator'.length) : pathname;
+    const publicPath = pathname.startsWith('/passiko/') ? pathname.slice('/passiko'.length) : pathname;
     const file = resolve(root, publicPath === '/' ? 'index.html' : '.' + publicPath);
     if (!file.startsWith(root + sep)) {
       response.writeHead(403, headers).end('Forbidden');
@@ -41,6 +41,6 @@ const server = http.createServer(async (request, response) => {
   }
 });
 server.listen(Number(process.env.PORT || 3000), process.env.HOST || '127.0.0.1', () => {
-  console.log('Degenerator listening on port ' + server.address().port);
+  console.log('Passiko listening on port ' + server.address().port);
 });
 for (const signal of ['SIGTERM', 'SIGINT']) process.on(signal, () => server.close());

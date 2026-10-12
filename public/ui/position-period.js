@@ -157,7 +157,7 @@ export function initPositionPeriod({ rangeLab }) {
   $('period-retry').addEventListener('click', () => load(selected));
   $('period-checkpoint').addEventListener('input', () => selectCheckpoint(Number($('period-checkpoint').value)));
   $('period-export').addEventListener('click', () => {
-    if (period) downloadBlob(new Blob([JSON.stringify(period, null, 2) + '\n'], { type: 'application/json' }), 'degenerator-' + period.id + '-' + period.points[0].snapshot.block.number + '-' + period.points.at(-1).snapshot.block.number + '-historical-case.json');
+    if (period) downloadBlob(new Blob([JSON.stringify(period, null, 2) + '\n'], { type: 'application/json' }), 'passiko-' + period.id + '-' + period.points[0].snapshot.block.number + '-' + period.points.at(-1).snapshot.block.number + '-historical-case.json');
   });
   $('period-apply').addEventListener('click', () => {
     if (!period) return;

@@ -16,7 +16,7 @@ import { once } from 'node:events';
 import { fileURLToPath } from 'node:url';
 
 const project = fileURLToPath(new URL('../', import.meta.url));
-const profile = await mkdtemp(join(tmpdir(), 'degenerator-browser-'));
+const profile = await mkdtemp(join(tmpdir(), 'passiko-browser-'));
 const children = [];
 let socket;
 let sequence = 0;
@@ -106,8 +106,8 @@ try {
     const missing = await fetch(base + 'missing');
     assert.equal(missing.status, 404);
     assert.ok((await missing.text()).includes('Page not found'));
-    assert.equal((await fetch(base + 'degenerator/favicon.svg')).status, 200);
-    assert.equal((await fetch(base + 'degenerator/styles/errors.css')).status, 200);
+    assert.equal((await fetch(base + 'passiko/favicon.svg')).status, 200);
+    assert.equal((await fetch(base + 'passiko/styles/errors.css')).status, 200);
     const missingHead = await fetch(base + 'missing', { method: 'HEAD' });
     assert.equal(missingHead.status, 404);
     assert.equal(await missingHead.text(), '');
@@ -203,7 +203,7 @@ try {
   await click('scenario-export');
   const download = await exported;
   await completed;
-  assert.equal(download.suggestedFilename, 'degenerator-liquidity-scenarios-cp50-v1.csv');
+  assert.equal(download.suggestedFilename, 'passiko-liquidity-scenarios-cp50-v1.csv');
   const csv = await readFile(join(profile, download.suggestedFilename), 'utf8');
   assert.ok(csv.startsWith('model,investment_usd,'));
   assert.ok(csv.includes('cp50-v1,5000,2000,3000,250,'));

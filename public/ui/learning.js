@@ -223,7 +223,7 @@ export function initLearning() {
     if (!lesson.reasons.some(([value]) => value === draft.reason)) draft.reason = '';
     if (!draft.prediction) draft.ran = false;
     $('learn-level').textContent = 'Stage ' + stageForLesson(lesson.id).level + ' · ' + stageForLesson(lesson.id).title;
-    $('learn-lesson-title').textContent = lesson.title; document.title = lesson.short + ' · Degenerator Learn';
+    $('learn-lesson-title').textContent = lesson.title; document.title = lesson.short + ' · Passiko Learn';
     $('learn-lesson-number').textContent = index === 6 ? 'FINAL CHALLENGE' : 'LESSON ' + (index + 1) + ' OF 6';
     $('learn-concept').textContent = lesson.concept; $('learn-skill').textContent = lesson.skill;
     $('learn-intro').textContent = lesson.intro; $('learn-prediction-question').textContent = lesson.prediction;

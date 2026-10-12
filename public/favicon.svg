@@ -1,5 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
-  <title>Degenerator</title>
-  <rect width="64" height="64" rx="16" fill="#c5f680"/>
-  <path d="M5 19 19 5M5 5h14v14" transform="translate(8 8) scale(2)" fill="none" stroke="#142011" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><title>Passiko</title><rect width="64" height="64" rx="16" fill="#b8cdb9"/><g id="passiko-mark" color="#274d40"><path d="M15 54V21c0-6 5-11 11-11h9c10 0 17 7 17 17s-7 17-17 17h-7" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="27" r="4" fill="currentColor"/></g></svg>

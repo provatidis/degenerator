@@ -6,7 +6,8 @@ import { fileURLToPath } from 'node:url';
 const { default: sharp } = await import(process.env.SHARP_MODULE || 'sharp');
 const root = new URL('../public/', import.meta.url);
 const favicon = await readFile(new URL('favicon.svg', root), 'utf8');
-const opaque = favicon.replace('rx="16"', 'rx="0"');
+// Keep the whole mark inside the central maskable-icon safe area.
+const opaque = favicon.replace('rx="16"', 'rx="0"').replace('<g id="passiko-mark"', '<g id="passiko-mark" transform="translate(6.4 6.4) scale(.8)"');
 await mkdir(new URL('assets/', root), { recursive: true });
 for (const [name, size] of [['apple-touch-icon.png',180],['icon-192.png',192],['icon-512.png',512]]) {
   await sharp(Buffer.from(opaque)).resize(size,size).png().toFile(fileURLToPath(new URL('assets/' + name, root)));

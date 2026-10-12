@@ -1,8 +1,10 @@
-# Degenerator
+# Passiko
+
+*See for yourself.*
 
 A DeFi playground for learning liquidity mechanics and testing assumptions. Compare providing liquidity with holding the same starting tokens, or inspect a real Uniswap position at a recorded block.
 
-[Open Experiment](https://provatidis.github.io/degenerator/) · [Learn](https://provatidis.github.io/degenerator/learn.html) · [Inspect a position](https://provatidis.github.io/degenerator/#position-lab)
+[Open Experiment](https://provatidis.github.io/passiko/) · [Learn](https://provatidis.github.io/passiko/learn.html) · [Inspect a position](https://provatidis.github.io/passiko/#position-lab)
 
 - **Experiment:** full-range and concentrated-liquidity calculators, ordered examples, and saved comparisons.
 - **Learn:** six interactive lessons and a final challenge. Every topic is available directly.

@@ -13,7 +13,7 @@
 .scenario-field .fine-print{margin-top:9px}
 .scenario-presets{display:flex; gap:7px; margin:-7px 0 23px}
 .scenario-presets button{flex:1; font-size:11px; padding:7px 5px; border:1px solid var(--border); background:var(--surface); color:var(--muted); border-radius:6px}
-.scenario-presets button[aria-pressed=true]{background:#2b3b23; color:var(--accent); border-color:#607847}
+.scenario-presets button[aria-pressed=true]{background:#304b3d; color:var(--accent); border-color:#637e6d}
 .scenario-actions{display:flex; gap:12px; align-items:center; justify-content:space-between; margin-top:13px}
 .scenario-actions .secondary{font-size:12px; padding:10px 12px}
 .text-button{border:0; background:none; color:var(--muted); font-size:12px; padding:8px 0}
@@ -35,11 +35,11 @@
 .chart-legend{display:flex; gap:13px; font-size:10px; color:var(--muted)}
 .chart-legend span{display:flex; align-items:center; gap:5px}
 .chart-legend i{display:inline-block; width:15px; height:3px}
-.legend-hold{background:#a2b1a5}
+.legend-hold{background:#b0bdb3}
 .legend-lp{background:var(--accent)}
 #scenario-chart{display:block; width:100%; margin-top:15px}
-.scenario-hold-line{fill:none; stroke:#a2b1a5; stroke-width:2; stroke-dasharray:6 5}
-.scenario-hold-dot{fill:#a2b1a5}
+.scenario-hold-line{fill:none; stroke:#b0bdb3; stroke-width:2; stroke-dasharray:6 5}
+.scenario-hold-dot{fill:#b0bdb3}
 .scenario-marker{fill:none; stroke:#617457; stroke-width:1; stroke-dasharray:4 4}
 .scenario-figure .fine-print{margin:0}
 .scenario-assets{display:grid; grid-template-columns:1fr 1fr; gap:22px; border-top:1px solid var(--border); padding-top:18px}
@@ -53,7 +53,7 @@
 .scenario-table thead th{font-size:10px; font-weight:500; color:var(--muted); background:var(--surface)}
 .scenario-table tbody th{font-weight:400}
 .scenario-table tr:last-child th,.scenario-table tr:last-child td{border-bottom:0}
-.selected-scenario{background:#263423}
+.selected-scenario{background:#2a4437}
 .scenario-row-button{background:none; border:0; color:var(--text); padding:0; font-size:12px; text-align:left}
 .scenario-row-button:hover{color:var(--accent)}
 .model-details{margin-top:18px; border:1px solid var(--border); border-radius:10px; padding:16px 20px; color:var(--muted); font-size:12px; line-height:1.8}

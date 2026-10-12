@@ -2,7 +2,9 @@
 
 These are durable working choices, not a feature backlog. Revisit them when evidence or the user’s direction changes.
 
-- Degenerator helps people understand liquidity and test assumptions. Guided learning and direct exploration belong in one app.
+- Passiko helps people understand liquidity and test assumptions. Guided learning and direct exploration belong in one app.
+- The identity centres on careful observation and learning through experiments. Liquidity is the current area of depth; the name can accommodate other DeFi subjects later.
+- Rebranding preserves existing browser-storage keys, scenario versions and file-format identifiers. Those are compatibility contracts, independent of visible names and download filenames.
 - Complexity increases predictably across examples. Advanced cases and every lesson remain directly accessible.
 - Learn links carry their setup into Playground. Learning progress, virtual balances, model drafts and recorded snapshots remain independent.
 - Give each task a focused workspace. Preserve public fragments, existing storage schemas and working drafts during navigation.

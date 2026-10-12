@@ -4,40 +4,40 @@
   <meta charset="UTF-8">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; connect-src 'self' https://ethereum-rpc.publicnode.com https://eth.drpc.org; base-uri 'none'; object-src 'none'; form-action 'self'">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#101714">
-  <meta name="description" content="Explore full-range and concentrated liquidity, import pool and position snapshots, and experiment with virtual swaps in Degenerator.">
-  <title>Degenerator · Learn, experiment, inspect</title>
-  <meta name="application-name" content="Degenerator">
-  <meta name="apple-mobile-web-app-title" content="Degenerator">
+  <meta name="theme-color" content="#172c24">
+  <meta name="description" content="Explore full-range and concentrated liquidity, import pool and position snapshots, and experiment with virtual swaps in Passiko.">
+  <title>Passiko · Learn, experiment, inspect</title>
+  <meta name="application-name" content="Passiko">
+  <meta name="apple-mobile-web-app-title" content="Passiko">
   <meta name="color-scheme" content="dark">
-  <link rel="canonical" href="https://provatidis.github.io/degenerator/">
+  <link rel="canonical" href="https://provatidis.github.io/passiko/">
   <link rel="icon" href="favicon.ico" sizes="16x16 32x32 48x48">
   <link rel="icon" href="favicon.svg" type="image/svg+xml" sizes="any">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" sizes="180x180">
   <link rel="manifest" href="site.webmanifest">
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Degenerator">
-  <meta property="og:title" content="Degenerator · Learn, experiment, inspect">
-  <meta property="og:description" content="Explore full-range and concentrated liquidity, import pool and position snapshots, and experiment with virtual swaps in Degenerator.">
-  <meta property="og:url" content="https://provatidis.github.io/degenerator/">
-  <meta property="og:image" content="https://provatidis.github.io/degenerator/assets/social-preview.png">
+  <meta property="og:site_name" content="Passiko">
+  <meta property="og:title" content="Passiko · Learn, experiment, inspect">
+  <meta property="og:description" content="Explore full-range and concentrated liquidity, import pool and position snapshots, and experiment with virtual swaps in Passiko.">
+  <meta property="og:url" content="https://provatidis.github.io/passiko/">
+  <meta property="og:image" content="https://provatidis.github.io/passiko/assets/social-preview.png">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Degenerator. Compare liquidity scenarios using pool snapshots and virtual experiments.">
+  <meta property="og:image:alt" content="Passiko. Learn and experiment with DeFi, with a liquidity range scenario.">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Degenerator · Learn, experiment, inspect">
-  <meta name="twitter:description" content="Explore full-range and concentrated liquidity, import pool and position snapshots, and experiment with virtual swaps in Degenerator.">
-  <meta name="twitter:image" content="https://provatidis.github.io/degenerator/assets/social-preview.png">
-  <meta name="twitter:image:alt" content="Degenerator. Compare liquidity scenarios using pool snapshots and virtual experiments.">
+  <meta name="twitter:title" content="Passiko · Learn, experiment, inspect">
+  <meta name="twitter:description" content="Explore full-range and concentrated liquidity, import pool and position snapshots, and experiment with virtual swaps in Passiko.">
+  <meta name="twitter:image" content="https://provatidis.github.io/passiko/assets/social-preview.png">
+  <meta name="twitter:image:alt" content="Passiko. Learn and experiment with DeFi, with a liquidity range scenario.">
   <link rel="stylesheet" href="styles.css">
   <script type="module" src="main.js"></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
   <header class="topbar">
-    <a class="brand" href="#experiment" aria-label="Degenerator home"><span class="brand-icon"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" fill="none" stroke="currentColor" stroke-width="2"/></svg></span> Degenerator</a>
-    <nav class="site-nav" aria-label="Degenerator"><div class="product-nav"><a id="nav-experiment" href="#experiment" aria-current="page">Experiment</a><a href="learn.html">Learn</a><a id="nav-inspect" href="#inspect">Inspect</a></div></nav>
+    <a class="brand" href="#experiment" aria-label="Passiko home"><img class="brand-logo" src="assets/passiko-logo.svg" width="165" height="40" alt=""></a>
+    <nav class="site-nav" aria-label="Passiko"><div class="product-nav"><a id="nav-experiment" href="#experiment" aria-current="page">Experiment</a><a href="learn.html">Learn</a><a id="nav-inspect" href="#inspect">Inspect</a></div></nav>
   </header>
   <main id="main-content" tabindex="-1">
     <noscript><div class="notice"><p>JavaScript is needed for the calculators and snapshot imports. Enable it to use the playground.</p></div></noscript>
@@ -100,7 +100,7 @@
           <div class="scenario-actions"><button id="scenario-share" class="button secondary" type="button">Copy scenario link</button><button id="scenario-export" class="button secondary" type="button">Export CSV</button><button id="scenario-image" class="button secondary" type="button">Create result card</button></div>
           <div class="experiment-lab-footer"><a href="#saved-experiments">Saved experiments →</a><button id="scenario-reset" class="text-button" type="button">Reset scenario</button></div>
           <p id="scenario-image-status" class="fine-print" role="status"></p>
-          <details id="scenario-card-preview" class="result-card-preview" hidden><summary>Your result card</summary><img id="scenario-card-image" alt="Scenario card with investment, ETH prices, assumed fees and holding versus liquidity outcomes."><a id="scenario-image-download" class="button secondary" download="degenerator-scenario-cp50-v1.png">Download PNG</a></details>
+          <details id="scenario-card-preview" class="result-card-preview" hidden><summary>Your result card</summary><img id="scenario-card-image" alt="Scenario card with investment, ETH prices, assumed fees and holding versus liquidity outcomes."><a id="scenario-image-download" class="button secondary" download="passiko-scenario-cp50-v1.png">Download PNG</a></details>
           <div id="scenario-share-wrap" class="share-wrap" hidden><p id="scenario-share-status" role="status"></p><label class="sr-only" for="scenario-share-url">Scenario link</label><input id="scenario-share-url" type="text" readonly></div>
           <p id="scenario-link-status" class="fine-print" role="status"></p>
           <p class="fine-print">This lab is independent of your saved swap sandbox.</p>
@@ -209,7 +209,7 @@
           <div class="experiment-lab-footer"><a href="#saved-experiments">Saved experiments →</a><button id="cl-reset" class="text-button" type="button">Reset range scenario</button></div>
           <div id="cl-share-wrap" class="share-wrap" hidden><p id="cl-share-status" role="status"></p><label class="sr-only" for="cl-share-url">Range scenario link</label><input id="cl-share-url" type="text" readonly></div>
           <p id="cl-image-status" class="fine-print" role="status"></p></div>
-          <details id="cl-card-preview" class="card result-card-preview cl-card-preview" hidden><summary>Your range result card</summary><img id="cl-card-image" alt="Range result card with price boundaries, starting allocation, assumptions and the three strategy outcomes."><a id="cl-image-download" class="button secondary" download="degenerator-range-cl-range-v1.png">Download PNG</a></details>
+          <details id="cl-card-preview" class="card result-card-preview cl-card-preview" hidden><summary>Your range result card</summary><img id="cl-card-image" alt="Range result card with price boundaries, starting allocation, assumptions and the three strategy outcomes."><a id="cl-image-download" class="button secondary" download="passiko-range-cl-range-v1.png">Download PNG</a></details>
         </div>
       </div>
       <details id="cl-comparison-card" class="card cl-comparisons"><summary>Compare prices at the edges</summary><p class="body-copy">Select a row to explore it. Each row keeps the same range, investment and separate fee assumptions.</p><p class="fine-print table-scroll-hint">Swipe or scroll sideways to see every column.</p><div class="table-scroll" tabindex="0" role="region" aria-label="Range comparison table"><table class="scenario-table cl-table"><caption class="sr-only">Concentrated range outcomes at key future prices</caption><thead><tr><th scope="col">Future ETH price</th><th scope="col">Range status</th><th scope="col">Hold starting mix</th><th scope="col">50/50 LP</th><th scope="col">Your range LP</th><th scope="col">Range LP minus holding</th></tr></thead><tbody id="cl-comparisons"></tbody></table></div></details>
@@ -419,7 +419,7 @@
         <div class="period-actions"><button id="period-apply" class="button secondary" type="button" disabled>Explore this checkpoint in Playground →</button><button id="period-export" class="button secondary" type="button" disabled>Export recorded case</button></div>
       </section>
     </div>
-    <footer><span>Read-only chain data · Virtual experiments</span><span>Degenerator</span></footer>
+    <footer><span>Read-only chain data · Virtual experiments</span><span>Passiko · See for yourself.</span></footer>
   </main>
   <dialog id="experiment-dialog" class="experiment-dialog" aria-labelledby="experiment-dialog-title" aria-describedby="experiment-dialog-context"><form id="experiment-save-form"><h2 id="experiment-dialog-title">Save experiment</h2><p id="experiment-dialog-context" class="fine-print"></p><div class="scenario-field"><label for="experiment-name">Name</label><input id="experiment-name" type="text" maxlength="80" required autocomplete="off" aria-describedby="experiment-dialog-error"></div><div class="scenario-field"><label for="experiment-notes">Notes <span>Optional · 1,000 characters</span></label><textarea id="experiment-notes" maxlength="1000" rows="4" placeholder="What are you testing with this setup?" aria-describedby="experiment-dialog-error"></textarea></div><p id="experiment-dialog-error" class="form-error" role="status"></p><p class="fine-print">Saved in this browser. Export your library for a portable backup.</p><div class="experiment-dialog-actions"><button id="experiment-save-confirm" class="button primary" type="submit">Save experiment</button><button id="experiment-save-cancel" class="button secondary" type="button">Cancel</button></div></form></dialog>
 </body>

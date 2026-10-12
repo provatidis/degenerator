@@ -92,7 +92,7 @@ export async function checkLearning({ evaluate, click, fill, text, navigate, rel
   await click('learn-create-card');
   await evaluate("new Promise((resolve,reject)=>{const until=Date.now()+5000;const check=()=>{if(!document.getElementById('learn-card-preview').hidden&&document.getElementById('learn-card-image').naturalWidth===1200)resolve();else if(Date.now()>until)reject(new Error('Learning card did not render'));else setTimeout(check,25)};check()})");
   const cardPath = await downloadFile('learn-card-download');
-  assert.equal(basename(cardPath), 'degenerator-learning-challenge-cp50-v1.png');
+  assert.equal(basename(cardPath), 'passiko-learning-challenge-cp50-v1.png');
   const card = await readFile(cardPath);
   assert.equal(card.subarray(0,8).toString('hex'),'89504e470d0a1a0a');
   assert.equal(card.readUInt32BE(16),1200);

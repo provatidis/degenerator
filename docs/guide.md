@@ -1,4 +1,4 @@
-# Using Degenerator
+# Using Passiko
 
 [Project overview](../README.md) · [Product decisions](../DECISIONS.md)
 
@@ -25,7 +25,7 @@ Playground's **Choose an example** library follows ten ordered cases. Each state
 | 09 | Applied cases | Fees through a recorded period | Period fees, cumulative time in range and a holding comparison |
 | 10 | Applied cases | Leaving a range and returning | Outside intervals, fee pauses and activity between sampled prices |
 
-Every stage and lesson is directly accessible; variations practice the same concept rather than representing difficulty levels. Advanced users can open [the recorded in-range snapshot](https://provatidis.github.io/degenerator/#example=in-range-position), [fee-accounting snapshot](https://provatidis.github.io/degenerator/#example=position-fees), [in-range replay](https://provatidis.github.io/degenerator/#historical-case) or [exit-and-return replay](https://provatidis.github.io/degenerator/#historical-case=range-return) without completing earlier lessons. The example definitions live in [public/learning/example-path.js](../public/learning/example-path.js).
+Every stage and lesson is directly accessible; variations practice the same concept rather than representing difficulty levels. Advanced users can open [the recorded in-range snapshot](https://provatidis.github.io/passiko/#example=in-range-position), [fee-accounting snapshot](https://provatidis.github.io/passiko/#example=position-fees), [in-range replay](https://provatidis.github.io/passiko/#historical-case) or [exit-and-return replay](https://provatidis.github.io/passiko/#historical-case=range-return) without completing earlier lessons. The example definitions live in [public/learning/example-path.js](../public/learning/example-path.js).
 
 Examples 01–05 carry hypothetical, versioned assumptions through scenario links. Examples 06–08 select Inspect's position source and save the chosen recorded snapshot; calculator inputs change only when the user applies it. Examples 09–10 open the recorded-period workspace. It does not replace the latest position snapshot or automatically change calculator inputs. Examples do not change virtual balances or lesson completion.
 
@@ -45,7 +45,7 @@ These are verified fixed-position replays. They have no editable historical boun
 
 ## Saved experiments
 
-Choose **Save experiment** in either liquidity lab to keep its current model, exact numeric assumptions, name and optional notes. The [Saved experiments library](https://provatidis.github.io/degenerator/#saved-experiments) can search names/notes, filter by model, edit names and notes, and reopen any setup. Reopening loads a working copy; input edits leave the original record intact, and saving again creates a variation. Removal has an Undo action until another record is removed or the tab reloads.
+Choose **Save experiment** in either liquidity lab to keep its current model, exact numeric assumptions, name and optional notes. The [Saved experiments library](https://provatidis.github.io/passiko/#saved-experiments) can search names/notes, filter by model, edit names and notes, and reopen any setup. Reopening loads a working copy; input edits leave the original record intact, and saving again creates a variation. Removal has an Undo action until another record is removed or the tab reloads.
 
 Select two or three records to compare. Outcomes are recalculated from the saved model inputs, rather than storing potentially stale derived results. The comparison shows each LP value, holding value and difference, with expandable assumptions and notes. Its context distinguishes identical starting baskets and future prices, different future-price scenarios, and different budgets/prices/token mixes. A concentrated range and a 50/50 position can have different starting tokens even with equal budgets; each uses its own holding benchmark. Fee inputs remain assumed USD cash, with USDC = $1 and the existing model exclusions.
 
@@ -57,7 +57,7 @@ Storage failures keep changes for the current tab and explicitly request an expo
 
 ## Learn: Liquidity essentials
 
-Open [Learn](https://provatidis.github.io/degenerator/learn.html) for six independent lessons and a final challenge. Every topic is available directly, including shareable lesson fragments such as learn.html#lesson=range-boundaries. Exercises ask for a prediction, show the calculated outcome, and require both a numeric answer and sound reasoning. Hints and three repeatable variations support practice; completion records understanding checks, not simulated profit.
+Open [Learn](https://provatidis.github.io/passiko/learn.html) for six independent lessons and a final challenge. Every topic is available directly, including shareable lesson fragments such as learn.html#lesson=range-boundaries. Exercises ask for a prediction, show the calculated outcome, and require both a numeric answer and sound reasoning. Hints and three repeatable variations support practice; completion records understanding checks, not simulated profit.
 
 The lessons cover swap impact, proportional pool ownership, changing token balances, impermanent loss versus dollar profit, fee break-even, and concentrated range boundaries. The final challenge compares the same starting tokens, differentiates additional fees from the total break-even target, and can export a PNG result card and a reproducible playground link.
 

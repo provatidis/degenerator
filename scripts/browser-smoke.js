@@ -1,3 +1,4 @@
+import { checkMobileInspect } from './browser/inspect-checks.js';
 import { checkExperimentFlow } from './browser/flow-checks.js';
 import { checkPolish } from './browser/polish-checks.js';
 import { checkReplay, checkMobileReplay } from './browser/replay-checks.js';
@@ -551,6 +552,7 @@ try {
   await checkMobileReplay({ evaluate, click, fill, text, navigate, base, call });
   await checkPolish({ evaluate, navigate, call, base });
   await checkExperimentFlow({ evaluate, click, fill, text, navigate, base, call });
+  await checkMobileInspect({ evaluate, call, click, fill, navigate, nextEvent, base });
   assert.deepEqual(errors, [], 'No uncaught browser errors');
   console.log('PASS: mobile layout and interaction; no uncaught browser errors');
 } finally {

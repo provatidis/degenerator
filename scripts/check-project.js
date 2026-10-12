@@ -5,6 +5,12 @@ import { resolve, relative, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('../public/', import.meta.url));
+const { version } = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8'));
+function assetPath(specifier) {
+  const [path, query] = specifier.split('?');
+  if (query) assert.equal(query, 'v=' + version, 'Restamp release assets with npm run release:assets.');
+  return path;
+}
 async function filesIn(directory) {
   const entries = await readdir(directory, { withFileTypes: true });
   const groups = await Promise.all(entries.map(entry => entry.isDirectory() ? filesIn(resolve(directory, entry.name)) : [resolve(directory, entry.name)]));
@@ -19,8 +25,8 @@ for (const file of files.filter(file => file.endsWith('.js'))) {
   const layer = path.split('/')[0];
   const imports = [...source.matchAll(/(?:import|export)\s+[^;]*?\sfrom\s*['"]([^'"]+)['"]/g)].map(match => match[1]);
   for (const specifier of imports) {
-    assert.ok(specifier.startsWith('.') && specifier.endsWith('.js'), path + ': use local explicit module paths.');
-    const target = resolve(dirname(file), specifier);
+    assert.ok(specifier.startsWith('.') && assetPath(specifier).endsWith('.js'), path + ': use local explicit module paths.');
+    const target = resolve(dirname(file), assetPath(specifier));
     assert.ok(relative(root, target) && !relative(root, target).startsWith('..'), path + ': imports must stay inside public/.');
     await access(target);
     dependencies.get(file).push(target);
@@ -43,7 +49,7 @@ function visit(file, path = []) {
 for (const file of dependencies.keys()) visit(file);
 for (const file of files.filter(file => file.endsWith('.css'))) {
   const source = await readFile(file, 'utf8');
-  for (const match of source.matchAll(/@import\s+url\(["']([^"']+)["']\)/g)) await access(resolve(dirname(file), match[1]));
+  for (const match of source.matchAll(/@import\s+url\(["']([^"']+)["']\)/g)) await access(resolve(dirname(file), assetPath(match[1])));
 }
 const html = await readFile(resolve(root, 'index.html'), 'utf8');
 const canonical = html.match(/<link rel="canonical" href="([^"]+)"/)?.[1];
@@ -71,11 +77,16 @@ for (const document of ['index.html', 'learn.html', '404.html']) {
   assert.equal(new Set(ids).size, ids.length, document + ': HTML IDs must be unique.');
   for (const tag of markup.matchAll(/<(?:link|script|img)\b[^>]*>/g)) {
     const source = tag[0].match(/(?:href|src)="([^"]+)"/)?.[1];
-    if (source && !tag[0].includes('rel="canonical"')) await checkAsset(source);
+    if (source && !tag[0].includes('rel="canonical"')) {
+      await checkAsset(source);
+      if (tag[0].startsWith('<script') || tag[0].includes('rel="stylesheet"')) {
+        assert.equal(new URL(source, site).search, '?v=' + version, document + ': stamp entries with npm run release:assets.');
+      }
+    }
   }
 }
 const scripts = [...html.matchAll(/<script[^>]+src="([^"]+)"[^>]*><\/script>/g)].map(match => match[1]);
-assert.deepEqual(scripts, ['main.js'], 'Compose startup through one entry point.');
+assert.deepEqual(scripts.map(assetPath), ['main.js'], 'Compose startup through one entry point.');
 const metadata = Object.fromEntries([...html.matchAll(/<meta (?:name|property)="([^"]+)" content="([^"]*)"/g)].map(match => [match[1], match[2]]));
 for (const field of ['description','og:title','og:description','og:image:alt','twitter:title','twitter:description','twitter:image:alt']) assert.ok(metadata[field]?.trim(), 'Missing identity metadata: ' + field);
 assert.equal(metadata['og:url'],canonical);
@@ -113,7 +124,7 @@ assert.match(html,/<a class="skip-link" href="#main-content">/);
 assert.match(html,/<main id="main-content" tabindex="-1">/);
 assert.match(html,/<noscript>/);
 const learn = await readFile(resolve(root, 'learn.html'), 'utf8');
-assert.match(learn, /<script type=\"module\" src=\"learn-main.js\">/);
+assert.match(learn, /<script type=\"module\" src=\"learn-main.js(?:\?v=[0-9.]+)?\">/);
 assert.match(learn, /id=\"learn-lesson-list\"/);
 assert.match(learn, /href=\"learn.html\" aria-current=\"page\"/);
 assert.match(html, /href=\"learn.html\"/);

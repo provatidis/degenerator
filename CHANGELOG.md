@@ -1,5 +1,11 @@
 # Release history
 
+## 1.11.1 — 2026-10-13
+
+- Commit primary navigation fragments before changing the workspace, including touch navigation from Learn and an edited calculator.
+- Preserve the previous entry-element selector so cached navigation code can initialize the updated page. Version page entries, UI-controller imports and stylesheet imports, with a release stamping command and checks.
+- Add regressions for cached navigation and real touch events at mobile widths, while preserving calculator drafts and existing links.
+
 ## 1.11.0 — 2026-10-12
 
 - Open a simple zero-fee baseline directly at the inputs, with a separate entry to Learn. Keep examples and saved libraries below the working labs.

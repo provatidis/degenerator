@@ -1,6 +1,6 @@
 {
   "name": "passiko",
-  "version": "1.11.0",
+  "version": "1.11.1",
   "private": true,
   "type": "module",
   "description": "A DeFi playground for reproducible liquidity scenarios and virtual pool experiments",
@@ -10,6 +10,7 @@
     "test:browser": "node scripts/browser-smoke.js",
     "check:pool": "node scripts/check-pool.js",
     "check": "node scripts/check-project.js",
+    "release:assets": "node scripts/stamp-release-assets.js",
     "check:position": "node scripts/check-position.js",
     "check:fees": "node scripts/check-position-fees.js",
     "check:replay": "node scripts/check-replay.js"

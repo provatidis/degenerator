@@ -1,3 +1,4 @@
+import { checkReplay, checkMobileReplay } from './browser/replay-checks.js';
 import { checkNavigation, checkMobileNavigation } from './browser/navigation-checks.js';
 import { checkWorkspaces } from './browser/workspace-checks.js';
 import { checkExamples } from './browser/example-checks.js';
@@ -400,6 +401,7 @@ try {
   await checkExamples({ evaluate, click, fill, text, navigate, base });
   await checkSavedExperiments({ evaluate, click, fill, text, navigate, reload, downloadFile, call, base, profile });
   await checkWorkspaces({ evaluate, click, fill, text, navigate, base, downloadFile });
+  await checkReplay({ evaluate, click, fill, text, navigate, base, downloadFile, call });
   await checkNavigation({ evaluate, click, fill, navigate, base, nextEvent, call });
 
   const swappedPortfolio = await text('portfolio');
@@ -544,6 +546,7 @@ try {
   await fill('period-checkpoint','0');assert.equal(await text('period-lp'),await text('period-hold'));
   console.log('PASS: 320px historical case, checkpoint scrubbing and initial holding equality');
   await checkMobileNavigation({ evaluate, click, navigate, base, call });
+  await checkMobileReplay({ evaluate, click, fill, text, navigate, base, call });
   assert.deepEqual(errors, [], 'No uncaught browser errors');
   console.log('PASS: mobile layout and interaction; no uncaught browser errors');
 } finally {

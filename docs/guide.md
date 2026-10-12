@@ -4,13 +4,13 @@
 
 ## Finding a tool and returning to your setup
 
-The top navigation stays visible while scrolling. **Experiment** opens the calculator workspace introduction; **Inspect** opens the pool/position workspace introduction. The tool links below the introduction open a specific lab, saved experiments, the historical case or the separate Pool mechanics workspace. **Learn** opens the learning document. Existing tool and shared-scenario links still open their targets directly.
+The top navigation stays visible while scrolling. **Experiment** opens the calculator workspace introduction; **Inspect** opens the pool/position workspace introduction. The tool links below the introduction open a specific lab, saved experiments, the historical cases or the separate Pool mechanics workspace. **Learn** opens the learning document. Existing tool and shared-scenario links still open their targets directly.
 
 Switching workspaces or calculator tabs preserves their current inputs. Clicking a same-tab Learn link temporarily retains valid calculator inputs, the selected lab and any matching source snapshot. Returning restores those working drafts; an explicit shared scenario takes precedence. This handoff uses per-tab session storage and is consumed after restoration. If storage is blocked, navigation still works but the handoff cannot be saved. Invalid/incomplete inputs are not captured. Use **Save experiment** and export the library for a durable, portable copy.
 
 ## Example progression
 
-Playground's **Choose an example** library follows nine ordered cases. Each states what it adds. The four stages are **Foundations → Comparisons → Ranges → Applied cases**, shared with Learn's lesson groups.
+Playground's **Choose an example** library follows ten ordered cases. Each states what it adds. The four stages are **Foundations → Comparisons → Ranges → Applied cases**, shared with Learn's lesson groups.
 
 | Example | Stage | Case | What it adds |
 | --- | --- | --- | --- |
@@ -23,20 +23,25 @@ Playground's **Choose an example** library follows nine ordered cases. Each stat
 | 07 | Applied cases | A recorded out-of-range position | A single-token NFT snapshot |
 | 08 | Applied cases | Principal, fees and tokens owed | Snapshot fee accounting and collectable balances |
 | 09 | Applied cases | Fees through a recorded period | Period fees, cumulative time in range and a holding comparison |
+| 10 | Applied cases | Leaving a range and returning | Outside intervals, fee pauses and activity between sampled prices |
 
-Every stage and lesson is directly accessible; variations practice the same concept rather than representing difficulty levels. Advanced users can open [the recorded in-range snapshot](https://provatidis.github.io/degenerator/#example=in-range-position), [fee-accounting snapshot](https://provatidis.github.io/degenerator/#example=position-fees) or [historical case](https://provatidis.github.io/degenerator/#historical-case) without completing earlier lessons. The example definitions live in [public/learning/example-path.js](../public/learning/example-path.js).
+Every stage and lesson is directly accessible; variations practice the same concept rather than representing difficulty levels. Advanced users can open [the recorded in-range snapshot](https://provatidis.github.io/degenerator/#example=in-range-position), [fee-accounting snapshot](https://provatidis.github.io/degenerator/#example=position-fees), [in-range replay](https://provatidis.github.io/degenerator/#historical-case) or [exit-and-return replay](https://provatidis.github.io/degenerator/#historical-case=range-return) without completing earlier lessons. The example definitions live in [public/learning/example-path.js](../public/learning/example-path.js).
 
-Examples 01–05 carry hypothetical, versioned assumptions through scenario links. Examples 06–08 select Inspect's position source and save the chosen recorded snapshot; calculator inputs change only when the user applies it. Example 09 opens a separate recorded-period workspace. It does not replace the latest position snapshot or automatically change calculator inputs. Examples do not change virtual balances or lesson completion.
+Examples 01–05 carry hypothetical, versioned assumptions through scenario links. Examples 06–08 select Inspect's position source and save the chosen recorded snapshot; calculator inputs change only when the user applies it. Examples 09–10 open the recorded-period workspace. It does not replace the latest position snapshot or automatically change calculator inputs. Examples do not change virtual balances or lesson completion.
 
-## Historical case: fees through a recorded period
+## Historical cases: fees through a recorded period
 
-Open **Historical case** from Experiment or choose example 09. The shipped case follows Ethereum Uniswap v3 WETH/USDC position #1382030 in the 0.3% pool from block 26168526 to 26168941 on 11 October 2026. Nine checkpoints cover **4,992 seconds** (83 minutes and 12 seconds), with unchanged position liquidity and bounds.
+Open **Historical cases** from Experiment. The **Recorded cases** selector starts with **01 · Stays in range** (example 09), then **02 · Exit and return** (example 10). Each remains directly accessible. The baseline follows Ethereum Uniswap v3 WETH/USDC position #1382030 in the 0.3% pool from block 26168526 to 26168941 on 11 October 2026. Nine checkpoints cover **4,992 seconds** (83 minutes and 12 seconds), with unchanged position liquidity and bounds.
 
-Move the checkpoint slider to compare **Principal + period fees** with **Hold starting principal tokens**. Both strategies begin with the first checkpoint's exact principal tokens; previously accrued fees and recorded owed balances are excluded. Period fees are calculated from recorded fee growth and kept in their earned tokens, rather than entered as assumed cash. Time in range comes from cumulative contract counters, not the nine-point price line. Independent read-only collection simulations and complete position-update event queries check the recorded accounting and continuity.
+The longer case follows position #1375047 in the same 0.3% pool from block 26080000 to 26090000 on 29–30 September 2026. Its 17 checkpoints span **120,468 seconds** (33 hours, 27 minutes and 48 seconds): 50,256 seconds in range and 70,212 outside, with unchanged liquidity and bounds.
 
-Expand **Tokens and verification** for token balances, the selected block/hash and exact fee integers. **Export recorded case** downloads the checkpoint snapshots, counters and verification evidence as JSON. **Explore this checkpoint in Playground** starts a new hypothetical range experiment from the selected checkpoint's principal, price and bounds, with zero assumed future fees. Already collectable tokens stay outside both strategies in that new comparison.
+Move the checkpoint slider to compare **Principal + period fees** with **Hold starting principal tokens**. Both strategies begin with the first checkpoint's exact principal tokens; previously accrued fees and recorded owed balances are excluded. Period fees are calculated from recorded fee growth and kept in their earned tokens, rather than entered as assumed cash. Time in range comes from cumulative contract counters, not the sampled price line. Independent read-only collection simulations and complete position-update event queries check the recorded accounting and continuity.
 
-This is a verified fixed-position replay. It has no editable historical bounds or date window and is not an arbitrary-range backtester or lifetime PnL report. Valuations use the selected pool ratio and USDC = $1; gas and incentives are excluded. See [the replay method and limitations](replay.md) for the fee checks, rounding tolerance and capture procedure.
+Use **Start**, **Outside sample**, **Between samples**, **Return sample** and **End** to jump through the longer case. These identify recorded checkpoints, not exact crossing times. **Since the previous checkpoint** separates interval fees and active time from the cumulative totals. At the Between samples checkpoint, both endpoints are outside, yet counters show 45 minutes and 24 seconds of activity and new fee tokens between them. The chart focuses on recorded prices and identifies any fixed bound outside its view.
+
+Expand **Tokens and verification** for the full UTC window, token balances, the selected block/hash and exact fee/time integers. **How to read this replay** explains sampling, fee tokens versus dollar valuation and the holding benchmark. **Export recorded case** downloads the checkpoint snapshots, counters and verification evidence as JSON. **Explore this checkpoint in Playground** starts a new hypothetical range experiment from the selected checkpoint's principal, price and bounds, with zero assumed future fees. Already collectable tokens stay outside both strategies in that new comparison.
+
+These are verified fixed-position replays. They have no editable historical bounds or date window and do not provide arbitrary-range backtesting or lifetime PnL. Valuations use the selected pool ratio and USDC = $1; gas and incentives are excluded. See [the replay method and limitations](replay.md) for the fee checks, rounding tolerance and capture procedure.
 
 ## Saved experiments
 

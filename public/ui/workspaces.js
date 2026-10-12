@@ -31,8 +31,8 @@ export function initWorkspaces() {
       const scroll = () => requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: 'instant' }));
       if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', scroll, { once: true });
       else scroll();
-    } else if (key === 'mechanics') {
-      const scroll = () => requestAnimationFrame(() => document.getElementById('swap-sandbox').scrollIntoView({ block: 'start', behavior: 'instant' }));
+    } else if (key === 'mechanics' || key === 'replay') {
+      const scroll = () => requestAnimationFrame(() => document.getElementById(key === 'mechanics' ? 'swap-sandbox' : 'historical-case').scrollIntoView({ block: 'start', behavior: 'instant' }));
       if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', scroll, { once: true });
       else scroll();
     }

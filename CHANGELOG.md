@@ -1,5 +1,11 @@
 # Release history
 
+## 1.10.1 — 2026-10-12
+
+- Separate the charcoal page background, lighter cards and recessed inputs; strengthen control borders and secondary text.
+- Use sage fills with dark text for selected navigation and presets, with clear outlines on selected lessons and answers.
+- Match result-card exports, social previews and browser theme colours to the updated surfaces.
+
 ## 1.10.0 — 2026-10-12
 
 - Rename the app to Passiko and publish at `/passiko/`, with an open-frame p, outlined lowercase wordmark, soft sage accents and forest-green surfaces.

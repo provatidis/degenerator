@@ -8,8 +8,8 @@
 .example-library[open]>summary::after{transform:rotate(180deg)}
 .example-library-intro{max-width:780px;color:var(--muted);font-size:15px;line-height:1.8;margin:20px 0}
 .example-levels{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-.example-levels button{border:1px solid var(--border);border-radius:9px;background:var(--surface);color:var(--muted);padding:12px;font-size:14px;min-height:44px}
-.example-levels button[aria-pressed=true]{border-color:#698148;color:var(--accent);background:#223c30}
+.example-levels button{border:1px solid var(--border-strong);border-radius:9px;background:var(--surface);color:var(--muted);padding:12px;font-size:14px;min-height:44px}
+.example-levels button[aria-pressed=true]{border-color:var(--accent);color:var(--accent-ink);background:var(--accent)}
 .example-level-note{color:var(--muted);font-size:14px;line-height:1.8;margin:18px 0}
 .example-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;list-style:none;padding:0;margin:0}
 .example-card{display:flex;flex-direction:column;gap:12px;height:100%;padding:22px;border:1px solid var(--border);border-radius:12px;background:var(--surface)}

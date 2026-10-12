@@ -10,7 +10,7 @@ A DeFi playground for learning liquidity mechanics and testing assumptions. Comp
 - **Historical case:** scrub a verified fixed-position period; inspect earned fees, range time and the holding comparison.
 - **Pool mechanics:** a separate virtual swap and liquidity sandbox, linked from Experiment and Learn.
 
-The calculators use hypothetical prices and assumed cash fees. Position snapshots use recorded on-chain integers. Neither reconstructs a position’s lifetime profit. The interface identifies which kind of result you are viewing.
+The calculators use hypothetical prices and assumed cash fees. Snapshots record on-chain state at one block. The historical case calculates earned fee tokens and time in range over nine checkpoints and 4,992 seconds, with independent accounting checks. These tools do not reconstruct a position’s lifetime profit; the fixed-position replay is not an arbitrary-range backtester. The interface identifies which kind of result you are viewing.
 
 No wallet connection or transactions. The site runs on GitHub Pages; saved work stays in your browser unless exported.
 

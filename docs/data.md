@@ -79,6 +79,12 @@ node scripts/check-position.js 37 public/examples/uniswap-v3-mainnet-37.json
 
 Sources: [Ethereum v3 deployments](https://developers.uniswap.org/docs/protocols/v3/deployments/v3-ethereum-deployments), [position manager interface](https://github.com/Uniswap/v3-periphery/blob/main/contracts/interfaces/INonfungiblePositionManager.sol), [holdings math](https://blog.uniswap.org/uniswap-v3-math-primer-2), [tick arithmetic](https://github.com/Uniswap/v3-sdk/blob/main/src/utils/tickMath.ts), and [liquidity amounts](https://github.com/Uniswap/v3-periphery/blob/main/contracts/libraries/LiquidityAmounts.sol).
 
+### Snapshot balances and period earnings
+
+Example 08's collectable balances belong to one recorded block. They are distinct from the fees earned during example 09's bounded historical period. The [shipped historical case](replay.md) uses nine version-2 position snapshots over 4,992 seconds, verifies unchanged position accounting with complete event queries, and independently checks fee-growth differences against read-only collection simulations. It excludes previously accrued fees and recorded owed balances from both starting strategies; the final period earnings are not the final snapshot's total collectable balance.
+
+The browser opens that bundled case and exports its validated evidence without RPC calls. It offers neither historical-file import nor a user-selected replay window. Applying one checkpoint starts a new principal-only hypothetical range experiment. Arithmetic/file validation and stored simulation results do not authenticate a supplied file's chain origin; independent chain verification is performed by the development capture script described in [replay.md](replay.md#reproduce-the-capture).
+
 ## Provider failures and production policy
 
 Captures attempt each configured public endpoint at most once. Only typed network, timeout, HTTP capacity/server errors or recognized JSON-RPC rate limits trigger fallback. The entire capture restarts on the next provider, with a new finalized block and a final block-identity check; reads from different providers are never combined. Backup requests are sequential to avoid bursts, and a failed serial capture stops its queued reads. The exported provider is the successful source. Public endpoints can both be unavailable; recorded examples and saved files remain usable.
@@ -86,4 +92,3 @@ Captures attempt each configured public endpoint at most once. Only typed networ
 A manager revert with the specific Invalid token ID reason identifies a nonexistent or burned NFT at the captured block. Other reverts and identity/schema failures keep their own error path. Imported provider metadata remains descriptive, not proof of chain origin.
 
 The HTML entry points carry a restrictive Content Security Policy for GitHub Pages, including the two configured RPC origins. The local server also sends it as a header, with frame-ancestors protection (which cannot be enforced by a meta policy). Script/style assets remain local.
-

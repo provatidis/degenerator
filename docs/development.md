@@ -20,7 +20,7 @@ The HTTP server defaults to loopback port 3000. Set `HOST` and `PORT` to change 
 curl --fail http://127.0.0.1:3000/
 ```
 
-Open http://127.0.0.1:3000/ in your browser. No wallet, API key, network connection, or blockchain node is required to run the app locally.
+Open http://127.0.0.1:3000/ in your browser. The hypothetical labs, lessons and bundled recorded cases work without an external network connection. Live snapshots and the development-only chain verifiers need RPC access. No wallet, API key or locally running blockchain node is required.
 
 ## Test
 
@@ -28,9 +28,9 @@ Open http://127.0.0.1:3000/ in your browser. No wallet, API key, network connect
 npm test
 ```
 
-Tests cover swap pricing, reserve conservation, fees, stale-quote rejection, balance validation, liquidity accounting, withdrawals, storage restoration and failures, plus the scenario model, versioned links, and CSV exports.
+Tests cover the sandbox and both hypothetical models, versioned links and exports, v2/v3 snapshot validation, exact v3 fee accounting, fixed-position period accounting and continuity evidence, learning assessments, saved comparisons, Learn-return drafts and storage failures. The bundled historical record is checked locally without RPC calls; `npm run check:replay` separately recaptures and verifies chain history through public providers.
 
-For an optional browser smoke test, install Chromium or set `CHROMIUM_BIN` to its executable, then run `npm run test:browser`. It starts temporary servers and checks actual page interactions at desktop and mobile sizes, including calculator results, copied links, CSV downloads, shared-link restoration, and persistence. The cloud container uses Chromium with its browser sandbox disabled for this local test; the app itself needs no browser installation to serve its files.
+For a local browser smoke test, install Chromium or set `CHROMIUM_BIN` to its executable, then run `npm run test:browser`. It starts temporary servers and checks actual page interactions at desktop and mobile sizes, including calculators, learning, snapshot imports, saved comparisons, the historical checkpoint slider, downloads and persistence. Navigation checks cover sticky-header offsets, direct tool fragments, browser history and returning from Learn. The same suite runs in CI before deployment. The test runner launches Chromium with its browser sandbox disabled; serving the app itself requires no browser installation.
 
 Set `TEST_BASE_URL` to a deployed site or a local server with a project subpath to test that target instead of starting the Node server. The browser smoke test checks that the home link, scripts, styles, and swaps work at that base URL.
 
@@ -42,34 +42,31 @@ The period model lives in `public/models/fixed-position-period.js`; record valid
 
 ## Project structure
 
-- public/main.js: the single composition root. It initializes each UI controller and supplies the lab interfaces they need.
-- public/ui/: explicit initializers for the sandbox, full-range lab, range lab, pool snapshots and navigation. Importing a controller does not start it.
-- public/models/: pure calculations and protocol arithmetic. They do not read the DOM, browser storage or network.
-- public/data/: chain deployment configuration, read-only RPC adapters, snapshot schemas and persistence.
-- public/lib/: scenario links, exports, formatting and rendering utilities.
+- public/main.js and public/learn-main.js: composition roots for Experiment/Inspect and Learn respectively. They initialize each document's controllers and inject the interfaces they need.
+- public/ui/: explicit initializers for the sandbox, both labs, learning, pool/position snapshots, saved experiments, historical replay and navigation. Importing a controller does not start it.
+- public/models/: pure hypothetical calculations, lesson experiments and exact protocol/period arithmetic. They do not read the DOM, browser storage or network.
+- public/data/: deployment configuration, read-only Uniswap v2/v3 adapters, snapshot/period schemas, saved experiments, learning progress and temporary Learn-return storage.
+- public/lib/: compatible scenario links, exports, formatting and rendering utilities.
+- public/learning/: lesson definitions, optional deeper reading and the nine-example progression.
+- public/examples/: bundled pool/position snapshots and the verified fixed-position period record; these open without RPC requests.
 - public/styles/: shared foundation and components followed by feature styles. public/styles.css preserves the existing cascade order.
-- public/index.html: semantic, static markup. Each feature owns its IDs; the structure check rejects duplicates.
+- public/index.html and public/learn.html: semantic, static markup with one module entry point per document. Each feature owns its IDs; the structure check rejects duplicates.
 - scripts/: development, integration and browser checks; test/: reference calculations and adapter/storage contracts.
 - server.js: a local static server; GitHub Pages deploys public/ directly.
 
-Run npm run check to verify module paths, circular dependencies, architectural boundaries, stylesheet imports, unique HTML IDs and the single entry point. CI runs this before calculation and browser tests. Existing scenario.js, amm.js and storage.js exports and storage keys remain compatible.
+Run npm run check to verify module paths, circular dependencies, architectural boundaries, stylesheet imports, unique HTML IDs and document entry points. CI runs this before calculation and browser tests. Existing scenario.js, amm.js and storage.js exports and storage keys remain compatible.
 
 The structure review keeps the current dependency-free deployment. Explicit startup removes cross-controller import side effects; feature styles reduce collisions as labs grow. Shared tab behavior handles keyboard navigation consistently across the sandbox, labs and snapshot sources. ABI decoding, block pinning and snapshot-file/storage handling are shared by both protocol adapters; protocol identity checks remain adapter-specific. Static HTML remains appropriate at this size. Split markup or add a build step when repeated page layouts actually need it. A framework, database or application backend is not needed for read-only, public-chain imports.
 
 ## Architecture and extension policy
 
-The static app remains dependency-free and deployable on GitHub Pages. Calculation models, transport/adapters, versioned persistence, exports and DOM controllers have separate responsibilities:
-
-- public/models/: pure theoretical scenario calculations, guided experiments, and exact protocol arithmetic.
-- public/data/: deployment configuration, read-only RPC transport, the Uniswap v2 adapter, snapshot schemas and storage.
-- public/lib/: formatting, compatible scenario links, CSV output, download handling and result-card rendering.
-- public/ui/: interface controllers, composed by public/main.js.
-- public/scenario.js: compatibility exports for existing integrations and tests.
-- public/examples/: recorded chain fixtures that work without an RPC request.
+The static app remains dependency-free and deployable on GitHub Pages. Keep the model, data, utility and UI responsibilities above separate. `public/scenario.js` retains compatibility exports for existing integrations and tests.
 
 New financial models get their own versioned module and reference/invariant tests. New protocols get a deployment definition, adapter, exact token-unit handling and contract validation. Preserve old model links and storage keys; introduce explicit migrations when schemas change. Unit and desktop/mobile browser tests run before deployment.
 
-Historical replay is the next model milestone. Validate one fixed-range period before expanding to editable ranges or additional deployments. A backend becomes useful for private provider credentials, shared caching, scheduled snapshots or account synchronization. Each can be added behind the data layer without rewriting the calculation models or existing labs.
+Release 1.8.0 shipped the first verified fixed-position period: nine checkpoints over 4,992 seconds for position #1382030 in Ethereum's WETH/USDC 0.3% pool. Next validation cases are longer periods with exits/re-entry and comparisons of existing ranges in the 0.05% pool. Editable historical bounds/windows and arbitrary-range backtesting remain future work; they require evidence beyond sampled prices and global fee growth. See [replay.md](replay.md#next-validation-cases) before extending the model.
+
+A backend becomes useful for private provider credentials, shared caching, scheduled snapshots or account synchronization. Each can be added behind the data layer without rewriting the calculation models or existing labs. No scheduled collector or backend is part of the shipped replay.
 
 The cl-range-v1 model, links, CSV, presentation helpers and result cards are separate modules. A shared link router and accessible lab navigation coordinate the two calculators while preserving cp50-v1 links. Reference tests cover asymmetric funding, outside starts, exact boundaries, continuity, virtual-reserve conservation, wide-range limits, separate fees, numerical bounds and reproducible exports.
 

@@ -7,7 +7,7 @@ These are durable working choices, not a feature backlog. Revisit them when evid
 - Learn links carry their setup into Playground. Learning progress, virtual balances, model drafts and recorded snapshots remain independent.
 - Give each task a focused workspace. Preserve public fragments, existing storage schemas and working drafts during navigation.
 - Explain the result plainly. Keep essential assumptions nearby; put derivations and detailed accounting in optional disclosures.
-- Treat theoretical inputs, recorded facts and historical estimates as different kinds of evidence.
+- Treat hypothetical models, recorded single-block snapshots and independently checked historical accounting as different kinds of evidence.
 - Keep chain reads read-only and block-pinned. Use integers for contract accounting and pure models for calculations.
 - A holding comparison uses that experiment’s exact starting token basket. Fees, withdrawn principal and recorded owed balances must not be conflated.
 - Verify one bounded historical case before presenting editable replay. Hourly price samples alone do not establish arbitrary-range fee earnings.

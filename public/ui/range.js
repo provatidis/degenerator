@@ -114,7 +114,11 @@ export function initRangeLab({ navigation }) {
       const button = document.createElement('button');
       button.type = 'button'; button.className = 'scenario-row-button';
       button.textContent = usd(row.futurePrice) + (row.futurePrice === result.futurePrice ? ' · selected' : '');
-      button.addEventListener('click', () => setFuturePrice(row.futurePrice));
+      button.addEventListener('click', () => {
+        const focused = document.activeElement === button;
+        setFuturePrice(row.futurePrice);
+        if (focused) $('cl-comparisons').querySelector('.selected-scenario button')?.focus({ preventScroll: true });
+      });
       th.append(button); tr.append(th);
       for (const [text, style] of [
         [STATE_COPY[row.state].title, 'muted'], [usd(row.holdValue), ''], [usd(row.fullRange.lpValue), ''],

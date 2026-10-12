@@ -75,6 +75,7 @@ export async function checkSavedExperiments({ evaluate, click, fill, text, navig
   await select(baseline.id);
   assert.equal(await evaluate("Array.from(document.querySelectorAll('[data-compare-id]')).filter(input=>!input.checked).every(input=>input.disabled)"),true,'Comparison selection is limited to three.');
   await click('experiments-clear-selection');
+  assert.ok(await evaluate("document.activeElement.matches('[data-compare-id]')"), 'Clearing selection returns focus to an available comparison checkbox.');
   await fill('experiments-model','cl-range-v1');await evaluate("document.getElementById('experiments-model').dispatchEvent(new Event('change'))");assert.equal(await cards(),2);
   await fill('experiments-model','all');await evaluate("document.getElementById('experiments-model').dispatchEvent(new Event('change'))");
   const exported=await downloadFile('experiments-export'), beforeImport=await library();
@@ -88,6 +89,7 @@ export async function checkSavedExperiments({ evaluate, click, fill, text, navig
   const good=await library();await importFile(badPath);assert.deepEqual(await library(),good);assert.match(await text('experiments-status'),/unsupported version/);
   await action(fees.id,'Remove');assert.equal((await library()).experiments.length,4);
   await click('experiments-undo');assert.equal((await library()).experiments.length,5);
+  assert.equal(await evaluate('document.activeElement.closest("[data-experiment-id]")?.dataset.experimentId'),fees.id,'Undo returns focus to the restored experiment.');
   await reload();assert.equal(await cards(),5);
   assert.equal(await evaluate("localStorage.getItem('defi-sandbox-v1')"),previous[1]);
   assert.equal(await evaluate("localStorage.getItem('degenerator-learning-liquidity-v1')"),previous[2]);

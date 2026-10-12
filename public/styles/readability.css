@@ -11,7 +11,13 @@
 .learn-deeper-content .learn-math-note,.learn-deeper-content .learn-worked-note,.learn-reading-sources>p,.learn-reading-sources li p{font-size:var(--type-detail)}
 .learn-math pre{font-size:var(--type-detail);line-height:1.8;white-space:pre-wrap;overflow-wrap:anywhere}
 .learn-worked-steps li{font-size:14px;line-height:1.8}
-.chart-label{font-size:12px}
+.chart-label{font-size:var(--chart-label-size,12px)}
+.chart-axis-title{transform:translateY(calc(var(--chart-label-size,12px) - 12px))}
+#scenario-chart,#cl-chart,#curve,#period-chart{overflow:visible}
+#scenario-chart,#cl-chart{margin-bottom:20px}
+summary:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:4px}
+.table-scroll-hint{display:none}
+@media(max-width:750px){.table-scroll-hint{display:block;margin:0 0 12px}}
 .experiment-card>span:last-child{font-size:var(--type-detail)}
 .site-nav{flex-wrap:wrap}
 .learn-workspace{grid-template-columns:300px minmax(0,1fr);gap:36px}

@@ -64,7 +64,11 @@ export function initFullRangeLab({ navigation }) {
       button.type = 'button';
       button.className = 'scenario-row-button';
       button.textContent = `${usd(comparison.futurePrice)} · ${percent((comparison.ratio - 1) * 100)}${selected ? ' · selected' : ''}`;
-      button.addEventListener('click', () => { $('scenario-future').value = comparison.futurePrice; render(); });
+      button.addEventListener('click', () => {
+        const focused = document.activeElement === button;
+        $('scenario-future').value = comparison.futurePrice; render();
+        if (focused) $('scenario-comparisons').querySelector('.selected-scenario button')?.focus({ preventScroll: true });
+      });
       priceCell.append(button);
       row.append(priceCell);
       for (const [value, className] of [

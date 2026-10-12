@@ -135,7 +135,9 @@ export function initPositionPeriod({ rangeLab }) {
       $('period-description').textContent = 'Recorded Ethereum WETH/USDC · ' + first.position.fee / 10000 + '% pool · unchanged liquidity and bounds.';
       $('period-window').textContent = utc(first.block.timestamp) + ' → ' + utc(last.block.timestamp);
       buildMilestones(); render();
-      $('period-status').textContent = (invalid ? 'That case is unavailable. Showing the baseline. ' : '') + period.points.length + ' checkpoints · independently checked fees';
+      const dates = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' })
+        .formatRange(new Date(first.block.timestamp * 1000), new Date(last.block.timestamp * 1000));
+      $('period-status').textContent = (invalid ? 'That case is unavailable. Showing the baseline. ' : '') + dates + ' · ' + period.points.length + ' checkpoints · independently checked fees';
       $('period-export').disabled = false; $('period-apply').disabled = false;
       // Loading reveals a much taller panel; resolve deep-link scrolling afterward.
       requestAnimationFrame(() => {

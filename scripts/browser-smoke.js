@@ -1,3 +1,4 @@
+import { checkPolish } from './browser/polish-checks.js';
 import { checkReplay, checkMobileReplay } from './browser/replay-checks.js';
 import { checkNavigation, checkMobileNavigation } from './browser/navigation-checks.js';
 import { checkWorkspaces } from './browser/workspace-checks.js';
@@ -547,6 +548,7 @@ try {
   console.log('PASS: 320px historical case, checkpoint scrubbing and initial holding equality');
   await checkMobileNavigation({ evaluate, click, navigate, base, call });
   await checkMobileReplay({ evaluate, click, fill, text, navigate, base, call });
+  await checkPolish({ evaluate, navigate, call, base });
   assert.deepEqual(errors, [], 'No uncaught browser errors');
   console.log('PASS: mobile layout and interaction; no uncaught browser errors');
 } finally {

@@ -69,7 +69,7 @@ Content lives in public/learning/, pure experiment/assessment logic in public/mo
 
 ## Guided experiments and result cards
 
-The Pump and The Dump keep the current investment/starting price, set ETH to 2x or 0.5x, and clear assumed fees. The Harvest sets assumed fee income to the break-even amount for the current future price; it does not estimate yield.
+**ETH price doubles** and **ETH price halves** keep the current investment/starting price, set ETH to 2× or 0.5×, and clear assumed fees. **Fees needed to match holding** sets assumed fee income to the break-even amount for the current future price; it does not estimate yield.
 
 **Create result card** previews a downloadable 1200x720 PNG with the four assumptions, model version, holding/LP outcomes, before-fee IL, break-even fees, and model limitations. Input changes invalidate the preview so a card cannot silently describe an older scenario.
 

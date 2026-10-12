@@ -28,7 +28,7 @@ Open http://127.0.0.1:3000/ in your browser. The hypothetical labs, lessons and 
 npm test
 ```
 
-Tests cover the sandbox and both hypothetical models, versioned links and exports, v2/v3 snapshot validation, exact v3 fee accounting, fixed-position period accounting and continuity evidence, learning assessments, saved comparisons, Learn-return drafts and storage failures. The bundled historical record is checked locally without RPC calls; `npm run check:replay` separately recaptures and verifies chain history through public providers.
+Tests cover the sandbox and both hypothetical models, versioned links and exports, v2/v3 snapshot validation, exact v3 fee accounting, fixed-position period accounting and continuity evidence, learning assessments, saved comparisons, Learn-return drafts and storage failures. The bundled historical records are checked locally without RPC calls; `npm run check:replay` separately recaptures and verifies chain history through public providers.
 
 For a local browser smoke test, install Chromium or set `CHROMIUM_BIN` to its executable, then run `npm run test:browser`. It starts temporary servers and checks actual page interactions at desktop and mobile sizes, including calculators, learning, snapshot imports, saved comparisons, the historical checkpoint slider, downloads and persistence. Navigation checks cover sticky-header offsets, direct tool fragments, browser history and returning from Learn. The same suite runs in CI before deployment. The test runner launches Chromium with its browser sandbox disabled; serving the app itself requires no browser installation.
 

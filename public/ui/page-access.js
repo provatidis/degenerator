@@ -3,15 +3,18 @@ export function initPageAccess() {
   // Native anchors and scrollIntoView share the measured sticky-header offset.
   const header = document.querySelector('.topbar');
   const tabs = document.querySelector('.lab-switch');
+  const feedback = [...document.querySelectorAll('.lab-quick-result')];
   function refreshOffsets() {
     document.documentElement.style.setProperty('--header-height', header.getBoundingClientRect().height + 'px');
     const height = tabs?.getBoundingClientRect().height;
     if (height) document.documentElement.style.setProperty('--lab-tabs-height', height + 'px');
+    document.documentElement.style.setProperty('--lab-feedback-height', Math.max(0, ...feedback.map(node => node.getBoundingClientRect().height)) + 'px');
   }
   refreshOffsets();
   const observer = new ResizeObserver(refreshOffsets);
   observer.observe(header);
   if (tabs) observer.observe(tabs);
+  for (const node of feedback) observer.observe(node);
   // SVG text scales with its viewBox. Keep labels at least 12 screen pixels
   // on narrow cards, including charts revealed after a workspace/tab switch.
   const charts = [...document.querySelectorAll('svg')].filter(chart => chart.querySelector('.chart-label'));

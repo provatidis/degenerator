@@ -32,7 +32,13 @@ The model follows the holdings relationships in [Uniswap's math primer](https://
 
 Shared links use the versioned cl-range-v1 fragment and all seven inputs (investment, starting/future/lower/upper prices, range fees and full-range fees). They select the correct lab while leaving saved swap balances and the other lab's setup alone. CSV includes both distinct holding benchmarks and exact numeric inputs. A 1200×900 PNG result card includes the range, starting mix, separate fee assumptions and three outcomes. Editing inputs invalidates a previous card.
 
-**Use in range lab** seeds the theoretical setup with the existing v2 snapshot's reserve ratio, a fresh range and zero fee assumptions. It does not import a real v3 position. The v3 snapshot source imports an actual position and its tick-derived range separately; historical replay remains future work.
+**Use in range lab** seeds the theoretical setup with the existing v2 snapshot's reserve ratio, a fresh range and zero fee assumptions. It does not import a real v3 position. The v3 snapshot source imports an actual position and its tick-derived range separately. The verified historical replay is a separate, fixed-position analysis of recorded checkpoints; it is not an extension of this hypothetical range model.
+
+## Verified historical replay
+
+The [recorded case](replay.md) follows one existing Uniswap v3 position with unchanged liquidity and tick bounds through nine snapshots spanning 4,992 seconds. At each checkpoint, principal is recalculated from recorded position and pool state; period fees use cumulative inside-range fee growth from the first checkpoint, and time in range uses the cumulative seconds-inside counter. The record checks position continuity and compares each checkpoint's fee growth with independent read-only `collect` simulations.
+
+This is verified accounting for one fixed on-chain position and period. It is distinct from both hypothetical endpoint models in this document and a single-block position snapshot. It does not model arbitrary hypothetical ranges, recover every price between samples, reconstruct mint deposits or calculate lifetime profit.
 
 ## Liquidity scenario lab
 

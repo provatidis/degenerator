@@ -4,9 +4,13 @@
 
 ## Example progression
 
-Playground's **Choose an example** library follows eight ordered cases: unchanged price, a price increase, a fee target, an in-range model, its price boundary, a recorded in-range NFT, an out-of-range NFT, and a fee-accounting snapshot. Each case states what it adds. The four stages are **Foundations → Comparisons → Ranges → Applied cases**, shared with Learn's lesson groups. Every stage and lesson is directly accessible; variations practice the same concept rather than representing difficulty levels. Advanced users can open [the recorded in-range case](https://provatidis.github.io/degenerator/#example=in-range-position) without completing earlier lessons.
+Playground's **Choose an example** library follows nine ordered cases: unchanged price, a price increase, a fee target, an in-range model, its price boundary, a recorded in-range NFT, an out-of-range NFT, a fee-accounting snapshot, and a verified fixed-position replay. Each case states what it adds. The four stages are **Foundations → Comparisons → Ranges → Applied cases**, shared with Learn's lesson groups. Every stage and lesson is directly accessible; variations practice the same concept rather than representing difficulty levels. Advanced users can open [the recorded in-range case](https://provatidis.github.io/degenerator/#example=in-range-position) or [historical case](https://provatidis.github.io/degenerator/#historical-case) without completing earlier lessons.
 
-Opening a model example carries versioned assumptions through the existing scenario link. Opening a recorded case selects the position snapshot source and saves that snapshot; calculator inputs change only when the user applies it. Examples do not change virtual balances or lesson completion.
+Opening a model example carries versioned assumptions through the existing scenario link. Opening a recorded position example selects the position snapshot source and saves that snapshot. The historical example opens its recorded period in the replay workspace and leaves the saved position snapshot alone. Neither recorded flow changes calculator inputs until the user applies the position or a replay checkpoint. Examples do not change virtual balances or lesson completion.
+
+## Historical case
+
+The historical case follows position #1382030 through nine recorded checkpoints over 4,992 seconds (83 minutes and 12 seconds). It shows principal, fees earned during the period and time in range, with position continuity and fee accounting checked against read-only collection simulations. It is one verified fixed-position replay, not an arbitrary-range backtester; the line between checkpoints does not reconstruct every price or fee event. See [the replay method and evidence](replay.md).
 
 ## Saved experiments
 

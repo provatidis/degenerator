@@ -21,7 +21,7 @@
 .learn-entry-links{display:flex;flex-wrap:wrap;gap:12px 24px;margin:0 0 24px}
 .learn-entry-links a{font-size:14px;line-height:1.8;color:var(--accent)}
 .learn-path-group{padding:0;list-style:none}
-.learn-path-group>h3{font-size:12px;line-height:1.8;color:var(--accent);margin:18px 8px 7px;font-weight:600}
+.learn-path-group>h2{font-size:12px;line-height:1.8;color:var(--accent);margin:18px 8px 7px;font-weight:600}
 .learn-path-group:first-child>h3{margin-top:0}
 .learn-path-group>ol{list-style:none;padding:0;margin:0}
 .learn-level{font-size:13px;color:var(--muted);line-height:1.7;margin:20px 0 -8px}

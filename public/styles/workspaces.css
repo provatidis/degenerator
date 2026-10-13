@@ -3,6 +3,7 @@
 .workspace-links a,.workspace-back{color:var(--muted);font-size:14px;line-height:1.7;min-height:44px;display:inline-flex;align-items:center}
 .workspace-links a:hover,.workspace-back:hover{color:var(--accent)}
 .workspace-back{margin-bottom:20px}
+.workspace-tools-toggle{display:none}
 #workspace-title:focus{outline:none}
 #inspect-workspace .pool-section{margin-top:0}
 @media(max-width:750px){.workspace-links{gap:4px 20px}.topbar{height:auto;min-height:70px;flex-direction:column;align-items:flex-start;gap:12px;padding:16px 20px}.topbar .site-nav{display:flex;width:100%}.topbar .product-nav{gap:10px;width:100%}.topbar .product-nav a{flex:1;text-align:center}}
@@ -15,6 +16,19 @@ html{scroll-padding-top:calc(var(--header-height) + 12px)}
 .lab-switch{top:calc(var(--header-height) + 12px)}
 @media(min-width:751px){.learn-sidebar{top:calc(var(--header-height) + 24px);max-height:calc(100dvh - var(--header-height) - 48px);overflow-y:auto}}
 @media(max-width:360px){.topbar{padding:12px}}
+
+@media(max-width:750px){
+  .workspace-tools{margin:0 0 18px;border-bottom:1px solid var(--border)}
+  .workspace-tools-toggle{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:44px;padding:8px 0;border:0;background:transparent;color:var(--text);font:inherit;font-size:14px;text-align:left}
+  .workspace-tools-toggle>span:last-child{font-size:18px;color:var(--muted)}
+  .workspace-tools-toggle[aria-expanded=true]>span:last-child{transform:rotate(180deg)}
+  .workspace-tools-toggle[aria-expanded=false]+.workspace-links{display:none}
+  .workspace-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 12px;margin:0;padding:8px 0 12px;border:0}
+  .workspace-links a{line-height:1.4}
+  main{padding-top:22px}
+  .intro{gap:12px;margin-bottom:16px}
+  .intro h1{margin-bottom:8px}
+}
 
 .lab-group .scenario-section,#cl-results{scroll-margin-top:calc(var(--lab-tabs-height) + 24px)}
 .scenario-section :is(input,select,button,summary){scroll-margin-top:calc(var(--lab-tabs-height) + 24px)}

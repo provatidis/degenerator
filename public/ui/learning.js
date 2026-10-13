@@ -1,21 +1,21 @@
 import { stageForLesson } from '../learning/example-path.js';
-import { DEEPER_READING } from '../learning/deeper-reading.js?v=1.14.0';
-import { lessonWalkthrough } from '../lib/lesson-walkthrough.js?v=1.14.0';
-import { LESSONS } from '../learning/liquidity-essentials.js?v=1.14.0';
-import { LESSON_IDS, VARIANTS, lessonSetup, runLesson, checkLesson } from '../models/lesson-experiments.js?v=1.14.0';
-import { checkLessonUnderstanding } from '../models/lesson-application.js?v=1.14.0';
-import { lessonApplicationCopy } from '../lib/lesson-application-copy.js?v=1.14.0';
-import { newChoiceSeed, validChoiceSeed } from '../lib/learning-choices.js?v=1.14.0';
-import { learningChoices, learningMetric, learningPitfall } from '../lib/learning-elements.js?v=1.14.0';
-import { POOL_PITFALLS } from '../learning/pool-pitfalls.js?v=1.14.0';
-import { managementLessonFromHash } from '../lib/management-links.js?v=1.14.0';
-import { readProgress, saveProgress } from '../data/learning-progress.js?v=1.14.0';
+import { DEEPER_READING } from '../learning/deeper-reading.js?v=1.15.0';
+import { lessonWalkthrough } from '../lib/lesson-walkthrough.js?v=1.15.0';
+import { LESSONS } from '../learning/liquidity-essentials.js?v=1.15.0';
+import { LESSON_IDS, VARIANTS, lessonSetup, runLesson, checkLesson } from '../models/lesson-experiments.js?v=1.15.0';
+import { checkLessonUnderstanding } from '../models/lesson-application.js?v=1.15.0';
+import { lessonApplicationCopy } from '../lib/lesson-application-copy.js?v=1.15.0';
+import { newChoiceSeed, validChoiceSeed } from '../lib/learning-choices.js?v=1.15.0';
+import { learningChoices, learningMetric, learningPitfall } from '../lib/learning-elements.js?v=1.15.0';
+import { POOL_PITFALLS } from '../learning/pool-pitfalls.js?v=1.15.0';
+import { managementLessonFromHash } from '../lib/management-links.js?v=1.15.0';
+import { readProgress, saveProgress } from '../data/learning-progress.js?v=1.15.0';
 import { fmt, usd, signedUSD, percent } from '../lib/format.js';
 import { scenarioHash } from '../lib/scenario-links.js';
 import { rangeHash } from '../lib/range-links.js';
 import { resultCardBlob } from '../lib/result-card.js';
 import { appliedLessonFromHash } from '../lib/applied-lessons.js';
-import { tokenBalanceNarration, benchmarkNarration, lessonReasonFeedback } from '../lib/lesson-narration.js?v=1.14.0';
+import { tokenBalanceNarration, benchmarkNarration, lessonReasonFeedback } from '../lib/lesson-narration.js?v=1.15.0';
 
 export function initLearning() {
   const $ = id => document.getElementById(id);
@@ -319,7 +319,7 @@ export function initLearning() {
     const stage = stageForLesson(item.id);
     if (stage.level !== lastLevel) {
       const group = document.createElement('li'); group.className = 'learn-path-group';
-      const heading = document.createElement('h3'); heading.textContent = stage.level + ' · ' + stage.title;
+      const heading = document.createElement('h2'); heading.textContent = stage.level + ' · ' + stage.title;
       groupList = document.createElement('ol'); group.append(heading, groupList);
       overview.append(group); lastLevel = stage.level;
     }

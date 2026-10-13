@@ -65,7 +65,7 @@ async function checkAsset(source) {
   assert.ok(!relative(root, path).startsWith('..'));
   await access(path);
 }
-for (const document of ['index.html', 'learn.html', '404.html']) {
+for (const document of ['index.html', 'learn.html', 'about.html', 'methods.html', '404.html']) {
   const markup = await readFile(resolve(root, document), 'utf8');
   const policy = markup.match(/<meta http-equiv="Content-Security-Policy" content="([^"]+)"/)?.[1];
   assert.ok(policy, document + ': provide the production CSP in HTML.');

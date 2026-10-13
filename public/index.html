@@ -30,8 +30,8 @@
   <meta name="twitter:description" content="Explore full-range and concentrated liquidity, import pool and position snapshots, and experiment with virtual swaps in Passiko.">
   <meta name="twitter:image" content="https://provatidis.github.io/passiko/assets/social-preview.png">
   <meta name="twitter:image:alt" content="Passiko. Learn and experiment with DeFi, with a liquidity range scenario.">
-  <link rel="stylesheet" href="styles.css?v=1.14.0">
-  <script type="module" src="main.js?v=1.14.0"></script>
+  <link rel="stylesheet" href="styles.css?v=1.15.0">
+  <script type="module" src="main.js?v=1.15.0"></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
@@ -44,7 +44,10 @@
     <section class="intro">
       <div><p id="workspace-eyebrow" class="eyebrow evidence-badge">HYPOTHETICAL MODELS</p><h1 id="workspace-title" tabindex="-1">Compare liquidity scenarios</h1><p id="workspace-subtitle" class="subtitle">Change a price, range or fee assumption. Compare the outcome with holding.</p></div><div id="experiment-entry" class="intro-actions intro-range-link"><a id="example-start" class="button primary" href="#lp-lab">Start with a simple example →</a><a href="learn.html#lesson=swap-impact">Learn from the beginning →</a></div>
     </section>
-    <nav class="workspace-links" aria-label="Experiment tools"><a href="#lp-lab" data-workspaces="experiment">Full-range lab</a><a href="#range-lab" data-workspaces="experiment">Range lab</a><a href="#example-library" data-workspaces="experiment">Examples</a><a href="#saved-experiments" data-workspaces="experiment">Saved experiments</a><a href="#pool-lab" data-workspaces="inspect" hidden>Pool snapshot</a><a href="#position-lab" data-workspaces="inspect" hidden>V3 position</a><a href="#historical-case" data-workspaces="experiment inspect replay">Historical cases</a><a href="#swap-sandbox" data-workspaces="experiment mechanics">Pool mechanics</a><a href="#experiment" data-workspaces="inspect mechanics replay" hidden>Back to experiments</a></nav>
+    <div id="workspace-tools" class="workspace-tools">
+      <button id="workspace-tools-toggle" class="workspace-tools-toggle" type="button" aria-expanded="false" aria-controls="workspace-tool-links"><span id="workspace-tools-label">Explore experiment tools</span><span aria-hidden="true">⌄</span></button>
+    <nav id="workspace-tool-links" class="workspace-links" aria-label="Experiment tools"><a href="#lp-lab" data-workspaces="experiment">Full-range lab</a><a href="#range-lab" data-workspaces="experiment">Range lab</a><a href="#example-library" data-workspaces="experiment">Examples</a><a href="#saved-experiments" data-workspaces="experiment">Saved experiments</a><a href="#pool-lab" data-workspaces="inspect" hidden>Pool snapshot</a><a href="#position-lab" data-workspaces="inspect" hidden>V3 position</a><a href="#historical-case" data-workspaces="experiment inspect replay">Historical cases</a><a href="#swap-sandbox" data-workspaces="experiment mechanics">Pool mechanics</a><a href="#experiment" data-workspaces="inspect mechanics replay" hidden>Back to experiments</a></nav>
+    </div>
     <div id="experiment-workspace" class="app-workspace">
     <div id="liquidity-labs" class="lab-group">
     <div class="lab-switch" role="tablist" aria-label="Liquidity experiments">
@@ -426,7 +429,15 @@
         <div class="period-actions"><button id="period-apply" class="button secondary" type="button" disabled>Explore this checkpoint in Playground →</button><button id="period-export" class="button secondary" type="button" disabled>Export recorded case</button></div>
       </section>
     </div>
-    <footer><span>Read-only chain data · Virtual experiments</span><span>Passiko · See for yourself.</span></footer>
+    <footer class="site-footer">
+      <span>Passiko · See for yourself.</span>
+      <nav aria-label="Project information">
+        <a href="methods.html" target="_blank" rel="noopener noreferrer">Methods ↗</a>
+        <a href="https://github.com/provatidis/passiko" target="_blank" rel="noopener noreferrer">Source ↗</a>
+        <a href="about.html" target="_blank" rel="noopener noreferrer">About ↗</a>
+        <a href="https://github.com/provatidis/passiko/issues/new?title=Feedback%3A%20&amp;body=Topic%20or%20page%3A%0A%0AWhat%20felt%20unclear%20or%20unexpected%3F%0A%0AWhat%20were%20you%20trying%20to%20understand%3F%0A" target="_blank" rel="noopener noreferrer">Feedback ↗</a>
+      </nav>
+    </footer>
   </main>
   <dialog id="experiment-dialog" class="experiment-dialog" aria-labelledby="experiment-dialog-title" aria-describedby="experiment-dialog-context"><form id="experiment-save-form"><h2 id="experiment-dialog-title">Save experiment</h2><p id="experiment-dialog-context" class="fine-print"></p><div class="scenario-field"><label for="experiment-name">Name</label><input id="experiment-name" type="text" maxlength="80" required autocomplete="off" aria-describedby="experiment-dialog-error"></div><div class="scenario-field"><label for="experiment-notes">Notes <span>Optional · 1,000 characters</span></label><textarea id="experiment-notes" maxlength="1000" rows="4" placeholder="What are you testing with this setup?" aria-describedby="experiment-dialog-error"></textarea></div><p id="experiment-dialog-error" class="form-error" role="status"></p><p class="fine-print">Saved in this browser. Export your library for a portable backup.</p><div class="experiment-dialog-actions"><button id="experiment-save-confirm" class="button primary" type="submit">Save experiment</button><button id="experiment-save-cancel" class="button secondary" type="button">Cancel</button></div></form></dialog>
 </body>

@@ -9,8 +9,8 @@ export function appliedApplication(id, question) {
     feedback: 'Collecting those fee tokens transfers earned assets to the owner. With liquidity unchanged, it does not remove or reinvest the principal.'};
   if (id === 'between-samples') return {
     expected: 'not-proof', context: 'Imagine having just two price samples that are both inside the range, rather than the two outside samples in the recorded question interval.',
-    question: 'Do those two samples alone prove that the position stayed active for the entire interval?',
-    choices: [['not-proof','No. Price could leave the range and return between samples.'],['whole','Yes. Two in-range samples prove continuous activity.'],['no-fees','No. Two in-range samples prove that no fees accrued.']],
+    question: 'What do those two observations establish about the interval?',
+    choices: [['not-proof','The sampled prices are inside; the intervening path is unknown.'],['whole','The position was active throughout the time between both samples.'],['no-fees','Price stayed stable, so no swap fees accrued between samples.']],
     hint: 'A sampled status describes an instant. Counter differences supply evidence about the time between samples.',
     feedback: 'Two in-range samples cannot establish the entire path. An exit and return could occur between them; elapsed range-time accounting provides separate evidence.'};
   if (id !== 'period-vs-holding') throw new Error('Choose an applied exercise.');

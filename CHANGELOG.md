@@ -1,5 +1,12 @@
 # Release history
 
+## 1.15.0 — 2026-10-13
+
+- Keep lesson hints and ungraded predictions while making explanatory choices more believable. Practical follow-ups now change their conclusion with the supplied fees, costs or removal of liquidity; all totals are provided.
+- Replace the mobile rows of secondary links with an expandable tools menu. Keep desktop links visible, preserve navigation and drafts, and correct Learn’s sidebar heading order.
+- Add About and Methods pages with clear evidence boundaries and shared access to methods, source and feedback. Keep imported-file validation distinct from independent chain-state verification.
+- Extend checks for changing situations, mobile tools, project-information pages and restoration. Preserve existing lesson IDs, completion, historical records and saved experiments. Legacy pre-rebrand website links are intentionally unsupported.
+
 ## 1.14.0 — 2026-10-13
 
 - Add three practical lessons after the essentials: range widths, fee tiers and APR, then exits, returns and management costs. Each has three situations and checks explanation/application without any calculation field.

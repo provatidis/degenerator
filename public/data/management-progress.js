@@ -1,5 +1,5 @@
-import { MANAGEMENT_IDS, MANAGEMENT_VARIANTS } from '../models/range-decisions.js?v=1.14.0';
-import { validChoiceSeed } from '../lib/learning-choices.js?v=1.14.0';
+import { MANAGEMENT_IDS, MANAGEMENT_VARIANTS } from '../models/range-decisions.js?v=1.15.0';
+import { validChoiceSeed } from '../lib/learning-choices.js?v=1.15.0';
 export const MANAGEMENT_KEY = 'passiko-range-learning-v1';
 export const emptyManagementProgress = () => ({version:1,completed:[],drafts:{}});
 export function parseManagementProgress(value) {

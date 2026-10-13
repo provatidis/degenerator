@@ -26,6 +26,8 @@ The prior course covered mechanisms well but placed several practical cautions o
 | Between samples | Endpoints or a plotted line describe every crossing; active time pays fees. | Interpret counters separately from fee accounting; apply two inside samples. |
 | Period versus holding | A short, before-cost advantage guarantees longer-term performance. | Name period and basket; read supplied values after a hypothetical LP-only cost. |
 
+Hints are part of learning, and predictions remain ungraded. Wrong answers describe plausible misconceptions without relying on conspicuous absolutes. Practical follow-ups add supplied final values or change whether liquidity was removed, so the observation changes the conclusion. All needed totals are displayed; learners do not calculate them.
+
 Every topic is directly accessible. Three repeatable situations in each practical topic change the observation, while retaining the conceptual scope. An unchanged-price width situation explicitly says both positions are active, rather than implying one has exited.
 
 ## Evidence boundaries

@@ -22,7 +22,7 @@ export async function checkManagementLearning({evaluate,click,text,navigate,relo
     await choose('manage-reason',id==='range-width'?'budget':id==='fee-tiers'?'clock':'liquidated');await choose('manage-application',application);await click('manage-check');
     assert.equal(await text('manage-feedback-title'),'Review your answers.');
     assert.equal(await evaluate("document.getElementById('manage-continue').hidden"),true);
-    await choose('manage-reason',reason);await choose('manage-application',id==='range-width'?'narrow':id==='fee-tiers'?'yes':'refund');await click('manage-check');
+    await choose('manage-reason',reason);await choose('manage-application',id==='range-width'?'narrow':id==='fee-tiers'?'a':'fees');await click('manage-check');
     assert.equal(await text('manage-feedback-title'),'Review your answers.');
     await choose('manage-application',application);await click('manage-check');
     assert.equal(await text('manage-feedback-title'),'Both answers are correct.');
@@ -42,9 +42,10 @@ export async function checkManagementLearning({evaluate,click,text,navigate,relo
       await click('manage-variation');assert.equal(await text('manage-variation-label'),'Situation '+(variant+1)+' of 3');
       assert.equal(await evaluate("document.getElementById('manage-reveal').disabled"),true);assert.equal(await evaluate("document.getElementById('manage-observe').hidden"),true);
       await choose('manage-prediction',id==='range-width'?(variant===2?'both':'wide'):id==='fee-tiers'?'unknown':variant===1?'same':'rises');await click('manage-reveal');
-      await choose('manage-reason',reason);await choose('manage-application',application);await click('manage-check');assert.equal(await text('manage-feedback-title'),'Both answers are correct.');
+      const changedAnswer=id==='range-width'?(variant===1?'narrow':'wide'):id==='fee-tiers'?(variant===1?'a':'b'):variant===1?'removed':'automatic';
+      await choose('manage-reason',reason);await choose('manage-application',changedAnswer);await click('manage-check');assert.equal(await text('manage-feedback-title'),'Both answers are correct.');
       if(id==='range-width'&&variant===2)assert.match(await text('manage-metrics'),/Narrow range Active.*Wider range Active/s);
-      if(id==='fee-tiers')assert.match(await text('manage-metrics'),variant===1?/Position A fees \$12.00.*Position B fees \$4.00/s:/Position A fees \$4.00.*Position B fees \$12.00/s);
+      if(id==='fee-tiers')assert.match(await text('manage-metrics'),/Position A fees \$12.00.*Position B fees \$4.00/s);
       if(id==='range-management'&&variant===1)assert.match(await text('manage-metrics'),/USDC/);
     }
   }
@@ -65,6 +66,7 @@ export async function checkMobileManagementLearning({evaluate,click,text,navigat
     await call('Emulation.setDeviceMetricsOverride',{width,height:844,deviceScaleFactor:1,mobile:true});
     await navigate(base+'learn.html#manage=range-width');
     assert.equal(await evaluate("document.getElementById('learn-course').open"),false);
+    for(let reset=0;reset<3&&(await text('manage-variation-label'))!=='Situation 1 of 3';reset++)await click('manage-variation');
     await evaluate("document.querySelector('input[name=manage-prediction][value=wide]').click()");await click('manage-reveal');
     await evaluate("document.querySelector('input[name=manage-reason][value=bounds]').click();document.querySelector('input[name=manage-application][value=unknown]').click()");await click('manage-check');
     assert.equal(await text('manage-feedback-title'),'Both answers are correct.');assert.equal(await evaluate('document.documentElement.scrollWidth<=innerWidth'),true);

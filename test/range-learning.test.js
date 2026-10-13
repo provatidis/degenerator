@@ -1,8 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { MANAGEMENT_IDS, MANAGEMENT_VARIANTS, managementCase, checkManagementUnderstanding } from '../public/models/range-decisions.js';
-import { MANAGEMENT_LESSONS, managementPresentation } from '../public/learning/choosing-ranges.js';
+const { version } = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8'));
+const { MANAGEMENT_IDS, MANAGEMENT_VARIANTS, managementCase, checkManagementUnderstanding } = await import('../public/models/range-decisions.js?v=' + version);
+import { MANAGEMENT_LESSONS, managementPresentation, managementApplication } from '../public/learning/choosing-ranges.js';
 import { managementLessonFromHash } from '../public/lib/management-links.js';
 import { MANAGEMENT_KEY, emptyManagementProgress, parseManagementProgress, readManagementProgress, saveManagementProgress } from '../public/data/management-progress.js';
 import { POOL_PITFALLS } from '../public/learning/pool-pitfalls.js';
@@ -23,7 +24,12 @@ test('range widths use the same budget and price but each range’s own funding 
     assert.equal(result.wide.state,'inside');assert.equal(result.prediction,variant===2?'both':'wide');
     assert.equal(result.narrow.state,['above','below','inside'][variant]);
     if(variant===2)assert.match(managementPresentation(result).reasoning,/Both are active/);
-    assert.equal(result.application,'unknown');
+    assert.equal(result.application,['unknown','narrow','wide'][variant]);
+    if(result.comparison){
+      assert.equal(result.comparison.narrow,result.narrow.lpBeforeFees+result.comparison.fees[0]-result.comparison.costs[0]);
+      assert.equal(result.comparison.wide,result.wide.lpBeforeFees+result.comparison.fees[1]-result.comparison.costs[1]);
+      assert.equal(result.comparison.narrow>result.comparison.wide,variant===1);
+    }
     for(const {scenario} of managementPresentation(result).links){
       const restored=rangeFromHash(rangeHash(scenario));assert.equal(restored.futurePrice,result.price);assert.equal(restored.fees,0);assert.equal(restored.fullRangeFees,0);
     }
@@ -33,9 +39,10 @@ test('fee tiers alone never establish earnings, including supplied totals that r
   assert.equal(managementCase('fee-tiers',0).fees,null);
   for(let variant=0;variant<3;variant++){
     const result=managementCase('fee-tiers',variant),presentation=managementPresentation(result);
-    assert.equal(result.prediction,'unknown');assert.equal(result.application,'no');
+    assert.equal(result.prediction,'unknown');assert.equal(result.application,['no','a','b'][variant]);
     assert.match(presentation.note,/supplied teaching facts/);assert.equal(presentation.links.length,0);
-    if(result.fees)assert.equal(result.fees[result.rates[0]>result.rates[1]?0:1],4,'A higher fee rate can coexist with a smaller supplied fee total.');
+    if(variant===1)assert.ok(result.fees[0]>result.fees[1]&&result.rates[0]<result.rates[1]);
+    if(variant===2){assert.ok(result.fees[0]>result.fees[1]);assert.ok(result.totals[0]<result.totals[1]);}
   }
 });
 test('an unchanged outside position retains its tokens and returns to activity without a new deposit',()=>{
@@ -44,7 +51,7 @@ test('an unchanged outside position retains its tokens and returns to activity w
     assert.equal(result.first.liquidity,result.second.liquidity);assert.equal(result.second.liquidity,result.returned.liquidity);
     assert.deepEqual(result.first.pooled,result.second.pooled);
     assert.equal(result.returned.state,'inside');assert.deepEqual(result.returned.pooled,result.returned.initial);
-    assert.equal(result.prediction,['falls','same','rises'][variant]);assert.equal(result.application,'automatic');
+    assert.equal(result.prediction,['falls','same','rises'][variant]);assert.equal(result.application,variant===1?'removed':'automatic');
     if(variant===1){assert.equal(result.second.pooled.eth,0);assert.equal(result.second.lpBeforeFees,result.first.lpBeforeFees);}
     else{assert.equal(result.second.pooled.usdc,0);assert.equal(result.second.lpBeforeFees,result.second.pooled.eth*result.prices[1]);}
   }
@@ -52,11 +59,11 @@ test('an unchanged outside position retains its tokens and returns to activity w
 test('every situation has one supported explanation and transfer answer, independent of its prediction',()=>{
   assert.deepEqual(MANAGEMENT_LESSONS.map(item=>item.id),MANAGEMENT_IDS);
   for(const lesson of MANAGEMENT_LESSONS)for(let variant=0;variant<MANAGEMENT_VARIANTS;variant++){
-    const result=managementCase(lesson.id,variant),presentation=managementPresentation(result);
+    const result=managementCase(lesson.id,variant),presentation=managementPresentation(result),transfer=managementApplication(result);
     assert.equal(presentation.predictions.filter(([id])=>id===result.prediction).length,1);
     assert.equal(lesson.reasons.filter(([id])=>id===result.reason).length,1);
-    assert.equal(lesson.applications.filter(([id])=>id===result.application).length,1);
-    for(const [reason]of lesson.reasons)for(const [application]of lesson.applications){
+    assert.equal(transfer.choices.filter(([id])=>id===result.application).length,1);
+    for(const [reason]of lesson.reasons)for(const [application]of transfer.choices){
       assert.equal(checkManagementUnderstanding(lesson.id,variant,reason,application).passed,reason===result.reason&&application===result.application);
       if(reason!==result.reason)assert.ok(lesson.reasonFeedback[reason]);
     }
@@ -64,6 +71,7 @@ test('every situation has one supported explanation and transfer answer, indepen
     assert.equal(checkManagementUnderstanding(lesson.id,variant,result.reason,'').passed,false);
     assert.equal(checkManagementUnderstanding(lesson.id,variant,'unknown','unknown').passed,false);
     assert.doesNotMatch(JSON.stringify(presentation),/NaN|undefined|Infinity/);
+    assert.ok(transfer.context&&transfer.question&&transfer.hint&&transfer.feedback);
     assert.ok(lesson.deeper.length>=2&&lesson.sources.every(source=>new URL(source.url).protocol==='https:'));
   }
   for(const id of ['unknown',null])assert.throws(()=>managementCase(id));

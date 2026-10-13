@@ -31,12 +31,12 @@ for (const [name, imports] of Object.entries(teaching)) {
   await writeFile(file, source.replace(/(from ['"])([^'"]+)(['"])/g, (match, before, path, after) =>
     imports.includes(path.split('?')[0]) ? before + stamp(path) + after : match));
 }
-for (const name of ['index.html', 'learn.html', '404.html']) {
+for (const name of ['index.html', 'learn.html', 'about.html', 'methods.html', '404.html']) {
   const file = new URL(name, root);
   const source = await readFile(file, 'utf8');
   await writeFile(file, source.replace(/((?:href|src)=["])([^"]+)(["])/g, (match, before, path, after) => {
     const plain = path.split('?')[0];
-    return /(?:^|\/)(?:styles\.css|styles\/errors\.css|(?:learn-)?main\.js)$/.test(plain) ? before + stamp(path) + after : match;
+    return /(?:\.css|(?:^|\/)(?:learn-)?main\.js)$/.test(plain) ? before + stamp(path) + after : match;
   }));
 }
 const styles = [new URL('styles.css', root), ...(await readdir(new URL('styles/', root))).filter(name => name.endsWith('.css')).map(name => new URL('styles/' + name, root))];

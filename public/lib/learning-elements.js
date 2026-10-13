@@ -1,4 +1,4 @@
-import { orderedLearningChoices } from './learning-choices.js?v=1.14.0';
+import { orderedLearningChoices } from './learning-choices.js?v=1.15.0';
 
 export function learningChoices(container, {name,values,selected,seed,group,onChange,shuffle=true}) {
   const ordered=shuffle?orderedLearningChoices(values,seed,group):values;

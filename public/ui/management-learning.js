@@ -1,14 +1,14 @@
-import { MANAGEMENT_CHAPTER, MANAGEMENT_LESSONS, managementPresentation } from '../learning/choosing-ranges.js?v=1.14.0';
-import { MANAGEMENT_IDS, MANAGEMENT_VARIANTS, managementCase, checkManagementUnderstanding } from '../models/range-decisions.js?v=1.14.0';
-import { managementLessonFromHash } from '../lib/management-links.js?v=1.14.0';
-import { readManagementProgress, saveManagementProgress } from '../data/management-progress.js?v=1.14.0';
-import { newChoiceSeed, validChoiceSeed } from '../lib/learning-choices.js?v=1.14.0';
-import { learningChoices, learningMetric, learningSources } from '../lib/learning-elements.js?v=1.14.0';
+import { MANAGEMENT_CHAPTER, MANAGEMENT_LESSONS, managementPresentation, managementApplication } from '../learning/choosing-ranges.js?v=1.15.0';
+import { MANAGEMENT_IDS, MANAGEMENT_VARIANTS, managementCase, checkManagementUnderstanding } from '../models/range-decisions.js?v=1.15.0';
+import { managementLessonFromHash } from '../lib/management-links.js?v=1.15.0';
+import { readManagementProgress, saveManagementProgress } from '../data/management-progress.js?v=1.15.0';
+import { newChoiceSeed, validChoiceSeed } from '../lib/learning-choices.js?v=1.15.0';
+import { learningChoices, learningMetric, learningSources } from '../lib/learning-elements.js?v=1.15.0';
 import { rangeHash } from '../lib/range-links.js';
 
 export function initManagementLearning() {
   const $=id=>document.getElementById(id), {progress}=readManagementProgress();
-  let lesson, draft, outcome, presentation;
+  let lesson, draft, outcome, presentation, application;
   const fresh=(variant=0)=>({variant,prediction:'',reason:'',application:'',revealed:false,choiceSeed:newChoiceSeed()});
   function focus(id) {$(id).focus({preventScroll:true});$(id).scrollIntoView({block:'start',behavior:'instant'});}
   function navigation() {
@@ -47,8 +47,8 @@ export function initManagementLearning() {
     $('manage-feedback').hidden=false;$('manage-feedback').className='learn-feedback '+(result.passed?'learn-pass':'learn-retry');
     $('manage-feedback-title').textContent=result.passed?'Both answers are correct.':'Review your answers.';
     const reasonFeedback=lesson.reasonFeedback[draft.reason]||'Choose an explanation for the example. '+lesson.hint;
-    const applicationFeedback=draft.application?lesson.applicationFeedback:'Choose an answer for the changed situation. '+lesson.applicationHint;
-    $('manage-feedback-copy').textContent=result.passed?lesson.takeaway:!result.reasoning&&!result.application?reasonFeedback+' '+applicationFeedback:!result.reasoning?'Your application fits the changed situation. '+reasonFeedback:'Your explanation fits the example. '+applicationFeedback;
+    const applicationFeedback=draft.application?application.feedback:'Choose an answer for the changed situation. '+application.hint;
+    $('manage-feedback-copy').textContent=result.passed?lesson.takeaway+' '+application.feedback:!result.reasoning&&!result.application?reasonFeedback+' '+applicationFeedback:!result.reasoning?'Your application fits the changed situation. '+reasonFeedback:'Your explanation fits the example. '+applicationFeedback;
     $('manage-continue').hidden=!result.passed;
     if(result.passed&&!progress.completed.includes(lesson.id))progress.completed.push(lesson.id);
     const next=MANAGEMENT_LESSONS[MANAGEMENT_IDS.indexOf(lesson.id)+1];
@@ -60,17 +60,17 @@ export function initManagementLearning() {
     const id=managementLessonFromHash(location.hash);$('learn-management').hidden=!id;navigation();if(!id)return;
     lesson=MANAGEMENT_LESSONS.find(item=>item.id===id);draft=progress.drafts[id]||fresh();
     if(!validChoiceSeed(draft.choiceSeed))draft.choiceSeed=newChoiceSeed();
-    outcome=managementCase(id,draft.variant);presentation=managementPresentation(outcome);
+    outcome=managementCase(id,draft.variant);presentation=managementPresentation(outcome);application=managementApplication(outcome);
     if(!presentation.predictions.some(([value])=>value===draft.prediction)){draft.prediction='';draft.revealed=false;}
     if(!lesson.reasons.some(([value])=>value===draft.reason))draft.reason='';
-    if(!lesson.applications.some(([value])=>value===draft.application))draft.application='';
+    if(!application.choices.some(([value])=>value===draft.application))draft.application='';
     $('learn-page-title').textContent=MANAGEMENT_CHAPTER;$('learn-page-subtitle').textContent='Three practical situations after the essentials. All values are supplied; explain what they mean.';
     document.title=lesson.short+' · Passiko Learn';$('learn-route-note').hidden=true;
     $('manage-number').textContent='RANGE CHOICES '+(MANAGEMENT_IDS.indexOf(id)+1)+' OF 3';$('manage-title').textContent=lesson.title;
     $('manage-adds').textContent=lesson.adds;$('manage-intro').textContent=lesson.intro;$('manage-setup').textContent=presentation.setup;
     $('manage-prediction-question').textContent=presentation.prediction;$('manage-variation-label').textContent='Situation '+(draft.variant+1)+' of '+MANAGEMENT_VARIANTS;
-    $('manage-reason-question').textContent=presentation.reasoning||lesson.reasoning;$('manage-application-context').textContent=lesson.applicationContext;$('manage-application-question').textContent=lesson.applicationQuestion;
-    $('manage-hint-text').textContent=lesson.hint+' '+lesson.applicationHint;$('manage-hint').open=false;$('manage-deeper').open=false;
+    $('manage-reason-question').textContent=presentation.reasoning||lesson.reasoning;$('manage-application-context').textContent=application.context;$('manage-application-question').textContent=application.question;
+    $('manage-hint-text').textContent=lesson.hint+' '+application.hint;$('manage-hint').open=false;$('manage-deeper').open=false;
     $('manage-deeper-copy').replaceChildren(...lesson.deeper.map(text=>{const p=document.createElement('p');p.textContent=text;return p;}));
     learningSources($('manage-sources'),lesson.sources);
     $('manage-observe').hidden=true;$('manage-assessment').hidden=true;clearFeedback();
@@ -82,7 +82,7 @@ export function initManagementLearning() {
       $('manage-reveal').disabled=false;$('manage-reveal').textContent='Reveal the example →';persist();
     });
     choices('manage-reasons','manage-reason',lesson.reasons,draft.reason,value=>{draft.reason=value;clearFeedback();persist();});
-    choices('manage-applications','manage-application',lesson.applications,draft.application,value=>{draft.application=value;clearFeedback();persist();});
+    choices('manage-applications','manage-application',application.choices,draft.application,value=>{draft.application=value;clearFeedback();persist();});
     if(draft.revealed){reveal();if(checkManagementUnderstanding(id,draft.variant,draft.reason,draft.application).passed)check(false);}
     persist();
     if(!matchMedia('(max-width: 750px)').matches){

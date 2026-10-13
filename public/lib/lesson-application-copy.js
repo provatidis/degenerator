@@ -1,4 +1,4 @@
-import { lessonApplication } from '../models/lesson-application.js?v=1.14.0';
+import { lessonApplication } from '../models/lesson-application.js?v=1.15.0';
 import { usd, fmt } from './format.js';
 
 export function lessonApplicationCopy(id, outcome) {
@@ -43,8 +43,8 @@ export function lessonApplicationCopy(id, outcome) {
       : 'At the upper boundary, principal is all USDC. This identifies token composition; it does not reconstruct historical earnings.'};
   return {...base,
     context: 'Someone changes the benchmark to investing the entire ' + usd(s.investment) + ' starting budget in ETH, instead of holding the original ETH and USDC basket.',
-    question: 'Can that new gap be called impermanent loss for this setup?',
-    choices: [['different','No. It compares with a different starting strategy.'],['same','Yes. Any holding strategy defines this LP’s impermanent loss.'],['rally','Yes, whenever ETH rises above its starting price.']],
+    question: 'How should that new comparison be described?',
+    choices: [['different','A comparison with a different starting investment strategy.'],['same','Impermanent loss measured against a single-token holding benchmark.'],['rally','The original impermanent-loss comparison, expressed in ETH instead.']],
     hint: 'The LP began with ' + fmt(outcome.result.held.eth, 4) + ' ETH and ' + fmt(outcome.result.held.usdc, 2) + ' USDC. Its holding benchmark keeps that basket.',
     feedback: 'An all-ETH investment has a different starting allocation. You can compare strategies, but this LP’s impermanent-loss benchmark holds its exact original ETH and USDC amounts.'};
 }

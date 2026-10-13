@@ -23,7 +23,8 @@ export function initWorkspaces() {
   };
   function select(key) {
     if (!Object.hasOwn(panels, key)) throw new Error('Choose a supported workspace.');
-    const focusWasHidden = (key === 'mechanics' && toolMenu.contains(document.activeElement)) || Object.entries(panels).some(([name, panel]) => name !== key && panel.contains(document.activeElement));
+    const focusWasHidden = (key === 'mechanics' && toolMenu.contains(document.activeElement))
+      || Object.entries(panels).some(([name, panel]) => name !== key && panel.contains(document.activeElement));
     for (const [name, panel] of Object.entries(panels)) panel.hidden = name !== key;
     document.getElementById('workspace-eyebrow').textContent = copy[key][0];
     title.textContent = copy[key][1];

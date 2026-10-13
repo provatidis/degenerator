@@ -21,7 +21,7 @@ export const APPLIED_LESSONS = Object.freeze([
     predictions: [['possible', 'Yes — the sampled endpoints do not describe the whole interval'], ['none', 'No — two outside endpoints prove it stayed outside']],
     question: 'Between the two question checkpoints, how many seconds were recorded in range? Enter a whole number of seconds.',
     reasoning: 'What establishes activity between these samples?',
-    reasons: [['counters', 'The cumulative range-time counter and recorded fee growth, rather than the line connecting sampled prices.'], ['line', 'The straight line between the two prices reconstructs every crossing.'], ['status', 'The final outside status proves no fees were earned earlier.']],
+    reasons: [['counters', 'The range-time counter records active seconds; fee growth separately records earned tokens.'], ['line', 'The straight line between the two prices reconstructs every crossing.'], ['status', 'The final outside status proves no fees were earned earlier.']],
     hint: 'At the question checkpoint, use the in-range seconds since the previous checkpoint. This is an interval value, not the cumulative total from the start.',
     takeaway: 'A sampled endpoint is an observation, not a complete price path.',
     explanation: 'Both question endpoints are outside, but the range-time counter records active seconds between them and fee growth records new tokens. Other intervals add neither active seconds nor fee tokens. The record establishes activity without locating every crossing. Active time alone does not determine fees; swaps and the position’s share of active liquidity matter too.',
@@ -37,6 +37,6 @@ export const APPLIED_LESSONS = Object.freeze([
     reasons: [['basket', 'It compares this bounded period against the same starting tokens, with gas and incentives excluded.'], ['forecast', 'It proves the position will outperform over the next period.'], ['income', 'Any position that earns fees must beat holding.']],
     hint: 'LP minus holding = principal value + period fee value − holding value. Use the displayed difference, calculated before rounding the individual totals.',
     takeaway: 'Fee income is one part of the comparison. Name the period, benchmark and omitted costs.',
-    explanation: 'Here, period fees cover the principal shortfall against holding and leave a small positive difference before costs. That describes this recorded period. It does not establish lifetime profit or future performance. Gas, incentives and any management outside this unchanged-position period could change a wider comparison.',
+    explanation: 'At the final question checkpoint, period fees cover the principal shortfall against holding and leave a small positive difference before costs. Other checkpoints can have a different result. This final result describes the recorded period; it does not establish lifetime profit or future performance. Gas, incentives and any management outside this unchanged-position period could change a wider comparison.',
   },
 ]);

@@ -15,7 +15,7 @@ test('every lesson and transfer variation produces a finite, answerable exercise
     assert.ok(Number.isFinite(result.answer));
     assert.ok(lesson.predictions.some(([id]) => id === result.prediction));
     assert.ok(lesson.reasons.some(([id]) => id === result.reason));
-    assert.equal(checkLesson(lesson.id, inputs, variant, String(result.answer), result.reason).passed, true);
+    assert.equal(checkLesson(lesson.id, inputs, variant, String(result.wholeAnswer ? Math.round(result.answer) : result.answer), result.reason).passed, true);
   }
 });
 test('swap lesson reproduces the reference 1 ETH quote and larger orders get greater impact', () => {

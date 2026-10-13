@@ -1,14 +1,15 @@
 import { stageForLesson } from '../learning/example-path.js';
-import { DEEPER_READING } from '../learning/deeper-reading.js';
-import { lessonWalkthrough } from '../lib/lesson-walkthrough.js';
-import { LESSONS } from '../learning/liquidity-essentials.js';
-import { LESSON_IDS, VARIANTS, lessonSetup, runLesson, checkLesson } from '../models/lesson-experiments.js';
+import { DEEPER_READING } from '../learning/deeper-reading.js?v=1.12.1';
+import { lessonWalkthrough } from '../lib/lesson-walkthrough.js?v=1.12.1';
+import { LESSONS } from '../learning/liquidity-essentials.js?v=1.12.1';
+import { LESSON_IDS, VARIANTS, lessonSetup, runLesson, checkLesson } from '../models/lesson-experiments.js?v=1.12.1';
 import { readProgress, saveProgress } from '../data/learning-progress.js';
 import { fmt, usd, signedUSD, percent } from '../lib/format.js';
 import { scenarioHash } from '../lib/scenario-links.js';
 import { rangeHash } from '../lib/range-links.js';
 import { resultCardBlob } from '../lib/result-card.js';
 import { appliedLessonFromHash } from '../lib/applied-lessons.js';
+import { tokenBalanceNarration, benchmarkNarration, lessonReasonFeedback } from '../lib/lesson-narration.js?v=1.12.1';
 
 export function initLearning() {
   const $ = id => document.getElementById(id);
@@ -184,7 +185,7 @@ export function initLearning() {
       metrics.push(metric('Final ETH', fmt(r.pooled.eth, 6) + ' ETH', 'Position principal, excluding fees'), metric('Final USDC', fmt(r.pooled.usdc, 2), 'USDC = $1'), metric('ETH share of value', fmt(r.finalEthPercent, 2) + '%', r.state.replace('-', ' ')));
       visual.push(bar('ETH portion of principal', r.finalEthPercent, fmt(r.finalEthPercent, 2) + '%'), bar('USDC portion of principal', 100 - r.finalEthPercent, fmt(100 - r.finalEthPercent, 2) + '%'));
     } else if (lesson.id === 'token-balances') {
-      metrics.push(metric('Starting ETH', fmt(r.held.eth, 6) + ' ETH', 'Holding keeps this amount'), metric('Final LP ETH', fmt(r.pooled.eth, 6) + ' ETH', 'After ideal arbitrage'), metric('Final LP USDC', fmt(r.pooled.usdc, 2), 'No assumed fee income'));
+      metrics.push(metric('Starting ETH', fmt(r.held.eth, 6) + ' ETH', 'Holding keeps this amount'), metric('Final LP ETH', fmt(r.pooled.eth, 6) + ' ETH', 'After ideal arbitrage'), metric('Final LP USDC', fmt(r.pooled.usdc, 2), 'Starting USDC: ' + fmt(r.held.usdc, 2)));
       const max = Math.max(r.held.eth, r.pooled.eth);
       visual.push(bar('Starting ETH', r.held.eth / max * 100, fmt(r.held.eth, 6)), bar('Final LP ETH', r.pooled.eth / max * 100, fmt(r.pooled.eth, 6)));
     } else {
@@ -198,7 +199,11 @@ export function initLearning() {
     $('learn-metrics').replaceChildren(...metrics); $('learn-visual').replaceChildren(...visual);
     const predicted = lesson.predictions.find(([id]) => id === outcome.prediction)?.[1];
     $('learn-prediction-feedback').textContent = draft.prediction === outcome.prediction ? 'Your prediction matches the result.' : 'The result differs from your prediction: ' + predicted + '. Compare it with your prediction.';
-    $('learn-explanation').textContent = lesson.explanation;
+    const tokenCopy = lesson.id === 'token-balances' ? tokenBalanceNarration(outcome) : null;
+    $('learn-explanation').textContent = tokenCopy?.explanation || benchmarkNarration(lesson.id, outcome) || lesson.explanation;
+    $('learn-reason-question').textContent = tokenCopy?.reasoning || lesson.reasoning;
+    const reasons = lesson.reasons.map(([id, copy]) => [id, tokenCopy && id === 'rebalance' ? tokenCopy.correctReason : copy]);
+    choices('learn-reasons', 'learn-reason', reasons, draft.reason);
     renderDeeper();
     $('learn-results').hidden = false; $('learn-assessment').hidden = false;
     $('learn-run').textContent = 'Run again →';
@@ -254,10 +259,11 @@ export function initLearning() {
     const check = checkLesson(lesson.id, draft.inputs, draft.variant, draft.answer, draft.reason);
     $('learn-feedback').hidden = false; $('learn-feedback').className = 'learn-feedback ' + (check.passed ? 'learn-pass' : 'learn-retry');
     $('learn-feedback-title').textContent = check.passed ? 'Both answers are correct.' : 'Review your answers.';
+    const reasoningFeedback = lessonReasonFeedback(lesson.id, outcome, draft.reason);
     $('learn-feedback-copy').textContent = check.passed ? lesson.takeaway
-      : !check.numeric && !check.reasoning ? 'Check the calculation and the reasoning. The hint explains what to compare.'
+      : !check.numeric && !check.reasoning ? 'Revisit the number and its requested rounding. ' + reasoningFeedback
       : !check.numeric ? 'Your reasoning is sound. Revisit the number and its units; use the requested rounding.'
-      : 'Your number matches. Revisit the explanation behind it; the hint can help.';
+      : 'Your number matches. ' + reasoningFeedback;
     $('learn-answer').setAttribute('aria-invalid', String(!check.numeric));
     $('learn-continue').hidden = !check.passed;
     $('learn-share').hidden = !(check.passed && lesson.id === 'final-challenge');

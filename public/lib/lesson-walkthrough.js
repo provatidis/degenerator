@@ -29,7 +29,7 @@ export function lessonWalkthrough(id, outcome) {
   if (id === 'token-balances') return [
     ['Keep the starting basket visible', usd(s.investment) + ' starts as ' + fmt(r.held.eth, 6) + ' ETH + ' + fmt(r.held.usdc, 2) + ' USDC.'],
     ['Find the price factor', usd(s.futurePrice) + ' ÷ ' + usd(s.initialPrice) + ' = ' + fmt(r.ratio, 3) + '. Its square root is ' + fmt(Math.sqrt(r.ratio), 6) + '.'],
-    ['Rebalance the quantities', 'Divide starting ETH by that square root to obtain ' + fmt(r.pooled.eth, 6) + ' ETH. Multiply starting USDC by it to obtain ' + fmt(r.pooled.usdc, 2) + ' USDC.'],
+    [s.futurePrice === s.initialPrice ? 'Keep the quantities unchanged' : 'Follow the exchanged quantities', 'Divide starting ETH by that square root to obtain ' + fmt(r.pooled.eth, 6) + ' ETH. Multiply starting USDC by it to obtain ' + fmt(r.pooled.usdc, 2) + ' USDC. These quantity changes come from exchanged tokens, not new tokens created by the pool.'],
     ['Value the resulting basket', 'At the future price, each side contributes ' + usd(r.lpBeforeFees / 2) + ', for ' + usd(r.lpBeforeFees) + ' in total. Holding keeps the original token quantities.'],
   ];
   if (id === 'loss-vs-profit') return [

@@ -13,8 +13,12 @@ for (const name of ['main.js', 'learn-main.js']) {
 // Teaching text and grading must update together. These modules are pure or editorial;
 // protocol adapters and RPC classes retain their shared, unversioned module identity.
 const teaching = {
-  'ui/learning.js': ['../learning/liquidity-essentials.js', '../learning/deeper-reading.js', '../lib/lesson-walkthrough.js', '../lib/lesson-narration.js', '../models/lesson-experiments.js'],
-  'ui/applied-learning.js': ['../learning/applied-liquidity.js', '../lib/applied-lessons.js'],
+  'ui/learning.js': ['../learning/liquidity-essentials.js', '../learning/deeper-reading.js', '../lib/lesson-walkthrough.js', '../lib/lesson-narration.js', '../models/lesson-experiments.js', '../models/lesson-application.js', '../lib/lesson-application-copy.js', '../lib/learning-choices.js', '../data/learning-progress.js'],
+  'ui/applied-learning.js': ['../learning/applied-liquidity.js', '../lib/applied-lessons.js', '../lib/applied-applications.js', '../lib/learning-choices.js', '../data/applied-progress.js'],
+  'data/learning-progress.js': ['../models/lesson-experiments.js', '../lib/learning-choices.js'],
+  'data/applied-progress.js': ['../lib/applied-lessons.js', '../lib/learning-choices.js'],
+  'models/lesson-application.js': ['./lesson-experiments.js'],
+  'lib/lesson-application-copy.js': ['../models/lesson-application.js'],
   'models/lesson-experiments.js': ['./learning-answer.js'],
   'lib/applied-lessons.js': ['../models/learning-answer.js'],
 };

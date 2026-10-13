@@ -1,5 +1,6 @@
 // Keep legacy storage and format identifiers so existing work survives rebranding.
-import { LESSON_IDS, VARIANTS, validateLessonInputs } from '../models/lesson-experiments.js';
+import { LESSON_IDS, VARIANTS, validateLessonInputs } from '../models/lesson-experiments.js?v=1.13.0';
+import { validChoiceSeed } from '../lib/learning-choices.js?v=1.13.0';
 export const LEARNING_KEY = 'degenerator-learning-liquidity-v1';
 export function emptyProgress() { return { version: 1, completed: [], lastLesson: LESSON_IDS[0], drafts: {} }; }
 export function parseProgress(value) {
@@ -16,6 +17,8 @@ export function parseProgress(value) {
         prediction: typeof draft.prediction === 'string' && draft.prediction.length <= 16 ? draft.prediction : '',
         answer: typeof draft.answer === 'string' && draft.answer.length <= 32 ? draft.answer : '',
         reason: typeof draft.reason === 'string' && draft.reason.length <= 16 ? draft.reason : '',
+        application: typeof draft.application === 'string' && draft.application.length <= 24 ? draft.application : '',
+        choiceSeed: validChoiceSeed(draft.choiceSeed) ? draft.choiceSeed : null,
         ran: draft.ran === true };
     } catch { /* Ignore an invalid exercise without losing other progress. */ }
   }

@@ -43,7 +43,7 @@ test('all foundation distractors are rejected and explain the misconception in e
     }
   }
 });
-test('assessment precision rejects adjacent wrong numbers while accepting the requested rounding', () => {
+test('optional calculation precision rejects adjacent wrong numbers while accepting the requested rounding', () => {
   for (const [id, answer, wrong, reason] of [
     ['swap-impact', '18132', '18133', 'curve'], ['pool-share', '4.76', '4.75', 'ownership'],
     ['token-balances', '.884', '.883', 'rebalance'], ['loss-vs-profit', '428.93', '428.94', 'benchmark'],

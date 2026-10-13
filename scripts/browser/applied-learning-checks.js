@@ -5,8 +5,8 @@ export async function checkAppliedLearning({ evaluate, click, fill, text, naviga
   const before = await evaluate('JSON.stringify(' + JSON.stringify(existingKeys) + '.map(key=>localStorage.getItem(key)))');
   const choose = (name, value) => evaluate(`document.querySelector('input[name="${name}"][value="${value}"]').click()`);
   const ready = () => evaluate("new Promise((resolve,reject)=>{const end=Date.now()+5000;const check=()=>{if(document.getElementById('learn-applied').getAttribute('aria-busy')==='false')resolve();else if(Date.now()>end)reject(new Error('Applied record did not load'));else setTimeout(check,25)};check()})");
-  const cases = [['fees-over-time', 'earned', '2.36', 'growth', 'in-range'], ['between-samples', 'possible', '2724', 'counters', 'range-return'], ['period-vs-holding', 'lp', '0.17', 'basket', 'range-return']];
-  for (const [id, prediction, answer, reason, record] of cases) {
+  const cases = [['fees-over-time', 'earned', '2.36', 'growth', 'in-range', 'same'], ['between-samples', 'possible', '2724', 'counters', 'range-return', 'not-proof'], ['period-vs-holding', 'lp', '0.17', 'basket', 'range-return', 'hold']];
+  for (const [id, prediction, answer, reason, record, application] of cases) {
     await navigate(base + 'learn.html#applied=' + id); await ready();
     assert.equal(await evaluate("document.getElementById('learn-essential').hidden"), true);
     assert.equal(await evaluate("document.getElementById('learn-applied').hidden"), false);
@@ -25,16 +25,17 @@ export async function checkAppliedLearning({ evaluate, click, fill, text, naviga
       assert.match(await text('applied-observation'), /Both endpoints are outside/);
     }
     if (id === 'period-vs-holding') assert.match(await text('applied-metrics'), /\+\$0.17/);
-    const question = await text('applied-question');
+    const question = await text('applied-application-context');
     const target = await evaluate("document.getElementById('applied-checkpoint').value");
     await fill('applied-checkpoint', '0');
-    assert.equal(await text('applied-question'), question, 'Checkpoint exploration keeps the assessment fixed.');
+    assert.equal(await text('applied-application-context'), question, 'Checkpoint exploration keeps the assessment fixed.');
     assert.equal(await evaluate("document.getElementById('applied-return-question').hidden"), false);
-    await fill('applied-answer', answer); await choose('applied-reason', reason);
+    assert.equal(await evaluate("document.querySelectorAll('#applied-assessment-form input[type=number]').length"),0);
+    await choose('applied-reason', reason); await choose('applied-application', application);
     await click('applied-check'); assert.equal(await text('applied-feedback-title'), 'Both answers are correct.');
     await click('applied-return-question');
     assert.equal(await evaluate("document.getElementById('applied-checkpoint').value"), target);
-    assert.equal(await evaluate("document.getElementById('applied-answer').value"), answer);
+    assert.equal(await evaluate("document.querySelector('input[name=applied-application]:checked').value"), application);
     const transferred = await evaluate("document.getElementById('applied-explore').href");
     const params = new URLSearchParams(new URL(transferred).hash.slice(1));
     assert.equal(params.get('scenario'), 'cl-range-v1'); assert.equal(params.get('fees'), '0'); assert.equal(params.get('fullfees'), '0');
@@ -44,15 +45,23 @@ export async function checkAppliedLearning({ evaluate, click, fill, text, naviga
     await evaluate("document.querySelector('#applied-deeper summary').click()");
     assert.match(await text('applied-evidence'), /Block hash|block/);
     assert.equal(await evaluate("Array.from(document.querySelectorAll('#applied-deeper a')).every(a=>a.target==='_blank'&&a.rel.includes('noopener')&&a.href.startsWith('https:'))"), true);
-    await fill('applied-answer', '99999'); await click('applied-check');
-    assert.match(await text('applied-feedback-copy'), /reasoning is sound/);
-    assert.equal(await evaluate("document.getElementById('applied-continue').hidden"), true);
-    await fill('applied-answer', answer);
-    // A wrong real option must not pass merely because the numeric answer matches.
-    await evaluate("document.querySelectorAll('input[name=applied-reason]')[1].click()"); await click('applied-check');
-    assert.match(await text('applied-feedback-copy'), /number matches/);
-    await choose('applied-reason', reason); await click('applied-check');
+    await evaluate("document.querySelector('#applied-calculation summary').click()");
+    await fill('applied-answer', '99999'); await click('applied-calculation-check');
+    assert.match(await text('applied-calculation-feedback'), /does not affect completion/);
+    assert.equal(await evaluate("document.getElementById('applied-continue').hidden"), false);
+    await fill('applied-answer', answer); await click('applied-calculation-check');
+    assert.match(await text('applied-calculation-feedback'), /Calculation matches/);
+    // Explanation and transfer are independently required, regardless of optional math.
+    await choose('applied-reason', id === 'fees-over-time' ? 'owed' : id === 'between-samples' ? 'line' : 'forecast'); await click('applied-check');
+    assert.match(await text('applied-feedback-copy'), /application matches/);
+    await choose('applied-reason', reason);
+    await choose('applied-application',id === 'fees-over-time' ? 'less' : id === 'between-samples' ? 'whole' : 'lp'); await click('applied-check');
+    assert.equal(await text('applied-feedback-title'),'Review your answers.');
+    assert.equal(await evaluate("document.getElementById('applied-continue').hidden"),true);
+    await choose('applied-application',application); await click('applied-check');
+    const order = await evaluate("Array.from(document.querySelectorAll('input[name=applied-reason],input[name=applied-application]')).map(input=>input.value).join(',')");
     await reload(); await ready();
+    assert.equal(await evaluate("Array.from(document.querySelectorAll('input[name=applied-reason],input[name=applied-application]')).map(input=>input.value).join(',')"),order);
     assert.equal(await evaluate("document.getElementById('applied-answer').value"), answer);
     assert.equal(await text('applied-feedback-title'), 'Both answers are correct.');
     await evaluate("document.querySelector('[data-applied-id=" + id + "]').click()");
@@ -114,7 +123,7 @@ export async function checkMobileAppliedLearning({ evaluate, click, fill, text, 
     await evaluate("document.querySelector('input[name=applied-prediction][value=possible]').click()"); await click('applied-reveal');
     await evaluate("document.querySelector('#applied-deeper summary').click()");
     assert.equal(await evaluate('document.documentElement.scrollWidth <= innerWidth'), true);
-    await fill('applied-answer','2724'); await evaluate("document.querySelector('input[name=applied-reason][value=counters]').click()"); await click('applied-check');
+    await evaluate("document.querySelector('input[name=applied-application][value=not-proof]').click()"); await evaluate("document.querySelector('input[name=applied-reason][value=counters]').click()"); await click('applied-check');
     assert.equal(await text('applied-feedback-title'), 'Both answers are correct.');
     await click('applied-topics'); await evaluate("document.querySelector('[data-applied-id=period-vs-holding]').click()");
     assert.equal(await evaluate("document.getElementById('learn-course').open"), false);

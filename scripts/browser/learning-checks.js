@@ -21,17 +21,17 @@ export async function checkLearning({ evaluate, click, fill, text, navigate, rel
   assert.equal(await evaluate("document.getElementById('learn-route-note').hidden"), true);
   const choose = (name, value) => evaluate("document.querySelector('input[name=\"" + name + "\"][value=\"" + value + "\"]').click()");
   const cases = [
-    ['swap-impact','less','18132','curve'],
-    ['pool-share','less','4.76','ownership'],
-    ['token-balances','less','0.884','rebalance'],
-    ['loss-vs-profit','gain','428.93','benchmark'],
-    ['fee-break-even','short','428.93','assumption'],
-    ['range-boundaries','usdc','0','path'],
-    ['final-challenge','hold','328.93','total'],
+    ['swap-impact','less','18132','curve','more'],
+    ['pool-share','less','4.76','ownership','smaller'],
+    ['token-balances','less','0.884','rebalance','more'],
+    ['loss-vs-profit','gain','428.93','benchmark','matches'],
+    ['fee-break-even','short','428.93','assumption','same'],
+    ['range-boundaries','usdc','0','path','eth'],
+    ['final-challenge','hold','328.93','total','different'],
   ];
-  for (const [id, prediction, answer, reason] of cases) {
+  for (const [id, prediction, answer, reason, application] of cases) {
     await navigate(base + 'learn.html#lesson=' + id);
-    await choose('learn-prediction', prediction);
+    await choose('learn-prediction', id === 'swap-impact' ? 'same' : prediction);
     await click('learn-run');
     assert.equal(await evaluate("document.getElementById('learn-results').hidden"), false);
     assert.equal(await evaluate("document.getElementById('learn-deeper').open"),false);
@@ -54,14 +54,16 @@ export async function checkLearning({ evaluate, click, fill, text, navigate, rel
     assert.equal(await evaluate("localStorage.getItem('degenerator-learning-liquidity-v1')"),beforeReading,'Reading cannot mark exercises complete or change their answers.');
     if(id==='fee-break-even') assert.match(await text('learn-worked-steps'),/428.93[\s\S]*328.93/);
     if(id==='range-boundaries') assert.match(await text('learn-worked-steps'),/5,116.06/);
-    await fill('learn-answer', answer);
+    assert.equal(await evaluate("document.querySelectorAll('#learn-assessment-form input[type=number]').length"),0);
+    assert.equal(await evaluate("document.getElementById('learn-answer').value"),'');
     await choose('learn-reason', reason);
+    await choose('learn-application', application);
     if (id === 'swap-impact') {
-      await fill('learn-answer', '20000');
+      await choose('learn-application','same');
       await click('learn-check');
-      assert.match(await text('learn-feedback-copy'), /Revisit the number/);
+      assert.match(await text('learn-feedback-copy'), /larger trade/);
       assert.equal(await text('learn-progress-count'), '0 of 7 checked');
-      await fill('learn-answer', answer);
+      await choose('learn-application', application);
       await choose('learn-reason', 'fixed'); await click('learn-check');
       assert.match(await text('learn-feedback-copy'), /A finite swap changes the reserves/);
       assert.equal(await text('learn-progress-count'), '0 of 7 checked');
@@ -70,8 +72,17 @@ export async function checkLearning({ evaluate, click, fill, text, navigate, rel
     await click('learn-check');
     assert.equal(await text('learn-feedback-title'), 'Both answers are correct.');
     assert.equal(await evaluate("document.getElementById('learn-continue').hidden"), false);
+    const order = await evaluate("Array.from(document.querySelectorAll('input[name=learn-reason],input[name=learn-application]')).map(input=>input.value).join(',')");
+    await evaluate("document.querySelector('#learn-calculation > summary').click()");
+    await fill('learn-answer','999999'); await click('learn-calculation-check');
+    assert.match(await text('learn-calculation-feedback'),/does not affect completion/);
+    assert.equal(await evaluate("document.getElementById('learn-continue').hidden"),false);
+    assert.equal(await text('learn-feedback-title'),'Both answers are correct.');
+    await fill('learn-answer',answer); await click('learn-calculation-check');
+    assert.match(await text('learn-calculation-feedback'),/Calculation matches/);
     await reload();
     assert.equal(await evaluate("document.getElementById('learn-answer').value"), answer);
+    assert.equal(await evaluate("Array.from(document.querySelectorAll('input[name=learn-reason],input[name=learn-application]')).map(input=>input.value).join(',')"),order);
     assert.equal(await evaluate("document.getElementById('learn-feedback').hidden"), false);
     if (id === 'range-boundaries') {
       const linked = await evaluate("document.getElementById('learn-explore').href");
@@ -97,6 +108,10 @@ export async function checkLearning({ evaluate, click, fill, text, navigate, rel
   assert.equal(card.subarray(0,8).toString('hex'),'89504e470d0a1a0a');
   assert.equal(card.readUInt32BE(16),1200);
   assert.equal(card.readUInt32BE(20),720);
+  await evaluate("document.querySelector('#learn-deeper summary').click();document.querySelector('#learn-calculation summary').click()");
+  await fill('learn-answer','999999'); await click('learn-calculation-check');
+  assert.equal(await evaluate("document.getElementById('learn-card-preview').hidden"),false,'Optional practice cannot invalidate the completed result card.');
+  assert.equal(await evaluate("document.getElementById('learn-share').hidden"),false);
   await fill('learn-input-fees', '500');
   assert.equal(await evaluate("document.getElementById('learn-results').hidden"), true);
   assert.equal(await evaluate("document.getElementById('learn-card-preview').hidden"), true);
@@ -149,7 +164,7 @@ export async function checkMobileLearning({ evaluate, click, fill, text, navigat
   await evaluate("document.querySelector('#learn-math > summary').click()");
   assert.equal(await evaluate("document.getElementById('learn-deeper').open && document.getElementById('learn-math').open"),true);
   assert.equal(await evaluate('document.documentElement.scrollWidth <= innerWidth'),true);
-  await fill('learn-answer','0');
+  await evaluate("document.querySelector('input[name=learn-application][value=eth]').click()");
   await evaluate("document.querySelector('input[name=learn-reason][value=path]').click()");
   await click('learn-check');
   assert.equal(await text('learn-feedback-title'),'Both answers are correct.');

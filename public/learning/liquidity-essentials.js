@@ -13,7 +13,7 @@ export const LESSONS = [
     takeaway: 'A quote describes a trade against finite reserves. Spot price alone cannot tell you its proceeds.',
   },
   {
-    id: 'pool-share', title: 'Ownership after a liquidity deposit', short: 'Providing liquidity', concept: 'Ownership', skill: 'Calculate your share after a matching deposit.',
+    id: 'pool-share', title: 'Ownership after a liquidity deposit', short: 'Providing liquidity', concept: 'Ownership', skill: 'Explain what your share represents after a matching deposit.',
     intro: 'A matching deposit adds ETH and USDC at the pool’s current ratio. Liquidity provider (LP) tokens represent a fraction of the enlarged pool. Their withdrawal value depends on the pool reserves.',
     prediction: 'Is your ownership smaller than deposit ETH ÷ the pool’s original ETH reserves?',
     predictions: [['less', 'Yes — the deposit also enlarges the pool'], ['same', 'No — only the original reserves count']],
@@ -49,7 +49,7 @@ export const LESSONS = [
     takeaway: 'Choose the benchmark before interpreting a return.',
   },
   {
-    id: 'fee-break-even', title: 'Fees needed to match holding', short: 'Fees & break-even', concept: 'Fee income', skill: 'Find the total fees needed to match holding.',
+    id: 'fee-break-even', title: 'Fees needed to match holding', short: 'Fees & break-even', concept: 'Fee income', skill: 'Distinguish a fee target from assumed and earned fees.',
     intro: 'Fee income can compensate for the gap to holding. Enter the total fees accruing to your position after any protocol share. This lab treats them as separate USD cash added at the end; it does not forecast earnings.',
     prediction: 'Do your assumed fees cover the gap to holding at this future price?',
     predictions: [['enough', 'They match or exceed the gap'], ['short', 'The LP still trails holding']],

@@ -176,3 +176,14 @@
 .learn-application-setup p:last-child{margin:0;font-size:14px;line-height:1.8;color:var(--text)}
 .learn-calculation .learn-answer{display:block;margin-bottom:12px}
 .learn-calculation [role="status"]{min-height:1.8em}
+
+.learn-pitfall{margin:20px 0 24px;padding:16px 18px;border-left:3px solid #ae9969;background:var(--surface);border-radius:0 10px 10px 0;font-size:13px;line-height:1.85}
+.learn-pitfall strong{font-weight:600;color:var(--text)}.learn-pitfall p{margin:8px 0;color:var(--muted)}.learn-pitfall a{color:var(--accent);font-size:12px;text-decoration:underline;text-underline-offset:3px}
+#manage-lesson-list{list-style:none;padding:0;margin:12px -6px 0}
+#manage-lesson-list a{display:flex;align-items:center;gap:10px;padding:12px 8px;border:1px solid transparent;border-radius:10px;min-height:48px}
+#manage-lesson-list a:hover{background:var(--surface)}#manage-lesson-list a[aria-current=step]{background:var(--highlight);border-color:var(--accent);box-shadow:inset 3px 0 var(--accent)}
+#manage-lesson-list .learn-step-copy strong{font-size:14px}#manage-lesson-list .learn-step-state{font-size:12px}
+#manage-title{font-size:clamp(26px,3vw,34px);letter-spacing:-1px;line-height:1.2;margin:20px 0 12px}
+.management-lesson .learn-metrics{margin:24px 0}.management-lesson .learn-metric-note{font-size:13px}.management-lesson .learn-metric .label{font-size:14px}
+.management-lesson :is(button,summary),#manage-title,#manage-observe-title{scroll-margin-top:24px}
+@media(min-width:751px){#manage-topics{display:none}}@media(max-width:750px){#manage-title{font-size:28px}.management-lesson .learn-lesson-heading{flex-wrap:wrap}.management-lesson .card-heading{align-items:flex-start;flex-wrap:wrap}}

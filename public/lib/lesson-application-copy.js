@@ -1,4 +1,4 @@
-import { lessonApplication } from '../models/lesson-application.js?v=1.13.0';
+import { lessonApplication } from '../models/lesson-application.js?v=1.14.0';
 import { usd, fmt } from './format.js';
 
 export function lessonApplicationCopy(id, outcome) {
@@ -30,7 +30,7 @@ export function lessonApplicationCopy(id, outcome) {
       : 'A falling price can reduce both strategies’ dollar values while the LP still trails holding. Dollar loss and the gap to holding are different comparisons.'};
   if (id === 'fee-break-even') return {...base,
     context: 'Keep both prices and the starting basket. Change only assumed fee income from ' + usd(s.fees) + ' to ' + usd(application.fees) + '.',
-    question: 'Does the TOTAL fee target needed to match holding change?',
+    question: 'Does the total fee target needed to match holding change?',
     choices: [['same','The total target stays the same.'],['higher','The total target becomes higher.'],['lower','The total target becomes lower.']],
     hint: 'Separate the before-fee gap from the additional fees still needed after your assumption.',
     feedback: 'The total target comes from holding minus LP principal before fees. Changing assumed fee income changes total LP value and the remaining additional hurdle, while the total target stays the same.'};

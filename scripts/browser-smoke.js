@@ -1,3 +1,4 @@
+import { checkManagementLearning, checkMobileManagementLearning } from './browser/management-learning-checks.js';
 import { checkLessonConsistency, checkMobileLessonConsistency } from './browser/lesson-consistency-checks.js';
 import { checkAppliedLearning, checkMobileAppliedLearning } from './browser/applied-learning-checks.js';
 import { checkMobileInspect } from './browser/inspect-checks.js';
@@ -495,6 +496,7 @@ try {
 
   await checkLearning({ evaluate, click, fill, text, navigate, reload, base, downloadFile });
   await checkAppliedLearning({ evaluate, click, fill, text, navigate, reload, base, call, nextEvent });
+  await checkManagementLearning({ evaluate, click, text, navigate, reload, base });
   await checkLessonConsistency({ evaluate, click, fill, text, navigate, base, call, nextEvent });
 
   if (process.env.SCREENSHOT_PATH) {
@@ -532,6 +534,7 @@ try {
   await checkMobilePositions({ evaluate, click, fill, text });
   await checkMobileLearning({ evaluate, click, fill, text, navigate, base });
   await checkMobileLessonConsistency({ evaluate, click, fill, text, navigate, base, call });
+  await checkMobileManagementLearning({ evaluate, click, text, navigate, base, call });
   await checkMobileAppliedLearning({ evaluate, click, fill, text, navigate, base, call });
   await checkMobileSavedExperiments({ evaluate, click, fill, text, navigate, base, call });
   await call('Emulation.setDeviceMetricsOverride', { width: 320, height: 740, deviceScaleFactor: 1, mobile: true });

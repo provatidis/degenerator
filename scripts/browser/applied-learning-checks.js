@@ -17,6 +17,7 @@ export async function checkAppliedLearning({ evaluate, click, fill, text, naviga
     await choose('applied-prediction', prediction); await click('applied-reveal');
     assert.equal(await evaluate("document.getElementById('applied-observe').hidden"), false);
     assert.equal(await evaluate("document.getElementById('applied-assessment').hidden"), false);
+    assert.ok((await text('applied-pitfall')).length>40);
     assert.equal(await evaluate("document.getElementById('applied-observe-title').getBoundingClientRect().top >= document.querySelector('.topbar').getBoundingClientRect().bottom"), true);
     if (id === 'fees-over-time') assert.match(await text('applied-metrics'), /2.36/);
     if (id === 'between-samples') {

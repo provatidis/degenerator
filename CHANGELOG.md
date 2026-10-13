@@ -1,5 +1,13 @@
 # Release history
 
+## 1.14.0 — 2026-10-13
+
+- Add three practical lessons after the essentials: range widths, fee tiers and APR, then exits, returns and management costs. Each has three situations and checks explanation/application without any calculation field.
+- Show sourced pitfalls in all ten existing topics. Clarify the fee-target question, remove division from the ownership prediction and balance explanatory answer lengths.
+- Use calculated hypothetical range outcomes and explicitly supplied fictional fee totals. Keep them distinct from independently verified historical accounting and preserve older learning progress, scenario links and saved work.
+- Share choice/metric rendering across chapter controllers. Add strict routes, independent progress and desktop/mobile checks for the new chapter.
+
+
 ## 1.13.0 — 2026-10-13
 
 - Learning completion now checks explanation and application of an idea after one assumption changes. Predictions remain ungraded; numeric answers and rounding are optional practice in Go deeper.

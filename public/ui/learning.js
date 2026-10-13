@@ -1,18 +1,21 @@
 import { stageForLesson } from '../learning/example-path.js';
-import { DEEPER_READING } from '../learning/deeper-reading.js?v=1.13.0';
-import { lessonWalkthrough } from '../lib/lesson-walkthrough.js?v=1.13.0';
-import { LESSONS } from '../learning/liquidity-essentials.js?v=1.13.0';
-import { LESSON_IDS, VARIANTS, lessonSetup, runLesson, checkLesson } from '../models/lesson-experiments.js?v=1.13.0';
-import { checkLessonUnderstanding } from '../models/lesson-application.js?v=1.13.0';
-import { lessonApplicationCopy } from '../lib/lesson-application-copy.js?v=1.13.0';
-import { newChoiceSeed, validChoiceSeed, orderedLearningChoices } from '../lib/learning-choices.js?v=1.13.0';
-import { readProgress, saveProgress } from '../data/learning-progress.js?v=1.13.0';
+import { DEEPER_READING } from '../learning/deeper-reading.js?v=1.14.0';
+import { lessonWalkthrough } from '../lib/lesson-walkthrough.js?v=1.14.0';
+import { LESSONS } from '../learning/liquidity-essentials.js?v=1.14.0';
+import { LESSON_IDS, VARIANTS, lessonSetup, runLesson, checkLesson } from '../models/lesson-experiments.js?v=1.14.0';
+import { checkLessonUnderstanding } from '../models/lesson-application.js?v=1.14.0';
+import { lessonApplicationCopy } from '../lib/lesson-application-copy.js?v=1.14.0';
+import { newChoiceSeed, validChoiceSeed } from '../lib/learning-choices.js?v=1.14.0';
+import { learningChoices, learningMetric, learningPitfall } from '../lib/learning-elements.js?v=1.14.0';
+import { POOL_PITFALLS } from '../learning/pool-pitfalls.js?v=1.14.0';
+import { managementLessonFromHash } from '../lib/management-links.js?v=1.14.0';
+import { readProgress, saveProgress } from '../data/learning-progress.js?v=1.14.0';
 import { fmt, usd, signedUSD, percent } from '../lib/format.js';
 import { scenarioHash } from '../lib/scenario-links.js';
 import { rangeHash } from '../lib/range-links.js';
 import { resultCardBlob } from '../lib/result-card.js';
 import { appliedLessonFromHash } from '../lib/applied-lessons.js';
-import { tokenBalanceNarration, benchmarkNarration, lessonReasonFeedback } from '../lib/lesson-narration.js?v=1.13.0';
+import { tokenBalanceNarration, benchmarkNarration, lessonReasonFeedback } from '../lib/lesson-narration.js?v=1.14.0';
 
 export function initLearning() {
   const $ = id => document.getElementById(id);
@@ -36,15 +39,15 @@ export function initLearning() {
     $('learn-progress-count').textContent = count + ' of 7 checked';
     $('learn-progress').value = count;
     $('learn-progress').setAttribute('aria-label', count + ' of 7 exercises checked');
-    $('learn-course-status').textContent = count === 7 ? 'All essentials exercises checked. Continue with the applied chapter or revisit an experiment.' : 'Six lessons and a final challenge. Open any topic.';
+    $('learn-course-status').textContent = count === 7 ? 'All essentials exercises checked. Continue with range choices or revisit an experiment.' : 'Six lessons and a final challenge. Open any topic.';
     for (const link of document.querySelectorAll('[data-lesson-id]')) {
       const id = link.dataset.lessonId;
-      const active = !appliedLessonFromHash(location.hash) && id === lesson?.id;
+      const active = !managementLessonFromHash(location.hash) && !appliedLessonFromHash(location.hash) && id === lesson?.id;
       link.setAttribute('aria-current', active ? 'step' : 'false');
       link.querySelector('.learn-step-state').textContent = progress.completed.includes(id) ? 'Checked' : active ? 'Now exploring' : 'Open lesson';
       link.classList.toggle('learn-step-done', progress.completed.includes(id));
     }
-    if (lesson && !appliedLessonFromHash(location.hash) && !matchMedia('(max-width: 750px)').matches) {
+    if (lesson && !managementLessonFromHash(location.hash) && !appliedLessonFromHash(location.hash) && !matchMedia('(max-width: 750px)').matches) {
       const sidebar = document.querySelector('.learn-sidebar');
       const selected = document.querySelector('[data-lesson-id="' + lesson.id + '"]');
       const bounds = selected.getBoundingClientRect(), visible = sidebar.getBoundingClientRect();
@@ -60,25 +63,11 @@ export function initLearning() {
   }
   function selection(name) { return document.querySelector('input[name="' + name + '"]:checked')?.value || ''; }
   function choices(container, name, values, selected) {
-    const ordered = name === 'learn-prediction' ? values : orderedLearningChoices(values, draft.choiceSeed, lesson.id + name);
-    const nodes = ordered.map(([value, label]) => {
-      const item = document.createElement('label'); item.className = 'learn-choice';
-      const radio = document.createElement('input'); radio.type = 'radio'; radio.name = name; radio.value = value; radio.checked = value === selected;
-      const copy = document.createElement('span'); copy.textContent = label; item.append(radio, copy);
-      radio.addEventListener('change', () => {
-        if (name === 'learn-prediction') {
-          draft.prediction = value;
-          $('learn-run').disabled = false;
-          if (draft.ran) invalidate();
-        } else {
-          draft[name === 'learn-application' ? 'application' : 'reason'] = value; $('learn-feedback').hidden = true; $('learn-continue').hidden = true;
-          $('learn-share').hidden = true; clearCard();
-        }
-        persist();
-      });
-      return item;
-    });
-    $(container).replaceChildren(...nodes);
+    learningChoices($(container),{name,values,selected,seed:draft.choiceSeed,group:lesson.id+name,shuffle:name!=='learn-prediction',onChange:value=>{
+      if(name==='learn-prediction') {draft.prediction=value;$('learn-run').disabled=false;if(draft.ran)invalidate();}
+      else {draft[name==='learn-application'?'application':'reason']=value;$('learn-feedback').hidden=true;$('learn-continue').hidden=true;$('learn-share').hidden=true;clearCard();}
+      persist();
+    }});
   }
   function control(key, label, min, max, step, formatter) {
     const wrap = document.createElement('div'); wrap.className = 'learn-control';
@@ -132,13 +121,7 @@ export function initLearning() {
     $('learn-input-status').textContent = 'Setup changed. Predict, then run the updated experiment.';
     $('learn-run').textContent = 'Run experiment →'; clearCard();
   }
-  function metric(label, value, note = '') {
-    const block = document.createElement('div'); block.className = 'learn-metric';
-    const title = document.createElement('span'); title.className = 'label'; title.textContent = label;
-    const amount = document.createElement('strong'); amount.textContent = value;
-    const detail = document.createElement('span'); detail.className = 'learn-metric-note'; detail.textContent = note;
-    block.append(title, ' ', amount, ' ', detail); return block;
-  }
+  const metric=learningMetric;
   function bar(label, percentValue, detail) {
     const row = document.createElement('div'); row.className = 'learn-bar-row';
     const heading = document.createElement('div'); heading.className = 'learn-bar-label';
@@ -185,7 +168,7 @@ export function initLearning() {
       const small = 0.997 / (s.reserveEth + 0.997) * 100;
       visual.push(bar('A 1 ETH swap', small / Math.max(max, small) * 100, fmt(small, 2) + '% impact'), bar('Your ' + s.amount + ' ETH swap', max / Math.max(max, small) * 100, fmt(max, 2) + '% impact'));
     } else if (lesson.id === 'pool-share') {
-      metrics.push(metric('Your pool ownership', fmt(outcome.share, 2) + '%', 'Your claim on both reserves'), metric('Your matching deposit', fmt(s.depositEth, 0) + ' ETH', '+ ' + fmt(outcome.usdcDeposit, 0) + ' USDC'), metric('Enlarged ETH reserve', fmt(s.reserveEth + s.depositEth, 0) + ' ETH', 'The deposit is in the denominator'));
+      metrics.push(metric('Your pool ownership', fmt(outcome.share, 2) + '%', 'Your claim on both reserves'), metric('Your matching deposit', fmt(s.depositEth, 0) + ' ETH', '+ ' + fmt(outcome.usdcDeposit, 0) + ' USDC'), metric('Enlarged ETH reserve', fmt(s.reserveEth + s.depositEth, 0) + ' ETH', 'Includes your deposit'));
       visual.push(bar('Your share of the enlarged pool', outcome.share, fmt(outcome.share, 2) + '%'));
     } else if (lesson.id === 'range-boundaries') {
       metrics.push(metric('Final ETH', fmt(r.pooled.eth, 6) + ' ETH', 'Position principal, excluding fees'), metric('Final USDC', fmt(r.pooled.usdc, 2), 'USDC = $1'), metric('ETH share of value', fmt(r.finalEthPercent, 2) + '%', r.state.replace('-', ' ')));
@@ -215,6 +198,7 @@ export function initLearning() {
     if (!applicationCopy.choices.some(([id]) => id === draft.application)) draft.application = '';
     choices('learn-applications', 'learn-application', applicationCopy.choices, draft.application);
     $('learn-hint-text').textContent = lesson.takeaway + ' ' + applicationCopy.hint;
+    learningPitfall($('learn-pitfall'),POOL_PITFALLS[lesson.id]);
     renderDeeper();
     $('learn-results').hidden = false; $('learn-assessment').hidden = false;
     $('learn-run').textContent = 'Run again →';
@@ -232,7 +216,7 @@ export function initLearning() {
   }
   function loadLesson() {
     clearCard();
-    const applied = appliedLessonFromHash(location.hash);
+    const applied = appliedLessonFromHash(location.hash) || managementLessonFromHash(location.hash);
     $('learn-essential').hidden = Boolean(applied);
     if (applied) { $('learn-route-note').hidden = true; updateProgress(); return false; }
     $('learn-page-title').textContent = 'Liquidity essentials';
@@ -284,8 +268,8 @@ export function initLearning() {
     if (check.passed) {
       if (!progress.completed.includes(lesson.id)) progress.completed.push(lesson.id);
       const index = LESSON_IDS.indexOf(lesson.id);
-      $('learn-next').href = index < 6 ? '#lesson=' + LESSON_IDS[index + 1] : '#applied=fees-over-time';
-      $('learn-next').textContent = index < 6 ? 'Next: ' + LESSONS[index + 1].short + ' →' : 'Next: Fees, time and range exits →';
+      $('learn-next').href = index < 6 ? '#lesson=' + LESSON_IDS[index + 1] : '#manage=range-width';
+      $('learn-next').textContent = index < 6 ? 'Next: ' + LESSONS[index + 1].short + ' →' : 'Next: Choosing and managing a range →';
     }
     updateProgress(); if (save) persist();
   }
@@ -348,7 +332,7 @@ export function initLearning() {
     link.addEventListener('click', () => { if (matchMedia('(max-width: 750px)').matches) courseDetails.open = false; });
   });
   $('learn-topics').addEventListener('click', () => { courseDetails.open = true; const summary = courseDetails.querySelector('summary'); summary.focus({ preventScroll: true }); courseDetails.scrollIntoView({ block: 'start', behavior: 'instant' }); });
-  $('learn-resume').addEventListener('click', () => { if (appliedLessonFromHash(location.hash)) return; $('learn-lesson-title').focus({ preventScroll: true }); $('learn-lesson-title').scrollIntoView({ block: 'start', behavior: 'instant' }); });
+  $('learn-resume').addEventListener('click', () => { if (appliedLessonFromHash(location.hash) || managementLessonFromHash(location.hash)) return; $('learn-lesson-title').focus({ preventScroll: true }); $('learn-lesson-title').scrollIntoView({ block: 'start', behavior: 'instant' }); });
   window.addEventListener('hashchange', () => { if (!loadLesson()) return; $('learn-lesson-title').focus({ preventScroll: true }); $('learn-lesson-title').scrollIntoView({ block: 'start', behavior: 'instant' }); });
   window.addEventListener('pagehide', () => { if (cardURL) URL.revokeObjectURL(cardURL); });
   loadLesson();

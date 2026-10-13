@@ -1,5 +1,5 @@
-import { APPLIED_IDS } from '../lib/applied-lessons.js?v=1.13.0';
-import { validChoiceSeed } from '../lib/learning-choices.js?v=1.13.0';
+import { APPLIED_IDS } from '../lib/applied-lessons.js?v=1.14.0';
+import { validChoiceSeed } from '../lib/learning-choices.js?v=1.14.0';
 
 export const APPLIED_KEY = 'passiko-applied-liquidity-v1';
 export const emptyAppliedProgress = () => ({ version: 1, completed: [], drafts: {} });

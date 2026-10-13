@@ -1,8 +1,10 @@
-import { APPLIED_CHAPTER, APPLIED_LESSONS } from '../learning/applied-liquidity.js?v=1.13.0';
-import { appliedLessonFromHash, appliedQuestion, checkAppliedAnswer, appliedReasonFeedback } from '../lib/applied-lessons.js?v=1.13.0';
-import { appliedApplication, checkAppliedUnderstanding } from '../lib/applied-applications.js?v=1.13.0';
-import { newChoiceSeed, validChoiceSeed, orderedLearningChoices } from '../lib/learning-choices.js?v=1.13.0';
-import { readAppliedProgress, saveAppliedProgress } from '../data/applied-progress.js?v=1.13.0';
+import { APPLIED_CHAPTER, APPLIED_LESSONS } from '../learning/applied-liquidity.js?v=1.14.0';
+import { appliedLessonFromHash, appliedQuestion, checkAppliedAnswer, appliedReasonFeedback } from '../lib/applied-lessons.js?v=1.14.0';
+import { appliedApplication, checkAppliedUnderstanding } from '../lib/applied-applications.js?v=1.14.0';
+import { newChoiceSeed, validChoiceSeed } from '../lib/learning-choices.js?v=1.14.0';
+import { learningChoices, learningMetric, learningPitfall } from '../lib/learning-elements.js?v=1.14.0';
+import { POOL_PITFALLS } from '../learning/pool-pitfalls.js?v=1.14.0';
+import { readAppliedProgress, saveAppliedProgress } from '../data/applied-progress.js?v=1.14.0';
 import { createAppliedRecordLoader } from '../data/applied-records.js';
 import { REPLAY_CASES } from '../data/replay-cases.js';
 import { periodPointView, periodIntervalView, periodMilestones, periodChartRange, periodDuration } from '../lib/period-presentation.js';
@@ -42,21 +44,9 @@ export function initAppliedLearning() {
     $('applied-feedback').hidden = true; $('applied-continue').hidden = true; $('applied-reflection').hidden = true;
   }
   function choices(id, name, values, selected, onChange) {
-    const ordered = name === 'applied-prediction' ? values : orderedLearningChoices(values, draft.choiceSeed, lesson.id + name);
-    $(id).replaceChildren(...ordered.map(([value, copy]) => {
-      const label = document.createElement('label'); label.className = 'learn-choice';
-      const input = document.createElement('input'); input.type = 'radio'; input.name = name; input.value = value; input.checked = value === selected;
-      const text = document.createElement('span'); text.textContent = copy; label.append(input, ' ', text);
-      input.addEventListener('change', () => onChange(value)); return label;
-    }));
+    learningChoices($(id),{name,values,selected,seed:draft.choiceSeed,group:lesson.id+name,onChange,shuffle:name!=='applied-prediction'});
   }
-  function metric(label, value, note) {
-    const block = document.createElement('div'); block.className = 'learn-metric';
-    const title = document.createElement('span'); title.className = 'label'; title.textContent = label;
-    const amount = document.createElement('strong'); amount.textContent = value;
-    const detail = document.createElement('span'); detail.className = 'learn-metric-note'; detail.textContent = note;
-    block.append(title, ' ', amount, ' ', detail); return block;
-  }
+  const metric=learningMetric;
   function evidence(entries) {
     $('applied-evidence').replaceChildren(...entries.flatMap(([name, value]) => {
       const dt = document.createElement('dt'), dd = document.createElement('dd');
@@ -176,6 +166,7 @@ export function initAppliedLearning() {
     $('applied-title').textContent = lesson.title; $('applied-adds').textContent = lesson.adds; $('applied-intro').textContent = lesson.intro;
     $('applied-question').textContent = lesson.question; $('applied-reason-question').textContent = lesson.reasoning;
     $('applied-prediction-question').textContent = lesson.prediction; $('applied-calculation-hint').textContent = lesson.hint;
+    learningPitfall($('applied-pitfall'),POOL_PITFALLS[lesson.id]);
     $('applied-takeaway').textContent = lesson.takeaway; $('applied-explanation').textContent = lesson.explanation;
     $('applied-hint').open = false; $('applied-deeper').open = false; $('applied-calculation').open = false;
     $('applied-calculation-feedback').textContent = ''; $('applied-answer').setAttribute('aria-invalid', 'false'); document.querySelector('.applied-primer').open = false;

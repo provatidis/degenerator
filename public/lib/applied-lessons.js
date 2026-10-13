@@ -1,5 +1,5 @@
 import { periodPointView, periodIntervalView, periodMilestones } from './period-presentation.js';
-import { learningAnswerMatches } from '../models/learning-answer.js?v=1.13.0';
+import { learningAnswerMatches } from '../models/learning-answer.js?v=1.14.0';
 
 export const APPLIED_IDS = Object.freeze(['fees-over-time', 'between-samples', 'period-vs-holding']);
 export function appliedLessonFromHash(hash) {

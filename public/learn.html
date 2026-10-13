@@ -5,7 +5,7 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; connect-src 'self' https://ethereum-rpc.publicnode.com https://eth.drpc.org; base-uri 'none'; object-src 'none'; form-action 'self'">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#111916">
-  <meta name="description" content="Learn liquidity through interactive experiments and verified historical cases. Predict, observe and explain the outcome.">
+  <meta name="description" content="Learn liquidity basics, compare range choices and follow verified historical cases. Predict, observe, explain and apply.">
   <meta name="application-name" content="Passiko">
   <meta name="apple-mobile-web-app-title" content="Passiko">
   <title>Liquidity essentials · Passiko Learn</title>
@@ -16,7 +16,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Passiko">
   <meta property="og:title" content="Learn liquidity by doing · Passiko">
-  <meta property="og:description" content="Build the foundations, then follow fees and range exits through verified historical cases.">
+  <meta property="og:description" content="Learn liquidity basics, practical range choices and fees through verified historical cases.">
   <meta property="og:url" content="https://provatidis.github.io/passiko/learn.html">
   <meta property="og:image" content="https://provatidis.github.io/passiko/assets/social-preview.png">
   <meta property="og:image:type" content="image/png">
@@ -28,8 +28,8 @@
   <meta name="twitter:title" content="Learn liquidity by doing · Passiko">
   <meta name="twitter:description" content="Interactive liquidity lessons and applied historical cases, with predictions and understanding checks.">
   <meta name="twitter:image" content="https://provatidis.github.io/passiko/assets/social-preview.png">
-  <link rel="stylesheet" href="styles.css?v=1.13.0">
-  <script type="module" src="learn-main.js?v=1.13.0"></script>
+  <link rel="stylesheet" href="styles.css?v=1.14.0">
+  <script type="module" src="learn-main.js?v=1.14.0"></script>
 </head>
 <body class="learning-page">
   <a class="skip-link" href="#main-content">Skip to content</a>
@@ -43,8 +43,8 @@
       <div><p class="eyebrow">LEARN BY DOING</p><h1 id="learn-page-title">Liquidity essentials</h1><p id="learn-page-subtitle" class="subtitle">Explore swaps, pool ownership, fees and price ranges with interactive examples.</p></div>
       <button type="button" id="learn-resume" class="button secondary">Start lesson 1 ↓</button>
     </section>
-    <nav class="learn-entry-links" aria-label="Learning entry points"><a href="#lesson=swap-impact">Start with foundations →</a><a href="#lesson=final-challenge">Test the essentials →</a><a href="#applied=fees-over-time">Follow a recorded position →</a></nav>
-    <div class="learn-meta"><span>Essentials + 3 applied exercises</span> <span>Open any topic</span> <span id="learn-storage" role="status">Progress saves in this browser.</span></div>
+    <nav class="learn-entry-links" aria-label="Learning entry points"><a href="#lesson=swap-impact">Start with foundations →</a><a href="#manage=range-width">Explore range choices →</a><a href="#applied=fees-over-time">Follow a recorded position →</a></nav>
+    <div class="learn-meta"><span>Essentials + 6 further exercises</span> <span>Open any topic</span> <span id="learn-storage" role="status">Progress saves in this browser.</span></div>
     <div id="learn-route-note" class="notice" role="status" hidden><p>That lesson link could not be opened. Your last lesson is shown below; choose any topic from the chapter.</p></div>
     <div id="learn-workspace" class="learn-workspace">
       <aside class="learn-sidebar">
@@ -53,6 +53,7 @@
           <progress id="learn-progress" max="7" value="0" aria-label="0 of 7 exercises checked"></progress>
           <p id="learn-course-status" class="fine-print">Six lessons and a final challenge. Open any topic.</p>
           <nav aria-label="Liquidity essentials lessons"><ol id="learn-lesson-list"></ol></nav>
+          <section class="applied-course" aria-labelledby="manage-course-title"><div class="applied-course-heading"><h3 id="manage-course-title">Choosing and managing a range</h3><span id="manage-progress-count">0 of 3 checked</span></div><p class="fine-print">Next: range width, fee rates, then exits and costs. Open any exercise.</p><nav aria-label="Practical range exercises"><ol id="manage-lesson-list"></ol></nav></section>
           <section class="applied-course" aria-labelledby="applied-course-title">
             <div class="applied-course-heading"><h3 id="applied-course-title">Fees, time and range exits</h3><span id="applied-progress-count">0 of 3 checked</span></div>
             <p class="fine-print">Next: apply the mechanics to verified history. Open any exercise.</p>
@@ -84,6 +85,7 @@
           <div id="learn-visual" class="learn-visual"></div>
           <p id="learn-takeaway" class="learn-takeaway"></p>
           <p id="learn-explanation" class="learn-reading"></p>
+          <aside id="learn-pitfall" class="learn-pitfall" aria-label="Common pitfall"></aside>
           <a id="learn-explore" class="learn-explore" href="./" target="_blank" rel="noopener noreferrer">Explore in Playground ↗</a>
           <p id="learn-explore-note" class="fine-print"></p>
           <details id="learn-deeper" class="learn-deeper">
@@ -122,6 +124,33 @@
           <div id="learn-card-preview" hidden><img id="learn-card-image" alt="Final challenge result card with inputs, holding and LP values, assumed fees and model limitations."><a id="learn-card-download" class="button secondary" download="passiko-learning-challenge-cp50-v1.png">Download PNG</a></div>
         </section>
       </article>
+      <article id="learn-management" class="learn-lesson management-lesson" aria-labelledby="manage-title" hidden>
+        <div class="learn-lesson-heading"><p id="manage-number" class="eyebrow">RANGE CHOICES 1 OF 3</p><span class="small-badge">Hypothetical situation</span><button id="manage-topics" type="button" class="learn-text-button">All topics ↑</button></div>
+        <p id="manage-adds" class="learn-level"></p><h2 id="manage-title" tabindex="-1"></h2><p id="manage-intro" class="learn-reading"></p>
+        <section class="card learn-experiment" aria-labelledby="manage-predict-title">
+          <div class="card-heading"><div><p class="eyebrow">01 · PREDICT</p><h3 id="manage-predict-title">Before opening the example</h3></div><button id="manage-variation" class="learn-text-button" type="button">Try another situation ↻</button></div>
+          <p id="manage-setup" class="learn-setup"></p><fieldset class="learn-fieldset"><legend id="manage-prediction-question"></legend><div id="manage-predictions" class="learn-choices"></div></fieldset>
+          <button id="manage-reveal" class="button primary" type="button" disabled>Reveal the example →</button><div class="learn-experiment-footer"><span id="manage-variation-label"></span><span>Hypothetical WETH/USDC · No calculations required</span></div>
+        </section>
+        <section id="manage-observe" class="card learn-results" aria-labelledby="manage-observe-title" hidden>
+          <p class="eyebrow">02 · OBSERVE</p><h3 id="manage-observe-title" tabindex="-1">Read the result</h3><p id="manage-prediction-feedback" class="learn-prediction-feedback" role="status"></p>
+          <div id="manage-metrics" class="learn-metrics"></div><p id="manage-takeaway" class="learn-takeaway"></p><p id="manage-explanation" class="learn-reading"></p>
+          <aside class="learn-pitfall" aria-label="Common pitfall"><strong>Watch for this</strong><p id="manage-pitfall"></p></aside>
+          <div id="manage-handoffs" class="applied-handoffs"></div><p id="manage-explore-note" class="fine-print"></p>
+          <details id="manage-deeper" class="applied-deeper"><summary>Go deeper: mechanics and sources</summary><div id="manage-deeper-copy"></div><ul id="manage-sources"></ul></details>
+        </section>
+        <section id="manage-assessment" class="card learn-assessment" aria-labelledby="manage-check-title" hidden>
+          <p class="eyebrow">03 · CHECK YOUR UNDERSTANDING</p><h3 id="manage-check-title">Explain the result and apply the idea</h3>
+          <form id="manage-assessment-form" novalidate>
+            <fieldset class="learn-fieldset"><legend id="manage-reason-question"></legend><div id="manage-reasons" class="learn-choices"></div></fieldset>
+            <div class="learn-application-setup"><p class="eyebrow">APPLY · CHANGE THE SITUATION</p><p id="manage-application-context"></p></div>
+            <fieldset class="learn-fieldset"><legend id="manage-application-question"></legend><div id="manage-applications" class="learn-choices"></div></fieldset>
+            <details id="manage-hint" class="learn-hint"><summary>Need a hint?</summary><p id="manage-hint-text"></p></details><button id="manage-check" class="button primary" type="submit">Check answers →</button>
+          </form>
+          <div id="manage-feedback" class="learn-feedback" role="status" hidden><strong id="manage-feedback-title"></strong><p id="manage-feedback-copy"></p></div>
+          <div id="manage-continue" class="learn-continue" hidden><a id="manage-next" class="button secondary" href="#manage=fee-tiers">Next exercise →</a><button id="manage-fresh" class="learn-text-button" type="button">Test another situation ↻</button></div>
+        </section>
+      </article>
       <article id="learn-applied" class="learn-lesson applied-lesson" aria-labelledby="applied-title" hidden>
         <div class="learn-lesson-heading"><p id="applied-number" class="eyebrow">APPLIED 1 OF 3</p><span class="small-badge">Verified historical case</span><button id="applied-topics" type="button" class="learn-text-button">All topics ↑</button></div>
         <p id="applied-adds" class="learn-level"></p>
@@ -150,6 +179,7 @@
           <p id="applied-observation" class="learn-reading"></p>
           <p id="applied-takeaway" class="learn-takeaway"></p>
           <p id="applied-explanation" class="learn-reading"></p>
+          <aside id="applied-pitfall" class="learn-pitfall" aria-label="Common pitfall"></aside>
           <div class="applied-handoffs"><a id="applied-explore" class="learn-explore" href="./" target="_blank" rel="noopener noreferrer">Explore this setup in Playground ↗</a><a id="applied-inspect" href="./#historical-case" target="_blank" rel="noopener noreferrer">Inspect the full recorded case ↗</a></div>
           <p class="fine-print">Playground starts a new hypothetical experiment from the selected checkpoint’s principal and range, with zero assumed future fees. Earlier collectable tokens and recorded period earnings are excluded. Inspect opens the historical evidence.</p>
           <details id="applied-deeper" class="applied-deeper"><summary>Go deeper: accounting and evidence</summary><div>

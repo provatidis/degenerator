@@ -19,3 +19,5 @@ These are durable working choices, not a feature backlog. Revisit them when evid
 Technical references: [models](docs/models.md), [data](docs/data.md), [development](docs/development.md).
 
 - Learn completion checks explanation and application of the concept. Predictions are ungraded; calculations and rounding practice stay optional in Go deeper. A changed historical setup is a labelled thought experiment, separate from verified accounting.
+
+- Practical range lessons follow the essentials before historical accounting. Fee-rate examples use explicitly supplied fictional totals; no fee forecast is inferred from endpoint prices. Each range keeps its own starting basket. Essential misconceptions stay visible in the normal lesson flow.

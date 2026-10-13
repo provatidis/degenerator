@@ -34,6 +34,7 @@ export async function checkLearning({ evaluate, click, fill, text, navigate, rel
     await choose('learn-prediction', id === 'swap-impact' ? 'same' : prediction);
     await click('learn-run');
     assert.equal(await evaluate("document.getElementById('learn-results').hidden"), false);
+    assert.ok((await text('learn-pitfall')).length>40);
     assert.equal(await evaluate("document.getElementById('learn-deeper').open"),false);
     assert.equal(await evaluate("document.getElementById('learn-math').open"),false);
     const beforeReading = await evaluate("localStorage.getItem('degenerator-learning-liquidity-v1')");

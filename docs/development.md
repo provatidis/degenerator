@@ -28,7 +28,7 @@ Open http://127.0.0.1:3000/ in your browser. The hypothetical labs, lessons and 
 npm test
 ```
 
-Tests cover the sandbox and both hypothetical models, versioned links and exports, v2/v3 snapshot validation, exact v3 fee accounting, fixed-position period accounting and continuity evidence, learning assessments, saved comparisons, Learn-return drafts and storage failures. The bundled historical records are checked locally without RPC calls; `npm run check:replay` separately recaptures and verifies chain history through public providers.
+Tests cover the sandbox and both hypothetical models, versioned links and exports, v2/v3 snapshot validation, exact v3 fee accounting, fixed-position period accounting and continuity evidence, essential and applied learning assessments, saved comparisons, Learn-return drafts and storage failures. The bundled historical records are checked locally without RPC calls; `npm run check:replay` separately recaptures and verifies chain history through public providers.
 
 For a local browser smoke test, install Chromium or set `CHROMIUM_BIN` to its executable, then run `npm run test:browser`. It starts temporary servers and checks actual page interactions at desktop and mobile sizes, including calculators, learning, snapshot imports, saved comparisons, the historical checkpoint slider, downloads and persistence. Navigation checks cover sticky-header offsets, direct tool fragments, browser history and returning from Learn. The same suite runs in CI before deployment. Its mobile routing checks use touch events as well as keyboard and mouse input. The test runner launches Chromium with its browser sandbox disabled; serving the app itself requires no browser installation.
 
@@ -49,7 +49,7 @@ The period model lives in `public/models/fixed-position-period.js`; record valid
 - public/models/: pure hypothetical calculations, lesson experiments and exact protocol/period arithmetic. They do not read the DOM, browser storage or network.
 - public/data/: deployment configuration, read-only Uniswap v2/v3 adapters, snapshot/period schemas, saved experiments, learning progress and temporary Learn-return storage.
 - public/lib/: compatible scenario links, exports, formatting and rendering utilities.
-- public/learning/: lesson definitions, optional deeper reading and the ten-example progression.
+- public/learning/: essential and applied lesson definitions, optional deeper reading and the ten-example progression.
 - public/examples/: bundled pool/position snapshots and the verified fixed-position period record; these open without RPC requests.
 - public/styles/: shared foundation and components followed by feature styles. public/styles.css preserves the existing cascade order.
 - public/index.html and public/learn.html: semantic, static markup with one module entry point per document. Each feature owns its IDs; the structure check rejects duplicates.
@@ -106,3 +106,9 @@ The sandbox key remains `defi-sandbox-v1`; the `degenerator-*` keys for saved ex
 ## Working drafts during a Learn visit
 
 Clicking a same-tab Learn link captures validated calculator inputs, the active lab and any matching source snapshot into `degenerator-learn-return-v1` in session storage. Returning restores the working drafts without changing saved experiments, lesson progress or latest chain snapshots, then consumes that temporary handoff. Explicit shared scenario links take precedence. Browser history restores cached pages directly; stale handoffs are cleared when such a page returns. Unsupported or unreadable handoff data is preserved, and blocked storage leaves navigation usable. Invalid incomplete inputs are not captured.
+
+## Applied learning records
+
+`public/ui/applied-learning.js` composes the three applied exercises beside the existing essentials controller. Strict `#applied=...` routes preserve existing `#lesson=...` links. Editorial definitions live in `public/learning/applied-liquidity.js`; `public/lib/applied-lessons.js` derives fixed assessment targets from the same period presentation used by Inspect. Exploring checkpoints does not change the question. No new fee model or historical capture is introduced.
+
+`public/data/applied-records.js` loads only the two configured bundled replay records, shares requests, validates their evidence and permits retry after failures. The controller rejects stale responses when the selected exercise changes. Applied drafts and completion use their own `passiko-applied-liquidity-v1` key; the essentials schema and all existing keys remain compatible. Unit checks cover exact targets, rounding, interval versus cumulative values, identity checks and independent storage. Browser checks cover direct entry, progression, restoration, Playground transfer, loading failures/races and 390px/320px layouts.

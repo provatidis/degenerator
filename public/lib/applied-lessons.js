@@ -1,0 +1,27 @@
+import { periodPointView, periodIntervalView, periodMilestones } from './period-presentation.js';
+
+export const APPLIED_IDS = Object.freeze(['fees-over-time', 'between-samples', 'period-vs-holding']);
+export function appliedLessonFromHash(hash) {
+  const params = new URLSearchParams(hash.replace(/^#/, ''));
+  const id = params.get('applied');
+  return APPLIED_IDS.includes(id) && params.getAll('applied').length === 1 && [...params.keys()].every(key => key === 'applied') ? id : null;
+}
+export function appliedQuestion(period, id) {
+  if (!APPLIED_IDS.includes(id)) throw new Error('Choose an applied exercise.');
+  const expected = id === 'fees-over-time' ? 'position-1382030' : 'position-1375047';
+  if (period.id !== expected) throw new Error('This exercise requires its recorded position.');
+  const index = id === 'between-samples'
+    ? periodMilestones(period).find(item => item.label === 'Between samples')?.index
+    : period.points.length - 1;
+  if (!Number.isInteger(index)) throw new Error('The recorded between-samples interval is missing.');
+  const view = periodPointView(period, index), interval = periodIntervalView(period, index);
+  if (id === 'fees-over-time') return { index, view, interval, answer: view.feesUSD, tolerance: .0051, prediction: 'earned', reason: 'growth' };
+  if (id === 'between-samples') return { index, view, interval, answer: interval.secondsInRange, tolerance: 0, prediction: 'possible', reason: 'counters' };
+  return { index, view, interval, answer: view.gapUSD, tolerance: .0051, prediction: view.gapUSD >= 0 ? 'lp' : 'hold', reason: 'basket' };
+}
+export function checkAppliedAnswer(question, answer, reason) {
+  const numeric = typeof answer === 'string' && answer.trim() !== '' && Number.isFinite(Number(answer))
+    && Math.abs(Number(answer) - question.answer) <= question.tolerance + 1e-10;
+  const reasoning = reason === question.reason;
+  return { numeric, reasoning, passed: numeric && reasoning };
+}

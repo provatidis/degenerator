@@ -1,5 +1,5 @@
-import { APPLIED_CHAPTER, APPLIED_LESSONS } from '../learning/applied-liquidity.js';
-import { appliedLessonFromHash, appliedQuestion, checkAppliedAnswer } from '../lib/applied-lessons.js';
+import { APPLIED_CHAPTER, APPLIED_LESSONS } from '../learning/applied-liquidity.js?v=1.12.1';
+import { appliedLessonFromHash, appliedQuestion, checkAppliedAnswer, appliedReasonFeedback } from '../lib/applied-lessons.js?v=1.12.1';
 import { readAppliedProgress, saveAppliedProgress } from '../data/applied-progress.js';
 import { createAppliedRecordLoader } from '../data/applied-records.js';
 import { REPLAY_CASES } from '../data/replay-cases.js';
@@ -127,8 +127,8 @@ export function initAppliedLearning() {
     if (!period || !draft.prediction) return;
     draft.revealed = true;
     const correct = draft.prediction === question.prediction;
-    $('applied-prediction-feedback').textContent = correct ? 'Your prediction matches the recorded result.'
-      : 'Compare your prediction with the record: ' + lesson.predictions.find(([id]) => id === question.prediction)[1] + '.';
+    $('applied-prediction-feedback').textContent = correct ? 'Your prediction matches the recorded result at the marked question checkpoint or interval.'
+      : 'At the marked question checkpoint or interval: ' + lesson.predictions.find(([id]) => id === question.prediction)[1] + '. Compare that with your prediction.';
     $('applied-observe').hidden = false; $('applied-assessment').hidden = false;
     $('applied-reveal').textContent = 'Revisit the recorded result ↓';
     renderCheckpoint(); persist();
@@ -137,10 +137,11 @@ export function initAppliedLearning() {
     const result = checkAppliedAnswer(question, draft.answer, draft.reason);
     $('applied-feedback').hidden = false; $('applied-feedback').className = 'learn-feedback ' + (result.passed ? 'learn-pass' : 'learn-retry');
     $('applied-feedback-title').textContent = result.passed ? 'Both answers are correct.' : 'Review your answers.';
+    const reasoningFeedback = appliedReasonFeedback(lesson.id, draft.reason);
     $('applied-feedback-copy').textContent = result.passed ? lesson.takeaway
-      : !result.numeric && !result.reasoning ? 'Revisit the question checkpoint, units and explanation. The hint shows what to compare.'
+      : !result.numeric && !result.reasoning ? 'Revisit the question checkpoint’s number, units and requested rounding. ' + reasoningFeedback
         : !result.numeric ? 'Your reasoning is sound. Revisit the question checkpoint’s number and the requested units.'
-          : 'Your number matches. Revisit what the recorded evidence supports.';
+          : 'Your number matches. ' + reasoningFeedback;
     $('applied-answer').setAttribute('aria-invalid', String(!result.numeric));
     $('applied-continue').hidden = !result.passed;
     const next = APPLIED_LESSONS[APPLIED_LESSONS.indexOf(lesson) + 1];

@@ -63,7 +63,7 @@ export async function checkLearning({ evaluate, click, fill, text, navigate, rel
       assert.equal(await text('learn-progress-count'), '0 of 7 checked');
       await fill('learn-answer', answer);
       await choose('learn-reason', 'fixed'); await click('learn-check');
-      assert.match(await text('learn-feedback-copy'), /Revisit the explanation/);
+      assert.match(await text('learn-feedback-copy'), /A finite swap changes the reserves/);
       assert.equal(await text('learn-progress-count'), '0 of 7 checked');
       await choose('learn-reason', reason);
     }

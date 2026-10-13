@@ -1,5 +1,12 @@
 # Release history
 
+## 1.12.1 — 2026-10-13
+
+- Explain token transfers using the selected rising, falling or unchanged ETH price. Clarify that pools do not create ETH or USDC; give specific feedback for incorrect reasoning throughout both learning chapters.
+- Match numeric grading to the question’s displayed precision and require whole-number answers where requested. Reject adjacent incorrect rounded answers.
+- Anchor historical conclusions and prediction feedback to the marked question checkpoint while other checkpoints are explored. Clarify before-fee budget comparisons and principal-only range questions.
+- Version mutable teaching text and grading together, with regressions against a retained previous model. Add direction, distractor, rounding, boundary and desktop/mobile checks while preserving lesson identifiers and saved progress.
+
 ## 1.12.0 — 2026-10-13
 
 - Add a three-exercise applied learning chapter: fees accumulating, activity between outside-range samples, and the final comparison with holding. Reuse the two independently checked historical records and their existing accounting.

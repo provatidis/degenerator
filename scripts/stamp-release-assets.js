@@ -10,6 +10,19 @@ for (const name of ['main.js', 'learn-main.js']) {
   const source = await readFile(file, 'utf8');
   await writeFile(file, source.replace(/(from ['"])(\.\/ui\/[^'"]+)(['"])/g, (_, before, path, after) => before + stamp(path) + after));
 }
+// Teaching text and grading must update together. These modules are pure or editorial;
+// protocol adapters and RPC classes retain their shared, unversioned module identity.
+const teaching = {
+  'ui/learning.js': ['../learning/liquidity-essentials.js', '../learning/deeper-reading.js', '../lib/lesson-walkthrough.js', '../lib/lesson-narration.js', '../models/lesson-experiments.js'],
+  'ui/applied-learning.js': ['../learning/applied-liquidity.js', '../lib/applied-lessons.js'],
+  'models/lesson-experiments.js': ['./learning-answer.js'],
+  'lib/applied-lessons.js': ['../models/learning-answer.js'],
+};
+for (const [name, imports] of Object.entries(teaching)) {
+  const file = new URL(name, root), source = await readFile(file, 'utf8');
+  await writeFile(file, source.replace(/(from ['"])([^'"]+)(['"])/g, (match, before, path, after) =>
+    imports.includes(path.split('?')[0]) ? before + stamp(path) + after : match));
+}
 for (const name of ['index.html', 'learn.html', '404.html']) {
   const file = new URL(name, root);
   const source = await readFile(file, 'utf8');
@@ -24,4 +37,4 @@ for (const file of styles) {
   const updated = source.replace(/(@import url\(["])([^"?]+)(?:\?[^"\)]*)?(["]\);)/g, (_, before, path, after) => before + stamp(path) + after);
   if (updated !== source) await writeFile(file, updated);
 }
-console.log('Stamped page entries, UI controllers and stylesheet imports for ' + version + '.');
+console.log('Stamped page entries, UI controllers, teaching modules and stylesheet imports for ' + version + '.');

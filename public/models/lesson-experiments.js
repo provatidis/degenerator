@@ -1,6 +1,7 @@
 import { calculateScenario } from './cp50-v1.js';
 import { calculateRange } from './cl-range-v1.js';
 import { amountOut } from './uniswap-v2.js';
+import { learningAnswerMatches } from './learning-answer.js?v=1.12.1';
 
 export const LESSON_IDS = Object.freeze(['swap-impact', 'pool-share', 'token-balances', 'loss-vs-profit', 'fee-break-even', 'range-boundaries', 'final-challenge']);
 export const VARIANTS = 3;
@@ -45,31 +46,30 @@ export function runLesson(id, input, variant = 0) {
     const smallOut = Number(amountOut(10n ** 18n, BigInt(setup.reserveEth) * 10n ** 18n, BigInt(reserveUsdc) * 10n ** 6n)) / 1e6;
     const impact = setup.amount * 0.997 / (setup.reserveEth + setup.amount * 0.997) * 100;
     return { setup, out, smallOut, impact, afterEth: setup.reserveEth + setup.amount, afterUsdc: reserveUsdc - out,
-      prediction: 'less', answer: out, tolerance: 1, unit: 'USDC', reason: 'curve' };
+      prediction: 'less', answer: out, answerDigits: 0, wholeAnswer: true, unit: 'USDC', reason: 'curve' };
   }
   if (id === 'pool-share') {
     const percent = setup.depositEth / (setup.reserveEth + setup.depositEth) * 100;
     return { setup, share: percent, usdcDeposit: setup.depositEth * setup.initialPrice,
-      prediction: 'less', answer: percent, tolerance: 0.02, unit: '%', reason: 'ownership' };
+      prediction: 'less', answer: percent, answerDigits: 2, unit: '%', reason: 'ownership' };
   }
   if (id === 'range-boundaries') {
     const result = calculateRange({ ...setup, lowerPrice: setup.initialPrice * (1 - setup.width), upperPrice: setup.initialPrice * (1 + setup.width), fullRangeFees: 0 });
     return { setup, result, prediction: result.pooled.eth === 0 ? 'usdc' : result.pooled.usdc === 0 ? 'eth' : 'both',
-      answer: result.finalEthPercent, tolerance: 0.05, unit: '%', reason: 'path' };
+      answer: result.finalEthPercent, answerDigits: 2, unit: '%', reason: 'path' };
   }
   const result = calculateScenario(setup);
   const gap = Math.max(0, result.breakEvenFees - setup.fees);
   const answers = {
-    'token-balances': { prediction: result.pooled.eth < result.held.eth ? 'less' : result.pooled.eth > result.held.eth ? 'more' : 'same', answer: result.pooled.eth, tolerance: 0.001, unit: 'ETH', reason: 'rebalance' },
-    'loss-vs-profit': { prediction: result.lpReturn >= 0 ? 'gain' : 'loss', answer: result.breakEvenFees, tolerance: 0.02, unit: 'USD', reason: 'benchmark' },
-    'fee-break-even': { prediction: result.difference >= -1e-8 ? 'enough' : 'short', answer: result.breakEvenFees, tolerance: 0.02, unit: 'USD', reason: 'assumption' },
-    'final-challenge': { prediction: result.difference >= -1e-8 ? 'lp' : 'hold', answer: gap, tolerance: 0.02, unit: 'USD', reason: 'total' },
+    'token-balances': { prediction: result.pooled.eth < result.held.eth ? 'less' : result.pooled.eth > result.held.eth ? 'more' : 'same', answer: result.pooled.eth, answerDigits: 3, unit: 'ETH', reason: 'rebalance' },
+    'loss-vs-profit': { prediction: result.lpReturn >= 0 ? 'gain' : 'loss', answer: result.breakEvenFees, answerDigits: 2, unit: 'USD', reason: 'benchmark' },
+    'fee-break-even': { prediction: result.difference >= -1e-8 ? 'enough' : 'short', answer: result.breakEvenFees, answerDigits: 2, unit: 'USD', reason: 'assumption' },
+    'final-challenge': { prediction: result.difference >= -1e-8 ? 'lp' : 'hold', answer: gap, answerDigits: 2, unit: 'USD', reason: 'total' },
   };
   return { setup, result, ...answers[id] };
 }
 export function checkLesson(id, input, variant, answer, reason) {
   const result = runLesson(id, input, variant);
-  const numeric = typeof answer === 'string' && answer.trim() !== '' && Number.isFinite(Number(answer))
-    && Math.abs(Number(answer) - result.answer) <= result.tolerance + 1e-10;
+  const numeric = learningAnswerMatches(answer, result.answer, result.answerDigits, result.wholeAnswer);
   return { numeric, reasoning: reason === result.reason, passed: numeric && reason === result.reason };
 }

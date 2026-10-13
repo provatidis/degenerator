@@ -34,7 +34,7 @@ For a local browser smoke test, install Chromium or set `CHROMIUM_BIN` to its ex
 
 Set `TEST_BASE_URL` to a deployed site or a local server with a project subpath to test that target instead of starting the Node server. The browser smoke test checks that the home link, scripts, styles, and swaps work at that base URL.
 
-When changing the package version, run `npm run release:assets` before the checks. This stamps page entry points, UI-controller imports and stylesheet imports so a browser retaining the previous release fetches the new UI. The structure check rejects stale release queries. Storage keys, exported schemas and model versions are independent of these asset URLs.
+When changing the package version, run `npm run release:assets` before the checks. This stamps page entry points, UI-controller imports, mutable teaching/assessment modules and stylesheet imports so a browser retaining the previous release fetches the new UI. The structure check rejects stale release queries. Storage keys, exported schemas and model versions are independent of these asset URLs.
 
 ## Focused workspaces and historical records
 
@@ -112,3 +112,9 @@ Clicking a same-tab Learn link captures validated calculator inputs, the active 
 `public/ui/applied-learning.js` composes the three applied exercises beside the existing essentials controller. Strict `#applied=...` routes preserve existing `#lesson=...` links. Editorial definitions live in `public/learning/applied-liquidity.js`; `public/lib/applied-lessons.js` derives fixed assessment targets from the same period presentation used by Inspect. Exploring checkpoints does not change the question. No new fee model or historical capture is introduced.
 
 `public/data/applied-records.js` loads only the two configured bundled replay records, shares requests, validates their evidence and permits retry after failures. The controller rejects stale responses when the selected exercise changes. Applied drafts and completion use their own `passiko-applied-liquidity-v1` key; the essentials schema and all existing keys remain compatible. Unit checks cover exact targets, rounding, interval versus cumulative values, identity checks and independent storage. Browser checks cover direct entry, progression, restoration, Playground transfer, loading failures/races and 390px/320px layouts.
+
+## Lesson consistency checks
+
+`public/lib/lesson-narration.js` narrates the calculated setup and explains each incorrect foundation reason. Token-transfer direction follows the selected price; an unchanged price has a distinct explanation. Benchmarks, total fee targets and additional fees stay explicit. Applied corrective feedback remains scoped to the marked question checkpoint or interval.
+
+`public/models/learning-answer.js` checks the same decimal rounding used in displayed outcomes, with explicit whole-number requirements. It accepts equivalent extra precision without accepting an adjacent incorrectly rounded number. Lesson and progress identifiers are unchanged. The release stamper versions mutable teaching definitions, narration and grading together, while protocol adapter/RPC module identities remain shared. Unit checks cover all distractors, price directions, widths and variations; browser checks replay an older unversioned model beside the current grading module and cover desktop/mobile feedback.

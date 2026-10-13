@@ -30,8 +30,8 @@
   <meta name="twitter:description" content="Explore full-range and concentrated liquidity, import pool and position snapshots, and experiment with virtual swaps in Passiko.">
   <meta name="twitter:image" content="https://provatidis.github.io/passiko/assets/social-preview.png">
   <meta name="twitter:image:alt" content="Passiko. Learn and experiment with DeFi, with a liquidity range scenario.">
-  <link rel="stylesheet" href="styles.css?v=1.11.1">
-  <script type="module" src="main.js?v=1.11.1"></script>
+  <link rel="stylesheet" href="styles.css?v=1.12.0">
+  <script type="module" src="main.js?v=1.12.0"></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
@@ -422,6 +422,7 @@
           <details class="model-details period-details"><summary>Tokens and verification</summary><dl><dt>Recorded window · UTC</dt><dd id="period-window"></dd><dt>Position principal</dt><dd id="period-principal"></dd><dt>Period fee tokens</dt><dd id="period-fee-tokens"></dd><dt>Holding basket</dt><dd id="period-hold-tokens"></dd><dt>Selected block</dt><dd><a id="period-block" target="_blank" rel="noopener noreferrer"></a></dd><dt>Block hash</dt><dd id="period-hash"></dd><dt>Period fees · exact integers</dt><dd id="period-raw-fees"></dd><dt>Interval fees · exact integers</dt><dd id="period-interval-raw"></dd><dt>Interval time · exact seconds</dt><dd id="period-interval-time-raw"></dd><dt>Range-time counter · uint32</dt><dd id="period-counter"></dd></dl><p class="fine-print">The state and event providers agreed on the endpoint block hashes. Position-update event queries cover the complete period. Read-only collection simulations independently check period fees within one base unit per token. Interval credits are differences of cumulative period credits, preserving their integer rounding.</p></details>
           <details class="model-details period-details"><summary>How to read this replay</summary><div class="period-reading"><p><strong>Range status is a checkpoint fact.</strong> An outside sample shows that the position was outside at that block. A return sample is the first recorded in-range checkpoint after an outside sample; it does not identify the exact crossing time.</p><p><strong>Elapsed time and fee income measure different things.</strong> The range-time counter measures active seconds. Fee growth measures tokens earned through swaps. They include activity between samples; swaps within one block can earn fees without adding an active second.</p><p><strong>Earned tokens and their dollar value differ.</strong> Each interval adds the change in cumulative fee credits. Earlier fee tokens remain held, so their dollar value can move with ETH even while no new fees accrue. Fees are not compounded.</p><p><strong>Holding uses the starting principal tokens.</strong> Previously accrued fees and recorded owed balances are excluded from both strategies. Dollar comparisons use each selected pool price and USDC = $1; gas and incentives are excluded. This is a recorded period, not lifetime PnL or a forecast.</p></div></details>
         </div>
+        <p class="period-reading"><a class="learn-explore" href="learn.html#applied=fees-over-time">Learn with these recorded cases →</a></p>
         <div class="period-actions"><button id="period-apply" class="button secondary" type="button" disabled>Explore this checkpoint in Playground →</button><button id="period-export" class="button secondary" type="button" disabled>Export recorded case</button></div>
       </section>
     </div>

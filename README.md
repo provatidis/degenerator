@@ -7,7 +7,7 @@ A DeFi playground for learning liquidity mechanics and testing assumptions. Comp
 [Open Experiment](https://provatidis.github.io/passiko/) · [Learn](https://provatidis.github.io/passiko/learn.html) · [Inspect a position](https://provatidis.github.io/passiko/#position-lab)
 
 - **Experiment:** full-range and concentrated-liquidity calculators, ordered examples, and saved comparisons.
-- **Learn:** six interactive lessons and a final challenge. Every topic is available directly.
+- **Learn:** six interactive lessons, a final challenge and three applied exercises using verified historical cases. Every topic is available directly.
 - **Inspect:** Ethereum WETH/USDC pool and v3 NFT snapshots, principal, fee accounting and JSON exports.
 - **Historical cases:** start with an in-range baseline, then follow a 33-hour position through exits and returns. Inspect interval fees, active/outside time and the holding comparison.
 - **Pool mechanics:** a separate virtual swap and liquidity sandbox, linked from Experiment and Learn.

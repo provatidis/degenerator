@@ -1,3 +1,4 @@
+import { checkAppliedLearning, checkMobileAppliedLearning } from './browser/applied-learning-checks.js';
 import { checkMobileInspect } from './browser/inspect-checks.js';
 import { checkExperimentFlow } from './browser/flow-checks.js';
 import { checkPolish } from './browser/polish-checks.js';
@@ -492,6 +493,7 @@ try {
   console.log('PASS: impermanent-loss scenarios, reset, and desktop layout');
 
   await checkLearning({ evaluate, click, fill, text, navigate, reload, base, downloadFile });
+  await checkAppliedLearning({ evaluate, click, fill, text, navigate, reload, base, call, nextEvent });
 
   if (process.env.SCREENSHOT_PATH) {
     const screenshot = await call('Page.captureScreenshot', { format: 'png', captureBeyondViewport: true });
@@ -527,6 +529,7 @@ try {
   console.log('PASS: mobile range setup disclosure, price checkpoints, sharing and lab switching');
   await checkMobilePositions({ evaluate, click, fill, text });
   await checkMobileLearning({ evaluate, click, fill, text, navigate, base });
+  await checkMobileAppliedLearning({ evaluate, click, fill, text, navigate, base, call });
   await checkMobileSavedExperiments({ evaluate, click, fill, text, navigate, base, call });
   await call('Emulation.setDeviceMetricsOverride', { width: 320, height: 740, deviceScaleFactor: 1, mobile: true });
   await navigate(base+'#example=position-fees');

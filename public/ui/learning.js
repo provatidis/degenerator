@@ -8,6 +8,7 @@ import { fmt, usd, signedUSD, percent } from '../lib/format.js';
 import { scenarioHash } from '../lib/scenario-links.js';
 import { rangeHash } from '../lib/range-links.js';
 import { resultCardBlob } from '../lib/result-card.js';
+import { appliedLessonFromHash } from '../lib/applied-lessons.js';
 
 export function initLearning() {
   const $ = id => document.getElementById(id);
@@ -31,14 +32,15 @@ export function initLearning() {
     $('learn-progress-count').textContent = count + ' of 7 checked';
     $('learn-progress').value = count;
     $('learn-progress').setAttribute('aria-label', count + ' of 7 exercises checked');
-    $('learn-course-status').textContent = count === 7 ? 'All exercises checked. Try another variation or open Playground.' : 'Six lessons and a final challenge. Open any topic.';
+    $('learn-course-status').textContent = count === 7 ? 'All essentials exercises checked. Continue with the applied chapter or revisit an experiment.' : 'Six lessons and a final challenge. Open any topic.';
     for (const link of document.querySelectorAll('[data-lesson-id]')) {
       const id = link.dataset.lessonId;
-      link.setAttribute('aria-current', id === lesson.id ? 'step' : 'false');
-      link.querySelector('.learn-step-state').textContent = progress.completed.includes(id) ? 'Checked' : id === lesson.id ? 'Now exploring' : 'Open lesson';
+      const active = !appliedLessonFromHash(location.hash) && id === lesson?.id;
+      link.setAttribute('aria-current', active ? 'step' : 'false');
+      link.querySelector('.learn-step-state').textContent = progress.completed.includes(id) ? 'Checked' : active ? 'Now exploring' : 'Open lesson';
       link.classList.toggle('learn-step-done', progress.completed.includes(id));
     }
-    if (!matchMedia('(max-width: 750px)').matches) {
+    if (lesson && !appliedLessonFromHash(location.hash) && !matchMedia('(max-width: 750px)').matches) {
       const sidebar = document.querySelector('.learn-sidebar');
       const selected = document.querySelector('[data-lesson-id="' + lesson.id + '"]');
       const bounds = selected.getBoundingClientRect(), visible = sidebar.getBoundingClientRect();
@@ -214,6 +216,11 @@ export function initLearning() {
   }
   function loadLesson() {
     clearCard();
+    const applied = appliedLessonFromHash(location.hash);
+    $('learn-essential').hidden = Boolean(applied);
+    if (applied) { $('learn-route-note').hidden = true; updateProgress(); return false; }
+    $('learn-page-title').textContent = 'Liquidity essentials';
+    $('learn-page-subtitle').textContent = 'Explore swaps, pool ownership, fees and price ranges with interactive examples.';
     const params = new URLSearchParams(location.hash.slice(1));
     const requested = params.get('lesson');
     const valid = LESSON_IDS.includes(requested) && params.getAll('lesson').length === 1 && [...params.keys()].every(key => key === 'lesson');
@@ -241,6 +248,7 @@ export function initLearning() {
     renderControls(); updateSetup(); updateProgress();
     if (draft.ran) { renderResults(); if (checkLesson(id, draft.inputs, draft.variant, draft.answer, draft.reason).passed) showCheck(false); }
     persist();
+    return true;
   }
   function showCheck(save = true) {
     const check = checkLesson(lesson.id, draft.inputs, draft.variant, draft.answer, draft.reason);
@@ -256,8 +264,8 @@ export function initLearning() {
     if (check.passed) {
       if (!progress.completed.includes(lesson.id)) progress.completed.push(lesson.id);
       const index = LESSON_IDS.indexOf(lesson.id);
-      $('learn-next').href = index < 6 ? '#lesson=' + LESSON_IDS[index + 1] : '#lesson=' + LESSON_IDS[0];
-      $('learn-next').textContent = index < 6 ? 'Next: ' + LESSONS[index + 1].short + ' →' : 'Revisit the chapter →';
+      $('learn-next').href = index < 6 ? '#lesson=' + LESSON_IDS[index + 1] : '#applied=fees-over-time';
+      $('learn-next').textContent = index < 6 ? 'Next: ' + LESSONS[index + 1].short + ' →' : 'Next: Fees, time and range exits →';
     }
     updateProgress(); if (save) persist();
   }
@@ -314,8 +322,8 @@ export function initLearning() {
     link.addEventListener('click', () => { if (matchMedia('(max-width: 750px)').matches) courseDetails.open = false; });
   });
   $('learn-topics').addEventListener('click', () => { courseDetails.open = true; const summary = courseDetails.querySelector('summary'); summary.focus({ preventScroll: true }); courseDetails.scrollIntoView({ block: 'start', behavior: 'instant' }); });
-  $('learn-resume').addEventListener('click', () => { $('learn-lesson-title').focus({ preventScroll: true }); $('learn-lesson-title').scrollIntoView({ block: 'start', behavior: 'instant' }); });
-  window.addEventListener('hashchange', () => { loadLesson(); $('learn-lesson-title').focus({ preventScroll: true }); $('learn-lesson-title').scrollIntoView({ block: 'start', behavior: 'instant' }); });
+  $('learn-resume').addEventListener('click', () => { if (appliedLessonFromHash(location.hash)) return; $('learn-lesson-title').focus({ preventScroll: true }); $('learn-lesson-title').scrollIntoView({ block: 'start', behavior: 'instant' }); });
+  window.addEventListener('hashchange', () => { if (!loadLesson()) return; $('learn-lesson-title').focus({ preventScroll: true }); $('learn-lesson-title').scrollIntoView({ block: 'start', behavior: 'instant' }); });
   window.addEventListener('pagehide', () => { if (cardURL) URL.revokeObjectURL(cardURL); });
   loadLesson();
 }

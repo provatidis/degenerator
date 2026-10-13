@@ -1,5 +1,12 @@
 # Release history
 
+## 1.12.0 — 2026-10-13
+
+- Add a three-exercise applied learning chapter: fees accumulating, activity between outside-range samples, and the final comparison with holding. Reuse the two independently checked historical records and their existing accounting.
+- Keep a fixed question checkpoint or interval while learners explore recorded history. Require a numeric answer and sound reasoning, with hints, optional exact accounting and source links.
+- Connect the essentials challenge and Inspect to the applied chapter. Provide direct access to every exercise, independent saved progress, loading recovery, and zero-fee principal-only Playground handoffs.
+- Check assessment arithmetic, record loading, storage isolation and desktop/mobile workflows without changing the historical evidence or original lesson formats.
+
 ## 1.11.1 — 2026-10-13
 
 - Commit primary navigation fragments before changing the workspace, including touch navigation from Learn and an edited calculator.

@@ -25,6 +25,10 @@ The first outside sample is block 26081250. Several following intervals add no a
 
 These facts explain why an endpoint status or sampled price line cannot establish the whole path. **Outside sample** and **Return sample** identify recorded checkpoints, not exact crossing times. **Between samples** opens the interval with activity omitted by the price line. The position's lower USD price bound is far below these prices, so the chart focuses on the observed movement and explicitly identifies that bound as outside the plotted window.
 
+## Learn from these records
+
+The [Fees, time and range exits chapter](https://provatidis.github.io/passiko/learn.html#applied=fees-over-time) uses these unchanged records for three guided prediction-and-explanation exercises. Assessment targets come from the existing period accounting: final baseline fee value, the exit-and-return case’s 2,724 active seconds between blocks 26084375–26085000, and its final LP-minus-holding result before costs. Checkpoint exploration stays independent of the fixed question. Playground handoffs start a separate principal-only hypothetical experiment with zero assumed future fees.
+
 ## Calculations and checks
 
 - Principal is recomputed from unchanged NFT liquidity and tick bounds at each recorded Q96 price.

@@ -82,7 +82,7 @@ export async function checkLearning({ evaluate, click, fill, text, navigate, rel
     }
   }
   assert.equal(await text('learn-progress-count'), '7 of 7 checked');
-  assert.match(await text('learn-course-status'), /All exercises checked/);
+  assert.match(await text('learn-course-status'), /All essentials exercises checked/);
   assert.equal(await evaluate("document.getElementById('learn-share').hidden"), false);
   await evaluate("Object.defineProperty(navigator, 'clipboard', { configurable:true, value:{writeText:async value=>{window.learningCopied=value}} });");
   await click('learn-copy');

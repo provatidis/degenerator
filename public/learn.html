@@ -5,7 +5,7 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; connect-src 'self' https://ethereum-rpc.publicnode.com https://eth.drpc.org; base-uri 'none'; object-src 'none'; form-action 'self'">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#111916">
-  <meta name="description" content="Learn liquidity by doing. Predict, experiment and check your understanding through six practical DeFi lessons and a final challenge.">
+  <meta name="description" content="Learn liquidity through interactive experiments and verified historical cases. Predict, observe and explain the outcome.">
   <meta name="application-name" content="Passiko">
   <meta name="apple-mobile-web-app-title" content="Passiko">
   <title>Liquidity essentials · Passiko Learn</title>
@@ -16,7 +16,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Passiko">
   <meta property="og:title" content="Learn liquidity by doing · Passiko">
-  <meta property="og:description" content="Six practical lessons. Predict an outcome, run an experiment and check the result.">
+  <meta property="og:description" content="Build the foundations, then follow fees and range exits through verified historical cases.">
   <meta property="og:url" content="https://provatidis.github.io/passiko/learn.html">
   <meta property="og:image" content="https://provatidis.github.io/passiko/assets/social-preview.png">
   <meta property="og:image:type" content="image/png">
@@ -26,10 +26,10 @@
   <meta name="twitter:image:alt" content="Passiko. Learn and experiment with DeFi, with a liquidity range scenario.">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Learn liquidity by doing · Passiko">
-  <meta name="twitter:description" content="Six practical lessons and a final challenge, with virtual funds and immediate feedback.">
+  <meta name="twitter:description" content="Interactive liquidity lessons and applied historical cases, with predictions and understanding checks.">
   <meta name="twitter:image" content="https://provatidis.github.io/passiko/assets/social-preview.png">
-  <link rel="stylesheet" href="styles.css?v=1.11.1">
-  <script type="module" src="learn-main.js?v=1.11.1"></script>
+  <link rel="stylesheet" href="styles.css?v=1.12.0">
+  <script type="module" src="learn-main.js?v=1.12.0"></script>
 </head>
 <body class="learning-page">
   <a class="skip-link" href="#main-content">Skip to content</a>
@@ -40,24 +40,29 @@
   <main id="main-content" tabindex="-1">
     <noscript><div class="notice"><p>JavaScript is needed for the interactive lessons and progress. Enable it to predict, run and check your experiments. <a href="./">Open Playground →</a></p></div></noscript>
     <section class="intro learn-intro">
-      <div><p class="eyebrow">LEARN BY DOING</p><h1>Liquidity essentials</h1><p class="subtitle">Explore swaps, pool ownership, fees and price ranges with interactive examples.</p></div>
+      <div><p class="eyebrow">LEARN BY DOING</p><h1 id="learn-page-title">Liquidity essentials</h1><p id="learn-page-subtitle" class="subtitle">Explore swaps, pool ownership, fees and price ranges with interactive examples.</p></div>
       <button type="button" id="learn-resume" class="button secondary">Start lesson 1 ↓</button>
     </section>
-    <nav class="learn-entry-links" aria-label="Learning entry points"><a href="#lesson=swap-impact">Start with foundations →</a><a href="#lesson=final-challenge">Jump to the applied challenge →</a><a href="./#example=in-range-position">Inspect a recorded position in Playground ↗</a></nav>
-    <div class="learn-meta"><span>6 lessons + a final challenge</span> <span>Open any topic</span> <span id="learn-storage" role="status">Progress saves in this browser.</span></div>
+    <nav class="learn-entry-links" aria-label="Learning entry points"><a href="#lesson=swap-impact">Start with foundations →</a><a href="#lesson=final-challenge">Test the essentials →</a><a href="#applied=fees-over-time">Follow a recorded position →</a></nav>
+    <div class="learn-meta"><span>Essentials + 3 applied exercises</span> <span>Open any topic</span> <span id="learn-storage" role="status">Progress saves in this browser.</span></div>
     <div id="learn-route-note" class="notice" role="status" hidden><p>That lesson link could not be opened. Your last lesson is shown below; choose any topic from the chapter.</p></div>
     <div id="learn-workspace" class="learn-workspace">
       <aside class="learn-sidebar">
         <details id="learn-course" class="card learn-course" open>
-          <summary><span>COURSE PROGRESS</span> <strong id="learn-progress-count">0 of 7 checked</strong> <span class="learn-course-chevron">⌄</span></summary>
+          <summary><span>ESSENTIALS</span> <strong id="learn-progress-count">0 of 7 checked</strong> <span class="learn-course-chevron">⌄</span></summary>
           <progress id="learn-progress" max="7" value="0" aria-label="0 of 7 exercises checked"></progress>
           <p id="learn-course-status" class="fine-print">Six lessons and a final challenge. Open any topic.</p>
           <nav aria-label="Liquidity essentials lessons"><ol id="learn-lesson-list"></ol></nav>
+          <section class="applied-course" aria-labelledby="applied-course-title">
+            <div class="applied-course-heading"><h3 id="applied-course-title">Fees, time and range exits</h3><span id="applied-progress-count">0 of 3 checked</span></div>
+            <p class="fine-print">Next: apply the mechanics to verified history. Open any exercise.</p>
+            <nav aria-label="Applied liquidity exercises"><ol id="applied-lesson-list"></ol></nav>
+          </section>
           <a class="learn-sidebar-link" href="./">Have your own question? Open Playground ↗</a>
         </details>
         <p class="learn-independence">These exercises have their own inputs. Your playground experiments and virtual balances stay separate.</p>
       </aside>
-      <article class="learn-lesson" aria-labelledby="learn-lesson-title">
+      <article id="learn-essential" class="learn-lesson" aria-labelledby="learn-lesson-title">
         <div class="learn-lesson-heading"><p id="learn-lesson-number" class="eyebrow">LESSON 1 OF 6</p><span id="learn-concept" class="small-badge">Swaps</span><button type="button" id="learn-topics" class="learn-text-button">All topics ↑</button></div>
         <p id="learn-level" class="learn-level">Stage 1 · Foundations</p>
         <h2 id="learn-lesson-title" tabindex="-1">Trade size and execution price</h2>
@@ -88,7 +93,7 @@
               <div id="learn-deeper-body"></div>
               <section class="learn-worked" aria-labelledby="learn-worked-title"><p class="eyebrow">FOLLOW YOUR CURRENT INPUTS</p><h4 id="learn-worked-title">A worked example</h4><p class="learn-worked-note">These steps use your selected setup. Displayed numbers are rounded.</p><ol id="learn-worked-steps"></ol></section>
               <aside class="learn-misconception"><p class="eyebrow">COMMON MISCONCEPTION</p><h4 id="learn-misconception-title"></h4><p id="learn-misconception-copy"></p></aside>
-              <p id="learn-fee-case" hidden><a href="./#example=position-fees" target="_blank" rel="noopener noreferrer">Applied case: principal, fees and tokens owed ↗</a><br><a href="./#historical-case" target="_blank" rel="noopener noreferrer">Follow fees through a recorded period ↗</a></p>
+              <p id="learn-fee-case" hidden><a href="./#example=position-fees" target="_blank" rel="noopener noreferrer">Applied case: principal, fees and tokens owed ↗</a><br><a href="./#historical-case" target="_blank" rel="noopener noreferrer">Follow fees through a recorded period ↗</a><br><a href="#applied=fees-over-time">Applied chapter: fees, time and range exits →</a></p>
               <details id="learn-math" class="learn-math"><summary>Show the math</summary><p id="learn-math-intro"></p><pre><code id="learn-math-formula"></code></pre><p id="learn-math-note" class="learn-math-note"></p></details>
               <section class="learn-reading-sources" aria-labelledby="learn-sources-title"><h4 id="learn-sources-title">Read the original sources</h4><p>Primary references. Links open in a new tab.</p><ul id="learn-sources"></ul></section>
             </div>
@@ -115,8 +120,60 @@
           <div id="learn-card-preview" hidden><img id="learn-card-image" alt="Final challenge result card with inputs, holding and LP values, assumed fees and model limitations."><a id="learn-card-download" class="button secondary" download="passiko-learning-challenge-cp50-v1.png">Download PNG</a></div>
         </section>
       </article>
+      <article id="learn-applied" class="learn-lesson applied-lesson" aria-labelledby="applied-title" hidden>
+        <div class="learn-lesson-heading"><p id="applied-number" class="eyebrow">APPLIED 1 OF 3</p><span class="small-badge">Verified historical case</span><button id="applied-topics" type="button" class="learn-text-button">All topics ↑</button></div>
+        <p id="applied-adds" class="learn-level"></p>
+        <h2 id="applied-title" tabindex="-1">Observe fees accumulating</h2>
+        <p id="applied-intro" class="learn-reading"></p>
+        <details class="applied-primer"><summary>Need a quick reminder?</summary><p>Principal is the position’s ETH and USDC, excluding fees. A range is active while the pool’s contract tick is within its bounds. Holding keeps the exact starting principal tokens.</p><a href="#lesson=range-boundaries">Revisit range boundaries →</a></details>
+        <section class="card learn-experiment" aria-labelledby="applied-predict-title">
+          <p class="eyebrow">01 · PREDICT</p><h3 id="applied-predict-title">Before opening the record</h3>
+          <p id="applied-source" class="learn-setup"></p>
+          <fieldset class="learn-fieldset"><legend id="applied-prediction-question"></legend><div id="applied-predictions" class="learn-choices"></div></fieldset>
+          <button id="applied-reveal" type="button" class="button primary" disabled>Reveal the recorded result →</button>
+          <p id="applied-load-status" class="fine-print" role="status"></p>
+        </section>
+        <section id="applied-observe" class="card learn-results" aria-labelledby="applied-observe-title" hidden>
+          <p class="eyebrow">02 · OBSERVE</p><h3 id="applied-observe-title" tabindex="-1">Follow the recorded checkpoints</h3>
+          <p id="applied-prediction-feedback" class="learn-prediction-feedback" role="status"></p>
+          <p id="applied-question-window" class="applied-question-window"></p>
+          <div id="applied-metrics" class="learn-metrics"></div>
+          <label for="applied-checkpoint" class="period-slider-label">Explore recorded checkpoints</label>
+          <input id="applied-checkpoint" type="range" min="0" max="8" step="1" value="8" aria-describedby="applied-current">
+          <div class="applied-checkpoint-heading"><p id="applied-current"></p><span id="applied-state" class="small-badge"></span></div>
+          <button id="applied-return-question" type="button" class="learn-text-button" hidden>Return to the question checkpoint →</button>
+          <div id="applied-milestones" class="period-milestones" aria-label="Recorded milestones"></div>
+          <figure class="applied-figure"><svg id="applied-chart" viewBox="0 0 620 220" role="img" aria-labelledby="applied-chart-title"><title id="applied-chart-title">Sampled ETH pool prices and the selected checkpoint</title></svg><figcaption id="applied-chart-caption">Dots are recorded prices. The connecting line does not reconstruct moves between samples. Sage: in-range sample; amber: outside sample.</figcaption></figure>
+          <div id="applied-interval" class="applied-interval"><h4>Since the previous checkpoint</h4><p id="applied-interval-summary"></p></div>
+          <p id="applied-observation" class="learn-reading"></p>
+          <p id="applied-takeaway" class="learn-takeaway"></p>
+          <p id="applied-explanation" class="learn-reading"></p>
+          <div class="applied-handoffs"><a id="applied-explore" class="learn-explore" href="./" target="_blank" rel="noopener noreferrer">Explore this setup in Playground ↗</a><a id="applied-inspect" href="./#historical-case" target="_blank" rel="noopener noreferrer">Inspect the full recorded case ↗</a></div>
+          <p class="fine-print">Playground starts a new hypothetical experiment from the selected checkpoint’s principal and range, with zero assumed future fees. Earlier collectable tokens and recorded period earnings are excluded. Inspect opens the historical evidence.</p>
+          <details id="applied-deeper" class="applied-deeper"><summary>Go deeper: accounting and evidence</summary><div>
+            <p id="applied-accounting"></p><dl id="applied-evidence"></dl>
+            <p>Fee tokens are valued at the selected pool price, with USDC = $1. Individual totals are rounded for display; differences use unrounded values. Gas and incentives are excluded. This bounded, unchanged-position record does not establish lifetime profit or future performance.</p>
+            <p>Recorded fees were independently checked against read-only collection simulations. Unchanged-position evidence covers the entire block window. The bundled record is validated when opened; this does not make a new RPC request.</p>
+            <ul><li><a href="https://developers.uniswap.org/docs/get-started/concepts/liquidity-providers/concentrated-liquidity" target="_blank" rel="noopener noreferrer">Uniswap: active liquidity and ranges ↗</a></li><li><a href="https://github.com/Uniswap/v3-core/blob/main/contracts/UniswapV3Pool.sol" target="_blank" rel="noopener noreferrer">Uniswap pool contract: range-time counters ↗</a></li><li><a href="https://github.com/Uniswap/v3-core/blob/main/contracts/libraries/Tick.sol" target="_blank" rel="noopener noreferrer">Uniswap tick accounting: fee growth inside ↗</a></li><li><a href="https://github.com/provatidis/passiko/blob/main/docs/replay.md" target="_blank" rel="noopener noreferrer">Passiko: recorded cases and verification method ↗</a></li></ul>
+          </div></details>
+        </section>
+        <section id="applied-assessment" class="card learn-assessment" aria-labelledby="applied-check-title" hidden>
+          <p class="eyebrow">03 · EXPLAIN</p><h3 id="applied-check-title">Check the number and conclusion</h3>
+          <p class="fine-print">These questions refer to the marked question checkpoint. Exploring other checkpoints does not change the question.</p>
+          <form id="applied-assessment-form" novalidate>
+            <label id="applied-question" for="applied-answer" class="learn-answer-label"></label>
+            <input id="applied-answer" class="learn-answer" type="number" step="any" inputmode="decimal" autocomplete="off" aria-describedby="applied-question applied-feedback-copy">
+            <fieldset class="learn-fieldset"><legend id="applied-reason-question"></legend><div id="applied-reasons" class="learn-choices"></div></fieldset>
+            <details id="applied-hint" class="learn-hint"><summary>Need a hint?</summary><p id="applied-hint-text"></p></details>
+            <button id="applied-check" class="button primary" type="submit">Check answers →</button>
+          </form>
+          <div id="applied-feedback" class="learn-feedback" role="status" hidden><strong id="applied-feedback-title"></strong><p id="applied-feedback-copy"></p></div>
+          <div id="applied-continue" class="learn-continue" hidden><a id="applied-next" class="button secondary" href="#applied=between-samples">Next exercise →</a><button id="applied-restart" class="learn-text-button" type="button">Try this question again ↻</button></div>
+          <p id="applied-reflection" class="learn-reading" hidden>Explain it in your own words: what changed the token mix, what did fees contribute, and what information would you need for a wider comparison?</p>
+        </section>
+      </article>
     </div>
-    <footer><span>Passiko · See for yourself.</span><span>Illustrative experiments · Virtual funds · No wallet connection</span></footer>
+    <footer><span>Passiko · See for yourself.</span><span>Hypothetical experiments &amp; recorded cases · No wallet connection</span></footer>
   </main>
 </body>
 </html>

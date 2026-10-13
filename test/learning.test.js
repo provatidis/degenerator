@@ -82,7 +82,7 @@ test('range exercise labels exact boundaries and does not infer earlier fees', (
   assert.equal(tight.prediction, 'usdc');
   assert.equal(wide.prediction, 'both');
 });
-test('completion requires both a rounded numeric answer and sound reasoning', () => {
+test('optional calculation checker validates rounding and can reuse reasoning', () => {
   const inputs = lessonSetup('fee-break-even');
   assert.equal(checkLesson('fee-break-even', inputs, 0, '428.93', 'assumption').passed, true);
   for (const answer of ['', ' ', 'no', 'Infinity', '100']) assert.equal(checkLesson('fee-break-even', inputs, 0, answer, 'assumption').passed, false);

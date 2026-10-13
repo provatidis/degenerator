@@ -1,6 +1,8 @@
-import { APPLIED_CHAPTER, APPLIED_LESSONS } from '../learning/applied-liquidity.js?v=1.12.1';
-import { appliedLessonFromHash, appliedQuestion, checkAppliedAnswer, appliedReasonFeedback } from '../lib/applied-lessons.js?v=1.12.1';
-import { readAppliedProgress, saveAppliedProgress } from '../data/applied-progress.js';
+import { APPLIED_CHAPTER, APPLIED_LESSONS } from '../learning/applied-liquidity.js?v=1.13.0';
+import { appliedLessonFromHash, appliedQuestion, checkAppliedAnswer, appliedReasonFeedback } from '../lib/applied-lessons.js?v=1.13.0';
+import { appliedApplication, checkAppliedUnderstanding } from '../lib/applied-applications.js?v=1.13.0';
+import { newChoiceSeed, validChoiceSeed, orderedLearningChoices } from '../lib/learning-choices.js?v=1.13.0';
+import { readAppliedProgress, saveAppliedProgress } from '../data/applied-progress.js?v=1.13.0';
 import { createAppliedRecordLoader } from '../data/applied-records.js';
 import { REPLAY_CASES } from '../data/replay-cases.js';
 import { periodPointView, periodIntervalView, periodMilestones, periodChartRange, periodDuration } from '../lib/period-presentation.js';
@@ -13,11 +15,11 @@ import { feeUSD } from '../lib/position-fees.js';
 export function initAppliedLearning() {
   const $ = id => document.getElementById(id);
   const { progress } = readAppliedProgress(), loadRecord = createAppliedRecordLoader();
-  let lesson, draft, period = null, question = null, revision = 0;
+  let lesson, draft, period = null, question = null, application = null, revision = 0;
   const utc = timestamp => new Date(timestamp * 1000).toISOString().replace('T', ' ').replace('.000Z', ' UTC');
   const states = { inside: 'In range · both tokens', above: 'Above range · all USDC', below: 'Below range · all WETH' };
   const tokens = (zero, one) => formatUnits(zero, 6) + ' USDC + ' + formatUnits(one, 18) + ' WETH';
-  const fresh = () => ({ prediction: '', answer: '', reason: '', revealed: false, checkpoint: null });
+  const fresh = () => ({ prediction: '', answer: '', reason: '', application: '', choiceSeed: newChoiceSeed(), revealed: false, checkpoint: null });
   function focusTitle(id) { $(id).focus({ preventScroll: true }); $(id).scrollIntoView({ block: 'start', behavior: 'instant' }); }
   function updateNavigation() {
     $('applied-progress-count').textContent = progress.completed.length + ' of 3 checked';
@@ -38,10 +40,10 @@ export function initAppliedLearning() {
   }
   function clearFeedback() {
     $('applied-feedback').hidden = true; $('applied-continue').hidden = true; $('applied-reflection').hidden = true;
-    $('applied-answer').setAttribute('aria-invalid', 'false');
   }
   function choices(id, name, values, selected, onChange) {
-    $(id).replaceChildren(...values.map(([value, copy]) => {
+    const ordered = name === 'applied-prediction' ? values : orderedLearningChoices(values, draft.choiceSeed, lesson.id + name);
+    $(id).replaceChildren(...ordered.map(([value, copy]) => {
       const label = document.createElement('label'); label.className = 'learn-choice';
       const input = document.createElement('input'); input.type = 'radio'; input.name = name; input.value = value; input.checked = value === selected;
       const text = document.createElement('span'); text.textContent = copy; label.append(input, ' ', text);
@@ -134,15 +136,15 @@ export function initAppliedLearning() {
     renderCheckpoint(); persist();
   }
   function check(save = true) {
-    const result = checkAppliedAnswer(question, draft.answer, draft.reason);
+    const result = checkAppliedUnderstanding(question, application, draft.reason, draft.application);
     $('applied-feedback').hidden = false; $('applied-feedback').className = 'learn-feedback ' + (result.passed ? 'learn-pass' : 'learn-retry');
     $('applied-feedback-title').textContent = result.passed ? 'Both answers are correct.' : 'Review your answers.';
     const reasoningFeedback = appliedReasonFeedback(lesson.id, draft.reason);
+    const applicationFeedback = draft.application ? application.feedback : 'Choose an answer for the thought experiment. ' + application.hint;
     $('applied-feedback-copy').textContent = result.passed ? lesson.takeaway
-      : !result.numeric && !result.reasoning ? 'Revisit the question checkpoint’s number, units and requested rounding. ' + reasoningFeedback
-        : !result.numeric ? 'Your reasoning is sound. Revisit the question checkpoint’s number and the requested units.'
-          : 'Your number matches. ' + reasoningFeedback;
-    $('applied-answer').setAttribute('aria-invalid', String(!result.numeric));
+      : !result.reasoning && !result.application ? reasoningFeedback + ' ' + applicationFeedback
+      : !result.reasoning ? 'Your application matches the thought experiment. ' + reasoningFeedback
+      : 'Your explanation fits the record. ' + applicationFeedback;
     $('applied-continue').hidden = !result.passed;
     const next = APPLIED_LESSONS[APPLIED_LESSONS.indexOf(lesson) + 1];
     $('applied-next').href = next ? '#applied=' + next.id : './#historical-case=range-return';
@@ -155,7 +157,7 @@ export function initAppliedLearning() {
     const token = ++revision, id = appliedLessonFromHash(location.hash);
     $('learn-applied').hidden = !id; updateNavigation();
     if (!id) return;
-    lesson = APPLIED_LESSONS.find(item => item.id === id); period = null; question = null;
+    lesson = APPLIED_LESSONS.find(item => item.id === id); period = null; question = null; application = null;
     if (!matchMedia('(max-width: 750px)').matches) {
       const sidebar = document.querySelector('.learn-sidebar'), selected = document.querySelector('[data-applied-id="' + id + '"]');
       const bounds = selected.getBoundingClientRect(), visible = sidebar.getBoundingClientRect();
@@ -163,23 +165,27 @@ export function initAppliedLearning() {
       else if (bounds.top < visible.top) sidebar.scrollTop += bounds.top - visible.top - 24;
     }
     draft = progress.drafts[id] || fresh();
+    if (!validChoiceSeed(draft.choiceSeed)) draft.choiceSeed = newChoiceSeed();
+    draft.application ||= '';
     if (!lesson.predictions.some(([value]) => value === draft.prediction)) { draft.prediction = ''; draft.revealed = false; }
     if (!lesson.reasons.some(([value]) => value === draft.reason)) draft.reason = '';
     $('learn-page-title').textContent = APPLIED_CHAPTER;
-    $('learn-page-subtitle').textContent = 'Apply liquidity mechanics to two verified historical cases. Predict, observe and explain.';
+    $('learn-page-subtitle').textContent = 'Apply liquidity mechanics to two verified historical cases. Predict, observe, explain and apply.';
     document.title = lesson.short + ' · Passiko Learn';
     $('applied-number').textContent = 'APPLIED ' + (APPLIED_LESSONS.indexOf(lesson) + 1) + ' OF 3';
     $('applied-title').textContent = lesson.title; $('applied-adds').textContent = lesson.adds; $('applied-intro').textContent = lesson.intro;
     $('applied-question').textContent = lesson.question; $('applied-reason-question').textContent = lesson.reasoning;
-    $('applied-prediction-question').textContent = lesson.prediction; $('applied-hint-text').textContent = lesson.hint;
+    $('applied-prediction-question').textContent = lesson.prediction; $('applied-calculation-hint').textContent = lesson.hint;
     $('applied-takeaway').textContent = lesson.takeaway; $('applied-explanation').textContent = lesson.explanation;
-    $('applied-hint').open = false; $('applied-deeper').open = false; document.querySelector('.applied-primer').open = false;
+    $('applied-hint').open = false; $('applied-deeper').open = false; $('applied-calculation').open = false;
+    $('applied-calculation-feedback').textContent = ''; $('applied-answer').setAttribute('aria-invalid', 'false'); document.querySelector('.applied-primer').open = false;
     $('applied-observe').hidden = true; $('applied-assessment').hidden = true; clearFeedback();
     $('applied-answer').value = draft.answer;
     choices('applied-predictions', 'applied-prediction', lesson.predictions, draft.prediction, value => {
-      draft.prediction = value; draft.revealed = false; draft.answer = ''; draft.reason = '';
+      draft.prediction = value; draft.revealed = false; draft.answer = ''; draft.reason = ''; draft.application = '';
+      $('applied-calculation-feedback').textContent = ''; $('applied-answer').setAttribute('aria-invalid', 'false');
       $('applied-answer').value = ''; $('applied-observe').hidden = true; $('applied-assessment').hidden = true; clearFeedback();
-      document.querySelectorAll('input[name="applied-reason"]').forEach(input => { input.checked = false; });
+      document.querySelectorAll('input[name="applied-reason"],input[name="applied-application"]').forEach(input => { input.checked = false; });
       $('applied-reveal').disabled = !period; $('applied-reveal').textContent = 'Reveal the recorded result →'; persist();
     });
     choices('applied-reasons', 'applied-reason', lesson.reasons, draft.reason, value => { draft.reason = value; clearFeedback(); persist(); });
@@ -191,7 +197,12 @@ export function initAppliedLearning() {
     try {
       const record = await loadRecord(lesson.caseId);
       if (token !== revision) return;
-      period = record; question = appliedQuestion(period, id);
+      period = record; question = appliedQuestion(period, id); application = appliedApplication(id, question);
+      $('applied-application-context').textContent = application.context;
+      $('applied-application-question').textContent = application.question;
+      $('applied-hint-text').textContent = lesson.takeaway + ' ' + application.hint;
+      if (!application.choices.some(([value]) => value === draft.application)) draft.application = '';
+      choices('applied-applications', 'applied-application', application.choices, draft.application, value => { draft.application = value; clearFeedback(); persist(); });
       if (draft.checkpoint === null || draft.checkpoint >= period.points.length) draft.checkpoint = question.index;
       const first = period.points[0].snapshot, last = period.points.at(-1).snapshot;
       $('applied-source').textContent = 'Position #' + first.tokenId + ' · Ethereum WETH/USDC 0.3% · ' + period.points.length + ' checkpoints over ' + periodDuration(period.validation.durationSeconds) + ' · blocks ' + first.block.number + '–' + last.block.number + '.';
@@ -202,7 +213,7 @@ export function initAppliedLearning() {
       }));
       $('applied-reveal').textContent = 'Reveal the recorded result →'; $('applied-reveal').disabled = !draft.prediction;
       $('applied-load-status').textContent = 'Record validated. Choose a prediction, then open the result.';
-      if (draft.revealed) { reveal(); if (checkAppliedAnswer(question, draft.answer, draft.reason).passed) check(false); }
+      if (draft.revealed) { reveal(); if (checkAppliedUnderstanding(question, application, draft.reason, draft.application).passed) check(false); }
       persist();
     } catch (error) {
       if (token !== revision) return;
@@ -222,8 +233,14 @@ export function initAppliedLearning() {
   $('applied-reveal').addEventListener('click', () => { if (!period) { activate(true); return; } reveal(); focusTitle('applied-observe-title'); });
   $('applied-checkpoint').addEventListener('input', () => { if (!period) return; draft.checkpoint = Number($('applied-checkpoint').value); renderCheckpoint(); persist(); });
   $('applied-return-question').addEventListener('click', () => { draft.checkpoint = question.index; renderCheckpoint(); persist(); });
-  $('applied-answer').addEventListener('input', () => { draft.answer = $('applied-answer').value; clearFeedback(); persist(); });
-  $('applied-assessment-form').addEventListener('submit', event => { event.preventDefault(); if (!draft?.revealed || !question) return; draft.answer = $('applied-answer').value; check(); });
+  $('applied-answer').addEventListener('input', () => { draft.answer = $('applied-answer').value; $('applied-calculation-feedback').textContent = ''; $('applied-answer').setAttribute('aria-invalid', 'false'); persist(); });
+  $('applied-calculation-check').addEventListener('click', () => {
+    if (!question) return;
+    const numeric = checkAppliedAnswer(question, draft.answer, question.reason).numeric;
+    $('applied-answer').setAttribute('aria-invalid', String(!numeric));
+    $('applied-calculation-feedback').textContent = numeric ? 'Calculation matches. Lesson completion is unchanged.' : 'Revisit the marked question checkpoint, units and requested rounding. This optional practice does not affect completion.';
+  });
+  $('applied-assessment-form').addEventListener('submit', event => { event.preventDefault(); if (!draft?.revealed || !question) return; check(); });
   $('applied-restart').addEventListener('click', () => { progress.drafts[lesson.id] = fresh(); activate(true); });
   $('applied-topics').addEventListener('click', () => { $('learn-course').open = true; const summary = $('learn-course').querySelector('summary'); summary.focus({ preventScroll: true }); $('learn-course').scrollIntoView({ block: 'start', behavior: 'instant' }); });
   $('learn-resume').addEventListener('click', () => { if (appliedLessonFromHash(location.hash)) focusTitle('applied-title'); });

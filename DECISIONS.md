@@ -17,3 +17,5 @@ These are durable working choices, not a feature backlog. Revisit them when evid
 - Prefer depth and clearer workflows before more chains, wallet discovery or library features.
 
 Technical references: [models](docs/models.md), [data](docs/data.md), [development](docs/development.md).
+
+- Learn completion checks explanation and application of the concept. Predictions are ungraded; calculations and rounding practice stay optional in Go deeper. A changed historical setup is a labelled thought experiment, separate from verified accounting.

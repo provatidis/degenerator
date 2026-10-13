@@ -39,7 +39,7 @@ test('exploring a different checkpoint cannot alter the fixed question or accept
   assert.throws(() => appliedQuestion(returning, 'unknown'), /applied exercise/);
   assert.throws(() => appliedQuestion({ ...returning, points: [returning.points[0], returning.points.at(-1)] }, 'between-samples'), /interval is missing/);
 });
-test('each applied step requires both an answer with correct units and sound reasoning', () => {
+test('optional applied calculation practice validates numbers and can reuse reasoning', () => {
   for (const item of APPLIED_LESSONS) {
     const question = appliedQuestion(item.caseId === 'in-range' ? baseline : returning, item.id);
     assert.ok(item.predictions.some(([id]) => id === question.prediction));

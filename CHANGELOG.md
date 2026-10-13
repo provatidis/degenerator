@@ -1,5 +1,12 @@
 # Release history
 
+## 1.13.0 — 2026-10-13
+
+- Learning completion now checks explanation and application of an idea after one assumption changes. Predictions remain ungraded; numeric answers and rounding are optional practice in Go deeper.
+- All seven essentials exercises follow selected prices, trade sizes and ranges. Applied historical exercises add labelled thought experiments about fee collection, sampling and costs without altering the verified records.
+- Answer order varies between attempts and remains stable within a draft. Existing progress and checked lessons are retained; optional practice cannot hide Continue or invalidate a result card.
+
+
 ## 1.12.1 — 2026-10-13
 
 - Explain token transfers using the selected rising, falling or unchanged ETH price. Clarify that pools do not create ETH or USDC; give specific feedback for incorrect reasoning throughout both learning chapters.

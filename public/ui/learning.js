@@ -1,22 +1,25 @@
 import { stageForLesson } from '../learning/example-path.js';
-import { DEEPER_READING } from '../learning/deeper-reading.js?v=1.12.1';
-import { lessonWalkthrough } from '../lib/lesson-walkthrough.js?v=1.12.1';
-import { LESSONS } from '../learning/liquidity-essentials.js?v=1.12.1';
-import { LESSON_IDS, VARIANTS, lessonSetup, runLesson, checkLesson } from '../models/lesson-experiments.js?v=1.12.1';
-import { readProgress, saveProgress } from '../data/learning-progress.js';
+import { DEEPER_READING } from '../learning/deeper-reading.js?v=1.13.0';
+import { lessonWalkthrough } from '../lib/lesson-walkthrough.js?v=1.13.0';
+import { LESSONS } from '../learning/liquidity-essentials.js?v=1.13.0';
+import { LESSON_IDS, VARIANTS, lessonSetup, runLesson, checkLesson } from '../models/lesson-experiments.js?v=1.13.0';
+import { checkLessonUnderstanding } from '../models/lesson-application.js?v=1.13.0';
+import { lessonApplicationCopy } from '../lib/lesson-application-copy.js?v=1.13.0';
+import { newChoiceSeed, validChoiceSeed, orderedLearningChoices } from '../lib/learning-choices.js?v=1.13.0';
+import { readProgress, saveProgress } from '../data/learning-progress.js?v=1.13.0';
 import { fmt, usd, signedUSD, percent } from '../lib/format.js';
 import { scenarioHash } from '../lib/scenario-links.js';
 import { rangeHash } from '../lib/range-links.js';
 import { resultCardBlob } from '../lib/result-card.js';
 import { appliedLessonFromHash } from '../lib/applied-lessons.js';
-import { tokenBalanceNarration, benchmarkNarration, lessonReasonFeedback } from '../lib/lesson-narration.js?v=1.12.1';
+import { tokenBalanceNarration, benchmarkNarration, lessonReasonFeedback } from '../lib/lesson-narration.js?v=1.13.0';
 
 export function initLearning() {
   const $ = id => document.getElementById(id);
   const restored = readProgress();
   const progress = restored.progress;
   let available = restored.available;
-  let lesson, draft, outcome = null, cardURL = null, generation = 0;
+  let lesson, draft, outcome = null, applicationCopy = null, cardURL = null, generation = 0;
   const courseDetails = $('learn-course');
   courseDetails.open = !matchMedia('(max-width: 750px)').matches;
   function persist() {
@@ -57,7 +60,8 @@ export function initLearning() {
   }
   function selection(name) { return document.querySelector('input[name="' + name + '"]:checked')?.value || ''; }
   function choices(container, name, values, selected) {
-    const nodes = values.map(([value, label]) => {
+    const ordered = name === 'learn-prediction' ? values : orderedLearningChoices(values, draft.choiceSeed, lesson.id + name);
+    const nodes = ordered.map(([value, label]) => {
       const item = document.createElement('label'); item.className = 'learn-choice';
       const radio = document.createElement('input'); radio.type = 'radio'; radio.name = name; radio.value = value; radio.checked = value === selected;
       const copy = document.createElement('span'); copy.textContent = label; item.append(radio, copy);
@@ -67,7 +71,7 @@ export function initLearning() {
           $('learn-run').disabled = false;
           if (draft.ran) invalidate();
         } else {
-          draft.reason = value; $('learn-feedback').hidden = true; $('learn-continue').hidden = true;
+          draft[name === 'learn-application' ? 'application' : 'reason'] = value; $('learn-feedback').hidden = true; $('learn-continue').hidden = true;
           $('learn-share').hidden = true; clearCard();
         }
         persist();
@@ -121,7 +125,8 @@ export function initLearning() {
     $('learn-model').textContent = model + ' · Illustrative inputs · USDC = $1';
   }
   function invalidate() {
-    draft.ran = false; draft.answer = ''; draft.reason = ''; outcome = null;
+    draft.ran = false; draft.answer = ''; draft.reason = ''; draft.application = ''; outcome = null; applicationCopy = null;
+    $('learn-calculation-feedback').textContent = ''; $('learn-answer').setAttribute('aria-invalid', 'false');
     $('learn-results').hidden = true; $('learn-assessment').hidden = true; $('learn-feedback').hidden = true; $('learn-share').hidden = true; $('learn-continue').hidden = true;
     $('learn-answer').value = ''; choices('learn-reasons', 'learn-reason', lesson.reasons, '');
     $('learn-input-status').textContent = 'Setup changed. Predict, then run the updated experiment.';
@@ -172,6 +177,7 @@ export function initLearning() {
   }
   function renderResults() {
     outcome = runLesson(lesson.id, draft.inputs, draft.variant);
+    applicationCopy = lessonApplicationCopy(lesson.id, outcome);
     const s = outcome.setup, r = outcome.result, metrics = [], visual = [];
     if (lesson.id === 'swap-impact') {
       metrics.push(metric('USDC received', fmt(outcome.out, 2), 'After the 0.3% swap fee'), metric('Price impact', fmt(outcome.impact, 2) + '%', 'Excludes the fee itself'), metric('Average execution', usd(outcome.out / s.amount), 'USDC per ETH, including fee'));
@@ -204,6 +210,11 @@ export function initLearning() {
     $('learn-reason-question').textContent = tokenCopy?.reasoning || lesson.reasoning;
     const reasons = lesson.reasons.map(([id, copy]) => [id, tokenCopy && id === 'rebalance' ? tokenCopy.correctReason : copy]);
     choices('learn-reasons', 'learn-reason', reasons, draft.reason);
+    $('learn-application-context').textContent = applicationCopy.context;
+    $('learn-application-question').textContent = applicationCopy.question;
+    if (!applicationCopy.choices.some(([id]) => id === draft.application)) draft.application = '';
+    choices('learn-applications', 'learn-application', applicationCopy.choices, draft.application);
+    $('learn-hint-text').textContent = lesson.takeaway + ' ' + applicationCopy.hint;
     renderDeeper();
     $('learn-results').hidden = false; $('learn-assessment').hidden = false;
     $('learn-run').textContent = 'Run again →';
@@ -233,7 +244,9 @@ export function initLearning() {
     $('learn-route-note').hidden = !location.hash || valid;
     lesson = LESSONS.find(item => item.id === id);
     const index = LESSON_IDS.indexOf(id);
-    draft = progress.drafts[id] || { variant: 0, inputs: lessonSetup(id), prediction: '', answer: '', reason: '', ran: false };
+    draft = progress.drafts[id] || { variant: 0, inputs: lessonSetup(id), prediction: '', answer: '', reason: '', application: '', choiceSeed: newChoiceSeed(), ran: false };
+    if (!validChoiceSeed(draft.choiceSeed)) draft.choiceSeed = newChoiceSeed();
+    draft.application ||= '';
     if (!lesson.predictions.some(([value]) => value === draft.prediction)) draft.prediction = '';
     if (!lesson.reasons.some(([value]) => value === draft.reason)) draft.reason = '';
     if (!draft.prediction) draft.ran = false;
@@ -243,28 +256,29 @@ export function initLearning() {
     $('learn-concept').textContent = lesson.concept; $('learn-skill').textContent = lesson.skill;
     $('learn-intro').textContent = lesson.intro; $('learn-prediction-question').textContent = lesson.prediction;
     $('learn-question').textContent = lesson.question; $('learn-reason-question').textContent = lesson.reasoning;
-    $('learn-hint-text').textContent = lesson.hint; $('learn-hint').open = false;
-    $('learn-deeper').open = false; $('learn-math').open = false;
+    $('learn-calculation-hint').textContent = lesson.hint; $('learn-hint').open = false;
+    $('learn-deeper').open = false; $('learn-math').open = false; $('learn-calculation').open = false;
+    $('learn-calculation-feedback').textContent = '';
     $('learn-takeaway').textContent = lesson.takeaway;
     $('learn-results').hidden = true; $('learn-assessment').hidden = true; $('learn-feedback').hidden = true; $('learn-share').hidden = true; $('learn-continue').hidden = true;
     $('learn-input-status').textContent = ''; $('learn-run').disabled = !draft.prediction; $('learn-run').textContent = 'Run experiment →';
     choices('learn-predictions', 'learn-prediction', lesson.predictions, draft.prediction);
     choices('learn-reasons', 'learn-reason', lesson.reasons, draft.reason);
     renderControls(); updateSetup(); updateProgress();
-    if (draft.ran) { renderResults(); if (checkLesson(id, draft.inputs, draft.variant, draft.answer, draft.reason).passed) showCheck(false); }
+    if (draft.ran) { renderResults(); if (checkLessonUnderstanding(id, draft.inputs, draft.variant, draft.reason, draft.application).passed) showCheck(false); }
     persist();
     return true;
   }
   function showCheck(save = true) {
-    const check = checkLesson(lesson.id, draft.inputs, draft.variant, draft.answer, draft.reason);
+    const check = checkLessonUnderstanding(lesson.id, draft.inputs, draft.variant, draft.reason, draft.application);
     $('learn-feedback').hidden = false; $('learn-feedback').className = 'learn-feedback ' + (check.passed ? 'learn-pass' : 'learn-retry');
     $('learn-feedback-title').textContent = check.passed ? 'Both answers are correct.' : 'Review your answers.';
     const reasoningFeedback = lessonReasonFeedback(lesson.id, outcome, draft.reason);
+    const applicationFeedback = draft.application ? applicationCopy.feedback : 'Choose an answer for the changed setup. ' + applicationCopy.hint;
     $('learn-feedback-copy').textContent = check.passed ? lesson.takeaway
-      : !check.numeric && !check.reasoning ? 'Revisit the number and its requested rounding. ' + reasoningFeedback
-      : !check.numeric ? 'Your reasoning is sound. Revisit the number and its units; use the requested rounding.'
-      : 'Your number matches. ' + reasoningFeedback;
-    $('learn-answer').setAttribute('aria-invalid', String(!check.numeric));
+      : !check.reasoning && !check.application ? reasoningFeedback + ' ' + applicationFeedback
+      : !check.reasoning ? 'Your application matches the changed setup. ' + reasoningFeedback
+      : 'Your explanation fits the original setup. ' + applicationFeedback;
     $('learn-continue').hidden = !check.passed;
     $('learn-share').hidden = !(check.passed && lesson.id === 'final-challenge');
     if (check.passed) {
@@ -283,12 +297,18 @@ export function initLearning() {
   });
   $('learn-answer').addEventListener('input', () => {
     draft.answer = $('learn-answer').value; $('learn-answer').setAttribute('aria-invalid', 'false');
-    $('learn-feedback').hidden = true; $('learn-continue').hidden = true; $('learn-share').hidden = true; clearCard(); persist();
+    $('learn-calculation-feedback').textContent = ''; persist();
   });
-  $('learn-assessment-form').addEventListener('submit', event => { event.preventDefault(); if (!draft.ran) return; draft.answer = $('learn-answer').value; draft.reason = selection('learn-reason'); showCheck(); });
+  $('learn-calculation-check').addEventListener('click', () => {
+    if (!outcome) return;
+    const numeric = checkLesson(lesson.id, draft.inputs, draft.variant, draft.answer, outcome.reason).numeric;
+    $('learn-answer').setAttribute('aria-invalid', String(!numeric));
+    $('learn-calculation-feedback').textContent = numeric ? 'Calculation matches. Lesson completion is unchanged.' : 'Revisit the displayed number, units and requested rounding. This optional practice does not affect completion.';
+  });
+  $('learn-assessment-form').addEventListener('submit', event => { event.preventDefault(); if (!draft.ran) return; draft.reason = selection('learn-reason'); draft.application = selection('learn-application'); showCheck(); });
   function changeVariation() {
     const variant = (draft.variant + 1) % VARIANTS;
-    draft = { variant, inputs: lessonSetup(lesson.id, variant), prediction: '', answer: '', reason: '', ran: false };
+    draft = { variant, inputs: lessonSetup(lesson.id, variant), prediction: '', answer: '', reason: '', application: '', choiceSeed: newChoiceSeed(), ran: false };
     progress.drafts[lesson.id] = draft; loadLesson();
     $('learn-lesson-title').focus({ preventScroll: true }); $('learn-lesson-title').scrollIntoView({ block: 'start', behavior: 'instant' });
   }
@@ -299,7 +319,7 @@ export function initLearning() {
     catch { $('learn-card-status').textContent = 'Select and copy the scenario link below.'; $('learn-share-url').focus(); $('learn-share-url').select(); }
   });
   $('learn-create-card').addEventListener('click', async () => {
-    if (lesson.id !== 'final-challenge' || !outcome || !checkLesson(lesson.id, draft.inputs, draft.variant, draft.answer, draft.reason).passed) return;
+    if (lesson.id !== 'final-challenge' || !outcome || !checkLessonUnderstanding(lesson.id, draft.inputs, draft.variant, draft.reason, draft.application).passed) return;
     const token = generation; $('learn-card-status').textContent = 'Creating your result card…';
     try {
       const blob = await resultCardBlob(outcome.setup, new URL('./', location.href).href);

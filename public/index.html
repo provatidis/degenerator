@@ -30,8 +30,8 @@
   <meta name="twitter:description" content="Explore full-range and concentrated liquidity, import pool and position snapshots, and experiment with virtual swaps in Passiko.">
   <meta name="twitter:image" content="https://provatidis.github.io/passiko/assets/social-preview.png">
   <meta name="twitter:image:alt" content="Passiko. Learn and experiment with DeFi, with a liquidity range scenario.">
-  <link rel="stylesheet" href="styles.css?v=1.15.1">
-  <script type="module" src="main.js?v=1.15.1"></script>
+  <link rel="stylesheet" href="styles.css?v=1.15.2">
+  <script type="module" src="main.js?v=1.15.2"></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
@@ -129,8 +129,17 @@
             </div><p class="fine-print">Presets center the range on your starting price. Each range determines the ETH and USDC needed.</p></fieldset>
             <div id="cl-starting-mix" class="cl-starting-mix">
               <span class="label">Your starting token mix</span><p id="cl-initial-assets"></p>
-              <svg class="cl-allocation-bar" viewBox="0 0 100 8" preserveAspectRatio="none" role="img" aria-labelledby="cl-initial-allocation-title"><title id="cl-initial-allocation-title">Starting allocation by dollar value</title><rect class="cl-token-usdc" width="100" height="8"/><rect id="cl-initial-allocation-eth" class="cl-token-eth" height="8"/></svg>
-              <p id="cl-initial-allocation" class="fine-print"></p><p id="cl-initial-note" class="fine-print"></p>
+              <svg class="cl-allocation-bar" role="img" aria-labelledby="cl-initial-allocation-title">
+                <title id="cl-initial-allocation-title">Starting allocation by dollar value</title>
+                <defs><pattern id="cl-initial-usdc-stripes" width="6" height="6" patternUnits="userSpaceOnUse"><path class="allocation-stripe" d="M-1 1L1 -1M0 6L6 0M5 7L7 5"/></pattern></defs>
+                <rect class="cl-token-usdc" width="100%" height="100%"/><rect fill="url(#cl-initial-usdc-stripes)" width="100%" height="100%"/><rect id="cl-initial-allocation-eth" class="cl-token-eth" width="0%" height="100%"/>
+              </svg>
+              <p id="cl-initial-allocation" class="allocation-key">
+                <span class="allocation-token"><i class="allocation-swatch allocation-swatch-eth" aria-hidden="true"></i><span id="cl-initial-eth-share"></span></span>
+                <span class="allocation-token"><i class="allocation-swatch allocation-swatch-usdc" aria-hidden="true"></i><span id="cl-initial-usdc-share"></span></span>
+                <span class="allocation-basis">By asset value</span>
+              </p>
+              <p id="cl-initial-note" class="fine-print"></p>
             </div>
             <div class="scenario-field"><label for="cl-future">Future ETH price <span>USD</span></label><input id="cl-future" type="number" min="0.01" max="10000000" step="any" value="2100" required aria-describedby="cl-future-error"><p id="cl-future-error" class="field-error" hidden></p></div>
             <details id="cl-fee-details" class="cl-fee-details"><summary>Assumed fee income <span>Optional</span></summary>
@@ -167,8 +176,16 @@
             <p class="cl-benchmark-note">Holding keeps your range's starting tokens. The full-range LP uses the same budget and starts 50/50, so its starting mix may differ.</p>
             <div class="cl-position">
               <div><h3>Your range now holds</h3><p id="cl-final-assets"></p></div><span id="cl-asset-state" class="small-badge"></span>
-              <svg class="cl-allocation-bar" viewBox="0 0 100 8" preserveAspectRatio="none" role="img" aria-labelledby="cl-final-allocation-title"><title id="cl-final-allocation-title">Position allocation by dollar value</title><rect class="cl-token-usdc" width="100" height="8"/><rect id="cl-final-allocation-eth" class="cl-token-eth" height="8"/></svg>
-              <p id="cl-final-allocation" class="fine-print"></p>
+              <svg class="cl-allocation-bar" role="img" aria-labelledby="cl-final-allocation-title">
+                <title id="cl-final-allocation-title">Position allocation by dollar value</title>
+                <defs><pattern id="cl-final-usdc-stripes" width="6" height="6" patternUnits="userSpaceOnUse"><path class="allocation-stripe" d="M-1 1L1 -1M0 6L6 0M5 7L7 5"/></pattern></defs>
+                <rect class="cl-token-usdc" width="100%" height="100%"/><rect fill="url(#cl-final-usdc-stripes)" width="100%" height="100%"/><rect id="cl-final-allocation-eth" class="cl-token-eth" width="0%" height="100%"/>
+              </svg>
+              <p id="cl-final-allocation" class="allocation-key">
+                <span class="allocation-token"><i class="allocation-swatch allocation-swatch-eth" aria-hidden="true"></i><span id="cl-final-eth-share"></span></span>
+                <span class="allocation-token"><i class="allocation-swatch allocation-swatch-usdc" aria-hidden="true"></i><span id="cl-final-usdc-share"></span></span>
+                <span class="allocation-basis">By asset value</span>
+              </p>
             </div>
             <figure class="cl-figure">
               <div class="cl-chart-heading"><h3>Values across future ETH prices</h3><div class="cl-chart-legend"><span><i class="cl-legend-hold"></i>Hold starting mix</span><span><i class="cl-legend-full"></i>V2-style 50/50 LP</span><span><i class="cl-legend-range"></i>Your range LP</span></div></div>
@@ -298,7 +315,16 @@
               <span class="label">Position principal value · USDC = $1</span><strong id="position-principal" class="position-value"></strong>
               <p class="fine-print">Tokens backing the position’s liquidity, including when it is out of range. Excludes fees and recorded tokens owed.</p>
               <div class="position-token-grid"><div><span class="label">WETH</span><strong id="position-eth"></strong></div><div><span class="label">USDC</span><strong id="position-usdc"></strong></div></div>
-              <svg id="position-allocation-bar" class="allocation-bar" viewBox="0 0 100 8" preserveAspectRatio="none" role="img" aria-labelledby="position-allocation-title"><title id="position-allocation-title"></title><rect width="100" height="8" class="allocation-usdc"/><rect id="position-allocation-eth" width="0" height="8" class="allocation-eth"/></svg><p id="position-allocation-note" class="allocation-note"></p>
+              <svg id="position-allocation-bar" class="allocation-bar" role="img" aria-labelledby="position-allocation-title">
+                <title id="position-allocation-title"></title>
+                <defs><pattern id="position-usdc-stripes" width="6" height="6" patternUnits="userSpaceOnUse"><path class="allocation-stripe" d="M-1 1L1 -1M0 6L6 0M5 7L7 5"/></pattern></defs>
+                <rect width="100%" height="100%" class="allocation-usdc"/><rect fill="url(#position-usdc-stripes)" width="100%" height="100%"/><rect id="position-allocation-eth" width="0%" height="100%" class="allocation-eth"/>
+              </svg>
+              <p id="position-allocation-note" class="allocation-key">
+                <span id="position-allocation-weth" class="allocation-token"><i class="allocation-swatch allocation-swatch-eth" aria-hidden="true"></i><span id="position-eth-share"></span></span>
+                <span id="position-allocation-usdc" class="allocation-token"><i class="allocation-swatch allocation-swatch-usdc" aria-hidden="true"></i><span id="position-usdc-share"></span></span>
+                <span id="position-allocation-basis" class="allocation-basis"></span>
+              </p>
               <div class="position-range"><span id="position-state" class="cl-state"></span><p id="position-state-note" class="fine-print"></p><div class="position-range-prices"><div><span class="label">Lower ETH price</span><strong id="position-lower"></strong></div><div><span class="label">Upper ETH price</span><strong id="position-upper"></strong></div></div><p class="position-current-price">Recorded ETH price <strong id="position-price"></strong></p></div>
               <p id="position-evidence" class="fine-print"></p>
               <button id="position-apply" class="button primary position-apply" type="button" disabled>Explore this position’s range <span>→</span></button>

@@ -1,10 +1,10 @@
-import { APPLIED_CHAPTER, APPLIED_LESSONS } from '../learning/applied-liquidity.js?v=1.15.1';
-import { appliedLessonFromHash, appliedQuestion, checkAppliedAnswer, appliedReasonFeedback } from '../lib/applied-lessons.js?v=1.15.1';
-import { appliedApplication, checkAppliedUnderstanding } from '../lib/applied-applications.js?v=1.15.1';
-import { newChoiceSeed, validChoiceSeed } from '../lib/learning-choices.js?v=1.15.1';
-import { learningChoices, learningMetric, learningPitfall } from '../lib/learning-elements.js?v=1.15.1';
-import { POOL_PITFALLS } from '../learning/pool-pitfalls.js?v=1.15.1';
-import { readAppliedProgress, saveAppliedProgress } from '../data/applied-progress.js?v=1.15.1';
+import { APPLIED_CHAPTER, APPLIED_LESSONS } from '../learning/applied-liquidity.js?v=1.15.2';
+import { appliedLessonFromHash, appliedQuestion, checkAppliedAnswer, appliedReasonFeedback } from '../lib/applied-lessons.js?v=1.15.2';
+import { appliedApplication, checkAppliedUnderstanding } from '../lib/applied-applications.js?v=1.15.2';
+import { newChoiceSeed, validChoiceSeed } from '../lib/learning-choices.js?v=1.15.2';
+import { learningChoices, learningMetric, learningPitfall } from '../lib/learning-elements.js?v=1.15.2';
+import { POOL_PITFALLS } from '../learning/pool-pitfalls.js?v=1.15.2';
+import { readAppliedProgress, saveAppliedProgress } from '../data/applied-progress.js?v=1.15.2';
 import { createAppliedRecordLoader } from '../data/applied-records.js';
 import { REPLAY_CASES } from '../data/replay-cases.js';
 import { periodPointView, periodIntervalView, periodMilestones, periodChartRange, periodDuration } from '../lib/period-presentation.js';

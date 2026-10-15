@@ -49,10 +49,13 @@ export function initPositionSnapshots({ rangeLab, positionFees }) {
     $('position-upper').textContent = prices.upper;
     $('position-price').textContent = positionPrice(view.ethPrice);
     const share = view.principalUSD > 0 ? view.eth * view.ethPrice / view.principalUSD * 100 : 0;
-    $('position-allocation-eth').setAttribute('width', share);
+    $('position-allocation-eth').setAttribute('width', share + '%');
     $('position-allocation-bar').hidden = view.principalUSD === 0;
     $('position-allocation-title').textContent = view.state === 'inactive' ? 'No position principal.' : fmt(share, 1) + '% WETH and ' + fmt(100 - share, 1) + '% USDC by value, excluding fees and recorded tokens owed.';
-    $('position-allocation-note').textContent = view.state === 'inactive' ? 'No position principal' : fmt(share, 1) + '% WETH · ' + fmt(100 - share, 1) + '% USDC by value';
+    $('position-eth-share').textContent = fmt(share, 1) + '% WETH';
+    $('position-usdc-share').textContent = fmt(100 - share, 1) + '% USDC';
+    $('position-allocation-weth').hidden = $('position-allocation-usdc').hidden = view.state === 'inactive';
+    $('position-allocation-basis').textContent = view.state === 'inactive' ? 'No position principal' : 'By asset value';
     $('position-evidence').textContent = evidence === 'live'
       ? 'Position manager, pool identity, decimals, fee growth and block checked against the contracts.'
       : evidence === 'example' ? 'Recorded example. Captured from the contracts at this block; it is not current market data.'

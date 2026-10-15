@@ -5,10 +5,10 @@ import { readSharedScenario } from '../lib/link-router.js';
 import { rangeCSV } from '../lib/range-csv.js';
 import { fmt, usd, percent, signedUSD, compactUSD } from '../lib/format.js';
 import { STATE_COPY, rangePriceLabels, assetAmounts } from '../lib/range-presentation.js';
-import { rangeCardBlob } from '../lib/range-card.js?v=1.15.1';
+import { rangeCardBlob } from '../lib/range-card.js?v=1.15.2';
 import { downloadBlob } from '../lib/download.js';
 import { validateExperimentDraft } from '../data/saved-experiments.js';
-import { experimentOriginLabel } from '../lib/saved-experiments.js?v=1.15.1';
+import { experimentOriginLabel } from '../lib/saved-experiments.js?v=1.15.2';
 
 export function initRangeLab({ navigation }) {
   const { selectLab } = navigation;
@@ -42,8 +42,9 @@ export function initRangeLab({ navigation }) {
   function setText(id, text) { if ($(id).textContent !== text) $(id).textContent = text; }
   function updateAllocation(prefix, share) {
     const eth = Math.max(0, Math.min(100, share));
-    $('cl-' + prefix + '-allocation-eth').setAttribute('width', eth);
-    $('cl-' + prefix + '-allocation').textContent = fmt(eth, 1) + '% ETH · ' + fmt(100 - eth, 1) + '% USDC by asset value';
+    $('cl-' + prefix + '-allocation-eth').setAttribute('width', eth + '%');
+    $('cl-' + prefix + '-eth-share').textContent = fmt(eth, 1) + '% ETH';
+    $('cl-' + prefix + '-usdc-share').textContent = fmt(100 - eth, 1) + '% USDC';
     $('cl-' + prefix + '-allocation-title').textContent = fmt(eth, 1) + '% ETH and ' + fmt(100 - eth, 1) + '% USDC by asset value, excluding assumed cash fees.';
   }
 

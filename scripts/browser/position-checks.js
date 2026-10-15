@@ -33,7 +33,10 @@ export async function checkPositions({ base, call, evaluate, click, fill, text, 
   assert.match(await text('position-evidence'),/Recorded example/);
   assert.deepEqual(await inputState(),priorInputs,'Loading does not change a range setup.');
   assert.equal(await text('portfolio'),priorWallet);
-  assert.equal(await evaluate("document.getElementById('position-allocation-bar').getBoundingClientRect().height"),8);
+  assert.equal(await evaluate("document.getElementById('position-allocation-bar').getBoundingClientRect().height"),12);
+  assert.equal(await text('position-eth-share'),'100.0% WETH');
+  assert.equal(await text('position-usdc-share'),'0.0% USDC');
+  assert.equal(await evaluate("document.getElementById('position-allocation-eth').getBoundingClientRect().width"),await evaluate("document.getElementById('position-allocation-bar').getBoundingClientRect().width"));
   const exportedPath = await downloadFile('position-export');
   const exported = JSON.parse(await readFile(exportedPath,'utf8'));
   assert.deepEqual(exported,recorded);
@@ -78,9 +81,12 @@ export async function checkPositions({ base, call, evaluate, click, fill, text, 
   assert.equal(await text('position-state'),'No liquidity');
   assert.equal(await evaluate("document.getElementById('position-apply').disabled"),true);
   assert.equal(await evaluate("document.getElementById('position-allocation-bar').hidden"),true);
+  assert.equal(await evaluate("document.getElementById('position-allocation-weth').hidden && document.getElementById('position-allocation-usdc').hidden"),true);
+  assert.equal(await text('position-allocation-basis'),'No position principal');
   assert.equal(await text('position-owed0'),'0.000123 USDC');
   await loadFile(exportedPath); await waitStatus('Position saved');
   assert.equal(await evaluate("document.getElementById('position-apply').disabled"),false);
+  assert.equal(await evaluate("document.getElementById('position-allocation-weth').hidden || document.getElementById('position-allocation-usdc').hidden"),false);
 
   await checkPositionFees({ evaluate, click, text, navigate, base, downloadFile, profile, loadFile, waitStatus });
 

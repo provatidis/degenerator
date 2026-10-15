@@ -30,7 +30,6 @@
 }
 
 .allocation-bar { margin-top: 16px; }
-.allocation-note { font-size: 10px; color: var(--muted); line-height: 1.7; margin: 9px 0 0; }
 .position-setup-summary { display: none; }
 #position-result { scroll-margin-top: 24px; }
 #position-result:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }

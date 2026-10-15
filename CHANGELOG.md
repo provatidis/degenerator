@@ -1,5 +1,10 @@
 # Release history
 
+## 1.15.2 — 2026-10-15
+
+- Make token allocations easier to read with a taller bar, solid gold for ETH/WETH and striped blue for USDC. Add matching markers beside larger percentage labels in starting mixes, range outcomes and position snapshots.
+- Keep the bar proportional at every screen size, including all-ETH and all-USDC positions. Preserve all calculations and saved data.
+
 ## 1.15.1 — 2026-10-15
 
 - Name Uniswap v2-style full-range and v3-style price-range calculations in lab tabs, badges, lessons, saved experiments and result cards. Label the virtual pool as v2-style and recorded historical cases as v3.

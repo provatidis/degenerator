@@ -1,7 +1,7 @@
 import { calculateScenario } from './cp50-v1.js';
 import { calculateRange } from './cl-range-v1.js';
 import { amountOut } from './uniswap-v2.js';
-import { learningAnswerMatches } from './learning-answer.js?v=1.15.1';
+import { learningAnswerMatches } from './learning-answer.js?v=1.15.2';
 
 export const LESSON_IDS = Object.freeze(['swap-impact', 'pool-share', 'token-balances', 'loss-vs-profit', 'fee-break-even', 'range-boundaries', 'final-challenge']);
 export const VARIANTS = 3;

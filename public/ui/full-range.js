@@ -6,9 +6,9 @@ import { scenarioCSV } from '../lib/scenario-csv.js';
 import { experimentScenario } from '../models/experiments.js';
 import { fmt, usd, signedUSD, percent, compactUSD } from '../lib/format.js';
 import { downloadBlob } from '../lib/download.js';
-import { resultCardBlob } from '../lib/result-card.js?v=1.15.1';
+import { resultCardBlob } from '../lib/result-card.js?v=1.15.2';
 import { validateExperimentDraft } from '../data/saved-experiments.js';
-import { experimentOriginLabel } from '../lib/saved-experiments.js?v=1.15.1';
+import { experimentOriginLabel } from '../lib/saved-experiments.js?v=1.15.2';
 
 export function initFullRangeLab({ navigation }) {
   const { selectLab } = navigation;

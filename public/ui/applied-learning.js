@@ -1,10 +1,10 @@
-import { APPLIED_CHAPTER, APPLIED_LESSONS } from '../learning/applied-liquidity.js?v=1.15.0';
-import { appliedLessonFromHash, appliedQuestion, checkAppliedAnswer, appliedReasonFeedback } from '../lib/applied-lessons.js?v=1.15.0';
-import { appliedApplication, checkAppliedUnderstanding } from '../lib/applied-applications.js?v=1.15.0';
-import { newChoiceSeed, validChoiceSeed } from '../lib/learning-choices.js?v=1.15.0';
-import { learningChoices, learningMetric, learningPitfall } from '../lib/learning-elements.js?v=1.15.0';
-import { POOL_PITFALLS } from '../learning/pool-pitfalls.js?v=1.15.0';
-import { readAppliedProgress, saveAppliedProgress } from '../data/applied-progress.js?v=1.15.0';
+import { APPLIED_CHAPTER, APPLIED_LESSONS } from '../learning/applied-liquidity.js?v=1.15.1';
+import { appliedLessonFromHash, appliedQuestion, checkAppliedAnswer, appliedReasonFeedback } from '../lib/applied-lessons.js?v=1.15.1';
+import { appliedApplication, checkAppliedUnderstanding } from '../lib/applied-applications.js?v=1.15.1';
+import { newChoiceSeed, validChoiceSeed } from '../lib/learning-choices.js?v=1.15.1';
+import { learningChoices, learningMetric, learningPitfall } from '../lib/learning-elements.js?v=1.15.1';
+import { POOL_PITFALLS } from '../learning/pool-pitfalls.js?v=1.15.1';
+import { readAppliedProgress, saveAppliedProgress } from '../data/applied-progress.js?v=1.15.1';
 import { createAppliedRecordLoader } from '../data/applied-records.js';
 import { REPLAY_CASES } from '../data/replay-cases.js';
 import { periodPointView, periodIntervalView, periodMilestones, periodChartRange, periodDuration } from '../lib/period-presentation.js';
@@ -160,10 +160,10 @@ export function initAppliedLearning() {
     if (!lesson.predictions.some(([value]) => value === draft.prediction)) { draft.prediction = ''; draft.revealed = false; }
     if (!lesson.reasons.some(([value]) => value === draft.reason)) draft.reason = '';
     $('learn-page-title').textContent = APPLIED_CHAPTER;
-    $('learn-page-subtitle').textContent = 'Apply liquidity mechanics to two verified historical cases. Predict, observe, explain and apply.';
+    $('learn-page-subtitle').textContent = 'Apply Uniswap v3 liquidity mechanics to two verified historical cases. Predict, observe, explain and apply.';
     document.title = lesson.short + ' · Passiko Learn';
     $('applied-number').textContent = 'APPLIED ' + (APPLIED_LESSONS.indexOf(lesson) + 1) + ' OF 3';
-    $('applied-title').textContent = lesson.title; $('applied-adds').textContent = lesson.adds; $('applied-intro').textContent = lesson.intro;
+    $('applied-title').textContent = lesson.title; $('applied-adds').textContent = 'Uniswap v3 · Recorded case · ' + lesson.adds; $('applied-intro').textContent = lesson.intro;
     $('applied-question').textContent = lesson.question; $('applied-reason-question').textContent = lesson.reasoning;
     $('applied-prediction-question').textContent = lesson.prediction; $('applied-calculation-hint').textContent = lesson.hint;
     learningPitfall($('applied-pitfall'),POOL_PITFALLS[lesson.id]);

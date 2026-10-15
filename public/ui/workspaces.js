@@ -18,8 +18,8 @@ export function initWorkspaces() {
   const copy = {
     experiment: ['HYPOTHETICAL MODELS', 'Compare liquidity scenarios', 'Change a price, range or fee assumption. Compare the outcome with holding.'],
     inspect: ['RECORDED SNAPSHOTS', 'Inspect a pool or position', 'Read principal and fee accounting at one recorded Ethereum block.'],
-    replay: ['VERIFIED HISTORICAL CASE', 'Replay a fixed-range position', 'Follow principal, earned fees and holding through a recorded period.'],
-    mechanics: ['VIRTUAL POOL', 'Explore pool mechanics', 'Swap, deposit and withdraw virtual tokens. Follow the changing reserves.'],
+    replay: ['UNISWAP V3 · VERIFIED HISTORY', 'Replay a fixed-range position', 'Follow principal, earned fees and holding through a recorded period.'],
+    mechanics: ['UNISWAP V2-STYLE · VIRTUAL POOL', 'Explore pool mechanics', 'Swap, deposit and withdraw virtual tokens. Follow the changing reserves.'],
   };
   function select(key) {
     if (!Object.hasOwn(panels, key)) throw new Error('Choose a supported workspace.');

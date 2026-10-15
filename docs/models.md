@@ -2,6 +2,12 @@
 
 [Project overview](../README.md) · [Product decisions](../DECISIONS.md)
 
+## Protocol names and calculation versions
+
+The full-range lab and virtual pool use Uniswap v2-style mechanics. The price-range lab uses simplified Uniswap v3-style concentrated liquidity math, without native tick constraints or on-chain rounding. V3 also allows full-range positions; these names identify Passiko’s models rather than an exclusive division between protocols. Inspect reads real Uniswap v2 pools or v3 positions, and the recorded historical cases are v3.
+
+`cp50-v1` and `cl-range-v1` are Passiko model-revision identifiers. Their `v1` does not refer to Uniswap v1. They remain in links, exports and technical details so calculations remain reproducible; prominent labels name the protocol style instead.
+
 ## Three kinds of results
 
 - **Hypothetical models:** the full-range and range labs project endpoint balances from editable assumptions. Their fee income is an assumed USD cash amount.
@@ -12,7 +18,7 @@ Applying a snapshot or replay checkpoint to a lab starts a new hypothetical comp
 
 ## Concentrated-liquidity range lab
 
-Switch between **Full-range 50/50** and **Concentrated liquidity** without resetting either setup. The lab switch stays available while exploring a calculator. On mobile, budget/range inputs collapse into an editable summary; results and the price explorer remain visible, with sharing controls alongside the results. The range lab chooses lower/upper ETH prices, computes the required starting token mix for a fixed investment, and compares:
+Switch between **Full range · V2-style** and **Price range · V3-style** without resetting either setup. The lab switch stays available while exploring a calculator. On mobile, budget/range inputs collapse into an editable summary; results and the price explorer remain visible, with sharing controls alongside the results. The range lab chooses lower/upper ETH prices, computes the required starting token mix for a fixed investment, and compares:
 
 - Holding those exact starting range tokens.
 - A separate full-range 50/50 LP position funded with the same budget.

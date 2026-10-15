@@ -5,10 +5,10 @@ import { readSharedScenario } from '../lib/link-router.js';
 import { rangeCSV } from '../lib/range-csv.js';
 import { fmt, usd, percent, signedUSD, compactUSD } from '../lib/format.js';
 import { STATE_COPY, rangePriceLabels, assetAmounts } from '../lib/range-presentation.js';
-import { rangeCardBlob } from '../lib/range-card.js';
+import { rangeCardBlob } from '../lib/range-card.js?v=1.15.1';
 import { downloadBlob } from '../lib/download.js';
 import { validateExperimentDraft } from '../data/saved-experiments.js';
-import { experimentOriginLabel } from '../lib/saved-experiments.js';
+import { experimentOriginLabel } from '../lib/saved-experiments.js?v=1.15.1';
 
 export function initRangeLab({ navigation }) {
   const { selectLab } = navigation;

@@ -113,3 +113,11 @@ Applied progress uses `passiko-applied-liquidity-v1`, independently of the uncha
 The footer on Experiment and Learn opens [Methods](https://provatidis.github.io/passiko/methods.html), [About](https://provatidis.github.io/passiko/about.html), source and feedback in a separate tab, keeping the current experiment open. Methods explains hypothetical inputs, snapshot validation and independently checked historical accounting. Feedback opens a prefilled GitHub issue and requires a GitHub account to post.
 
 On mobile, use **Explore experiment tools** or **Explore inspect tools** to reveal the secondary destinations. Primary Experiment, Learn and Inspect navigation stays visible. Practical lesson situations change the supplied facts and may change the correct follow-up; hints remain available and no calculation is required.
+
+## Which Uniswap version am I exploring?
+
+- **Full range · V2-style** and the virtual pool use Uniswap v2-style mechanics. The early lessons identify this scope beside the lesson heading.
+- **Price range · V3-style** and practical range exercises use simplified Uniswap v3-style concentrated liquidity math. Price bounds are continuous inputs here; native v3 positions use tick boundaries.
+- **Inspect** labels real v2 pool snapshots separately from v3 positions. Both historical cases use real v3 positions.
+
+Uniswap v3 can also provide full-range liquidity. The lab labels identify the calculations Passiko uses. The `v1` in `cp50-v1` or `cl-range-v1` identifies Passiko’s model revision; it does not mean Uniswap v1.

@@ -1,7 +1,7 @@
 export const COURSE = { id: 'liquidity-essentials-v1', title: 'Liquidity essentials' };
 export const LESSONS = [
   {
-    id: 'swap-impact', title: 'Trade size and execution price', short: 'Swaps & price impact', concept: 'Swaps', skill: 'Explain how trade size affects execution.',
+    id: 'swap-impact', protocol: 'Uniswap v2-style', title: 'Trade size and execution price', short: 'Swaps & price impact', concept: 'Swaps', skill: 'Explain how trade size affects execution.',
     intro: 'A pool has finite reserves. A larger order takes more of its USDC and changes the exchange rate along the way. The price shown before a swap is not the price of every unit in that swap.',
     prediction: 'Will this trade receive the starting spot price for every ETH?',
     predictions: [['less', 'A lower average price than the starting price'], ['same', 'The same price for every ETH in the trade'], ['more', 'A higher average price than the starting price']],
@@ -13,7 +13,7 @@ export const LESSONS = [
     takeaway: 'A quote describes a trade against finite reserves. Spot price alone cannot tell you its proceeds.',
   },
   {
-    id: 'pool-share', title: 'Ownership after a liquidity deposit', short: 'Providing liquidity', concept: 'Ownership', skill: 'Explain what your share represents after a matching deposit.',
+    id: 'pool-share', protocol: 'Uniswap v2-style', title: 'Ownership after a liquidity deposit', short: 'Providing liquidity', concept: 'Ownership', skill: 'Explain what your share represents after a matching deposit.',
     intro: 'A matching deposit adds ETH and USDC at the pool’s current ratio. Liquidity provider (LP) tokens represent a fraction of the enlarged pool. Their withdrawal value depends on the pool reserves.',
     prediction: 'When you deposit, which pool balances determine your ownership?',
     predictions: [['less', 'The enlarged pool, including my deposit'], ['same', 'The pool balances before my deposit']],
@@ -25,7 +25,7 @@ export const LESSONS = [
     takeaway: 'The denominator includes your deposit. LP tokens are a claim on changing assets.',
   },
   {
-    id: 'token-balances', title: 'Token balances after a price change', short: 'Changing token balances', concept: 'Allocation', skill: 'Explain what a price move does to token quantities.',
+    id: 'token-balances', protocol: 'Uniswap v2-style', title: 'Token balances after a price change', short: 'Changing token balances', concept: 'Allocation', skill: 'Explain what a price move does to token quantities.',
     intro: 'In a full-range 50/50 model, arbitrage keeps the pool aligned with the new market price. The dollar split stays balanced while the quantities of ETH and USDC change.',
     prediction: 'At your selected future price, will the LP hold less, more, or the same ETH as at the start?',
     predictions: [['less', 'Less ETH'], ['more', 'More ETH'], ['same', 'The same ETH']],
@@ -37,7 +37,7 @@ export const LESSONS = [
     takeaway: 'Equal dollar weights do not mean fixed token quantities.',
   },
   {
-    id: 'loss-vs-profit', title: 'Dollar profit and impermanent loss', short: 'Loss versus profit', concept: 'Benchmarks', skill: 'Separate dollar profit from impermanent loss.',
+    id: 'loss-vs-profit', protocol: 'Uniswap v2-style', title: 'Dollar profit and impermanent loss', short: 'Loss versus profit', concept: 'Benchmarks', skill: 'Separate dollar profit from impermanent loss.',
     intro: 'Dollar profit compares the LP with its original investment. Impermanent loss compares the position’s tokens before fees with holding the exact starting tokens. These answer different questions.',
     prediction: 'Before fees, is the LP worth at least the original budget at your selected price?',
     predictions: [['gain', 'Yes — it gains dollars or breaks even'], ['loss', 'No — it loses dollars']],
@@ -49,7 +49,7 @@ export const LESSONS = [
     takeaway: 'Choose the benchmark before interpreting a return.',
   },
   {
-    id: 'fee-break-even', title: 'Fees needed to match holding', short: 'Fees & break-even', concept: 'Fee income', skill: 'Distinguish a fee target from assumed and earned fees.',
+    id: 'fee-break-even', protocol: 'Uniswap v2-style', title: 'Fees needed to match holding', short: 'Fees & break-even', concept: 'Fee income', skill: 'Distinguish a fee target from assumed and earned fees.',
     intro: 'Fee income can compensate for the gap to holding. Enter the total fees accruing to your position after any protocol share. This lab treats them as separate USD cash added at the end; it does not forecast earnings.',
     prediction: 'Do your assumed fees cover the gap to holding at this future price?',
     predictions: [['enough', 'They match or exceed the gap'], ['short', 'The LP still trails holding']],
@@ -61,7 +61,7 @@ export const LESSONS = [
     takeaway: 'Required fees and expected fees are different numbers.',
   },
   {
-    id: 'range-boundaries', title: 'Token balances at range boundaries', short: 'Concentrated liquidity', concept: 'Ranges', skill: 'Identify the token held at either range boundary.',
+    id: 'range-boundaries', protocol: 'Uniswap v3-style', title: 'Token balances at range boundaries', short: 'Concentrated liquidity', concept: 'Ranges', skill: 'Identify the token held at either range boundary.',
     intro: 'A concentrated position commits capital to a price interval. At or below its lower boundary it holds ETH; at or above its upper boundary it holds USDC. Within the range it can hold both.',
     prediction: 'At the selected future price, what will the position hold?',
     predictions: [['eth', 'Only ETH'], ['both', 'ETH and USDC'], ['usdc', 'Only USDC']],
@@ -73,7 +73,7 @@ export const LESSONS = [
     takeaway: 'Outside the range is an asset allocation state, not a complete history.',
   },
   {
-    id: 'final-challenge', title: 'Compare liquidity with holding', short: 'Final challenge', concept: 'Apply what you learned', skill: 'Compare an LP with holding and justify the conclusion.',
+    id: 'final-challenge', protocol: 'Uniswap v2-style', title: 'Compare liquidity with holding', short: 'Final challenge', concept: 'Apply what you learned', skill: 'Compare an LP with holding and justify the conclusion.',
     intro: 'You have one budget, one starting mix and an explicit fee assumption. Compare the final values, then explain the result. A high fee number alone is not enough to choose a strategy.',
     prediction: 'With your selected price and fee assumption, which has the higher final dollar value?',
     predictions: [['hold', 'Holding the starting tokens'], ['lp', 'The LP, including fees — or a tie']],

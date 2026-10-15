@@ -4,7 +4,7 @@ import { scenarioHash } from './scenario-links.js';
 import { rangeHash } from './range-links.js';
 import { fmt, usd } from './format.js';
 
-export const experimentModelName = model => model === FULL_MODEL ? 'Full-range 50/50' : 'Concentrated range';
+export const experimentModelName = model => model === FULL_MODEL ? 'V2-style full range' : 'V3-style price range';
 export function experimentView(entry) {
   const result = entry.model === FULL_MODEL ? calculateScenario(entry.inputs) : calculateRange(entry.inputs);
   return { result, initial: result.held ?? result.initial,

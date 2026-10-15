@@ -1,4 +1,4 @@
-import { lessonApplication } from '../models/lesson-application.js?v=1.15.0';
+import { lessonApplication } from '../models/lesson-application.js?v=1.15.1';
 import { usd, fmt } from './format.js';
 
 export function lessonApplicationCopy(id, outcome) {

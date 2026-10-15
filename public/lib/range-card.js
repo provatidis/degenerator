@@ -15,14 +15,14 @@ export async function rangeCardBlob(input, siteURL) {
     ctx.fillStyle = color; ctx.font = weight + ' ' + size + 'px system-ui, sans-serif'; ctx.fillText(content, x, y, maxWidth);
   };
   await drawBrand(ctx, 60, 28);
-  text('THE RANGE LAB', 60, 108, 16, '#bcc7bf');
+  text('UNISWAP V3-STYLE · HYPOTHETICAL PRICE RANGE', 60, 108, 16, '#bcc7bf');
   const state = STATE_COPY[result.state];
   text(state.title + '. ' + state.assets + '.', 60, 180, 44, '#f4f3ed', 600);
   const ranges = rangePriceLabels(result.lowerPrice, result.upperPrice);
   text('Your range: ' + ranges.lower + ' – ' + ranges.upper, 60, 224, 22, '#bcc7bf');
   const totals = [
     ['HOLD STARTING MIX', result.holdValue, '#a9c7f5'],
-    ['FULL-RANGE 50/50 LP', result.fullRange.lpValue, '#b5a8eb'],
+    ['V2-STYLE 50/50 LP', result.fullRange.lpValue, '#b5a8eb'],
     ['YOUR RANGE LP', result.lpValue, '#b8cdb9'],
   ];
   totals.forEach(([label, value, color], i) => {
@@ -39,7 +39,7 @@ export async function rangeCardBlob(input, siteURL) {
   text('Range IL before fees: ' + percent(result.impermanentLoss), 60, 650, 23);
   text('Range fees needed to match holding: ' + usd(result.breakEvenFees), 60, 690, 23);
   text('Holding keeps the range’s starting mix. The full-range LP starts 50/50.', 60, 751, 18, '#bcc7bf');
-  text('Continuous model ' + MODEL + ' · USDC = $1 · No tick rounding, gas or compounding', 60, 783, 17, '#bcc7bf');
+  text('Passiko calculation ' + MODEL + ' · USDC = $1 · No tick rounding, gas or compounding', 60, 783, 17, '#bcc7bf');
   text('Hypothetical endpoints and assumed fees · Not a forecast', 60, 815, 17, '#bcc7bf');
   text(siteURL, 60, 866, 17, '#b8cdb9');
   return new Promise((resolve, reject) => canvas.toBlob((blob) => blob ? resolve(blob) : reject(new Error('Your browser could not export the range card.')), 'image/png'));

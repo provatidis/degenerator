@@ -1,5 +1,11 @@
 # Release history
 
+## 1.15.1 — 2026-10-15
+
+- Name Uniswap v2-style full-range and v3-style price-range calculations in lab tabs, badges, lessons, saved experiments and result cards. Label the virtual pool as v2-style and recorded historical cases as v3.
+- Move Passiko’s internal model revision labels out of prominent badges and lesson footers. Explain that `cp50-v1` and `cl-range-v1` do not mean Uniswap v1, and that v3 can also provide full-range liquidity.
+- Clarify the simplified range model’s continuous price bounds versus native v3 ticks. Preserve calculation identifiers, shared links, saved data and all math.
+
 ## 1.15.0 — 2026-10-13
 
 - Keep lesson hints and ungraded predictions while making explanatory choices more believable. Practical follow-ups now change their conclusion with the supplied fees, costs or removal of liquidity; all totals are provided.

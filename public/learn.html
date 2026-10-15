@@ -28,8 +28,8 @@
   <meta name="twitter:title" content="Learn liquidity by doing · Passiko">
   <meta name="twitter:description" content="Interactive liquidity lessons and applied historical cases, with predictions and understanding checks.">
   <meta name="twitter:image" content="https://provatidis.github.io/passiko/assets/social-preview.png">
-  <link rel="stylesheet" href="styles.css?v=1.15.0">
-  <script type="module" src="learn-main.js?v=1.15.0"></script>
+  <link rel="stylesheet" href="styles.css?v=1.15.1">
+  <script type="module" src="learn-main.js?v=1.15.1"></script>
 </head>
 <body class="learning-page">
   <a class="skip-link" href="#main-content">Skip to content</a>
@@ -40,7 +40,7 @@
   <main id="main-content" tabindex="-1">
     <noscript><div class="notice"><p>JavaScript is needed for the interactive lessons and progress. Enable it to predict, run and check your experiments. <a href="./">Open Playground →</a></p></div></noscript>
     <section class="intro learn-intro">
-      <div><p class="eyebrow">LEARN BY DOING</p><h1 id="learn-page-title">Liquidity essentials</h1><p id="learn-page-subtitle" class="subtitle">Explore swaps, pool ownership, fees and price ranges with interactive examples.</p></div>
+      <div><p class="eyebrow">LEARN BY DOING</p><h1 id="learn-page-title">Liquidity essentials</h1><p id="learn-page-subtitle" class="subtitle">Explore Uniswap v2-style full-range pools and Uniswap v3-style price ranges with interactive examples.</p></div>
       <button type="button" id="learn-resume" class="button secondary">Start lesson 1 ↓</button>
     </section>
     <nav class="learn-entry-links" aria-label="Learning entry points"><a href="#lesson=swap-impact">Start with foundations →</a><a href="#manage=range-width">Explore range choices →</a><a href="#applied=fees-over-time">Follow a recorded position →</a></nav>
@@ -65,7 +65,7 @@
       </aside>
       <article id="learn-essential" class="learn-lesson" aria-labelledby="learn-lesson-title">
         <div class="learn-lesson-heading"><p id="learn-lesson-number" class="eyebrow">LESSON 1 OF 6</p><span id="learn-concept" class="small-badge">Swaps</span><button type="button" id="learn-topics" class="learn-text-button">All topics ↑</button></div>
-        <p id="learn-level" class="learn-level">Stage 1 · Foundations</p>
+        <p id="learn-level" class="learn-level">Uniswap v2-style · Stage 1 · Foundations</p>
         <h2 id="learn-lesson-title" tabindex="-1">Trade size and execution price</h2>
         <p id="learn-skill" class="learn-skill"></p>
         <p id="learn-intro" class="learn-reading">A larger swap moves further along the pool’s curve. Predict what happens, then try it.</p>
@@ -130,7 +130,7 @@
         <section class="card learn-experiment" aria-labelledby="manage-predict-title">
           <div class="card-heading"><div><p class="eyebrow">01 · PREDICT</p><h3 id="manage-predict-title">Before opening the example</h3></div><button id="manage-variation" class="learn-text-button" type="button">Try another situation ↻</button></div>
           <p id="manage-setup" class="learn-setup"></p><fieldset class="learn-fieldset"><legend id="manage-prediction-question"></legend><div id="manage-predictions" class="learn-choices"></div></fieldset>
-          <button id="manage-reveal" class="button primary" type="button" disabled>Reveal the example →</button><div class="learn-experiment-footer"><span id="manage-variation-label"></span><span>Hypothetical WETH/USDC · No calculations required</span></div>
+          <button id="manage-reveal" class="button primary" type="button" disabled>Reveal the example →</button><div class="learn-experiment-footer"><span id="manage-variation-label"></span><span>Hypothetical Uniswap v3-style · No calculations required</span></div>
         </section>
         <section id="manage-observe" class="card learn-results" aria-labelledby="manage-observe-title" hidden>
           <p class="eyebrow">02 · OBSERVE</p><h3 id="manage-observe-title" tabindex="-1">Read the result</h3><p id="manage-prediction-feedback" class="learn-prediction-feedback" role="status"></p>

@@ -1,21 +1,21 @@
 import { stageForLesson } from '../learning/example-path.js';
-import { DEEPER_READING } from '../learning/deeper-reading.js?v=1.15.0';
-import { lessonWalkthrough } from '../lib/lesson-walkthrough.js?v=1.15.0';
-import { LESSONS } from '../learning/liquidity-essentials.js?v=1.15.0';
-import { LESSON_IDS, VARIANTS, lessonSetup, runLesson, checkLesson } from '../models/lesson-experiments.js?v=1.15.0';
-import { checkLessonUnderstanding } from '../models/lesson-application.js?v=1.15.0';
-import { lessonApplicationCopy } from '../lib/lesson-application-copy.js?v=1.15.0';
-import { newChoiceSeed, validChoiceSeed } from '../lib/learning-choices.js?v=1.15.0';
-import { learningChoices, learningMetric, learningPitfall } from '../lib/learning-elements.js?v=1.15.0';
-import { POOL_PITFALLS } from '../learning/pool-pitfalls.js?v=1.15.0';
-import { managementLessonFromHash } from '../lib/management-links.js?v=1.15.0';
-import { readProgress, saveProgress } from '../data/learning-progress.js?v=1.15.0';
+import { DEEPER_READING } from '../learning/deeper-reading.js?v=1.15.1';
+import { lessonWalkthrough } from '../lib/lesson-walkthrough.js?v=1.15.1';
+import { LESSONS } from '../learning/liquidity-essentials.js?v=1.15.1';
+import { LESSON_IDS, VARIANTS, lessonSetup, runLesson, checkLesson } from '../models/lesson-experiments.js?v=1.15.1';
+import { checkLessonUnderstanding } from '../models/lesson-application.js?v=1.15.1';
+import { lessonApplicationCopy } from '../lib/lesson-application-copy.js?v=1.15.1';
+import { newChoiceSeed, validChoiceSeed } from '../lib/learning-choices.js?v=1.15.1';
+import { learningChoices, learningMetric, learningPitfall } from '../lib/learning-elements.js?v=1.15.1';
+import { POOL_PITFALLS } from '../learning/pool-pitfalls.js?v=1.15.1';
+import { managementLessonFromHash } from '../lib/management-links.js?v=1.15.1';
+import { readProgress, saveProgress } from '../data/learning-progress.js?v=1.15.1';
 import { fmt, usd, signedUSD, percent } from '../lib/format.js';
 import { scenarioHash } from '../lib/scenario-links.js';
 import { rangeHash } from '../lib/range-links.js';
-import { resultCardBlob } from '../lib/result-card.js';
+import { resultCardBlob } from '../lib/result-card.js?v=1.15.1';
 import { appliedLessonFromHash } from '../lib/applied-lessons.js';
-import { tokenBalanceNarration, benchmarkNarration, lessonReasonFeedback } from '../lib/lesson-narration.js?v=1.15.0';
+import { tokenBalanceNarration, benchmarkNarration, lessonReasonFeedback } from '../lib/lesson-narration.js?v=1.15.1';
 
 export function initLearning() {
   const $ = id => document.getElementById(id);
@@ -110,7 +110,7 @@ export function initLearning() {
     if (lesson.id === 'pool-share') $('learn-setup').textContent += ' · Matching USDC: ' + fmt(s.depositEth * s.initialPrice, 0);
     if (lesson.id === 'range-boundaries') $('learn-setup').textContent += ' · Range: ' + usd(s.initialPrice * (1 - s.width)) + '–' + usd(s.initialPrice * (1 + s.width));
     $('learn-variation-label').textContent = 'Variation ' + (draft.variant + 1) + ' of ' + VARIANTS;
-    const model = lesson.id === 'range-boundaries' ? 'cl-range-v1' : ['swap-impact', 'pool-share'].includes(lesson.id) ? 'Virtual Uniswap v2 mechanics' : 'cp50-v1';
+    const model = lesson.protocol + (lesson.id === 'range-boundaries' ? ' · Price range' : ['swap-impact', 'pool-share'].includes(lesson.id) ? ' · Virtual pool' : ' · Full-range 50/50');
     $('learn-model').textContent = model + ' · Illustrative inputs · USDC = $1';
   }
   function invalidate() {
@@ -220,7 +220,7 @@ export function initLearning() {
     $('learn-essential').hidden = Boolean(applied);
     if (applied) { $('learn-route-note').hidden = true; updateProgress(); return false; }
     $('learn-page-title').textContent = 'Liquidity essentials';
-    $('learn-page-subtitle').textContent = 'Explore swaps, pool ownership, fees and price ranges with interactive examples.';
+    $('learn-page-subtitle').textContent = 'Explore Uniswap v2-style full-range pools and Uniswap v3-style price ranges with interactive examples.';
     const params = new URLSearchParams(location.hash.slice(1));
     const requested = params.get('lesson');
     const valid = LESSON_IDS.includes(requested) && params.getAll('lesson').length === 1 && [...params.keys()].every(key => key === 'lesson');
@@ -234,7 +234,7 @@ export function initLearning() {
     if (!lesson.predictions.some(([value]) => value === draft.prediction)) draft.prediction = '';
     if (!lesson.reasons.some(([value]) => value === draft.reason)) draft.reason = '';
     if (!draft.prediction) draft.ran = false;
-    $('learn-level').textContent = 'Stage ' + stageForLesson(lesson.id).level + ' · ' + stageForLesson(lesson.id).title;
+    $('learn-level').textContent = lesson.protocol + ' · Stage ' + stageForLesson(lesson.id).level + ' · ' + stageForLesson(lesson.id).title;
     $('learn-lesson-title').textContent = lesson.title; document.title = lesson.short + ' · Passiko Learn';
     $('learn-lesson-number').textContent = index === 6 ? 'FINAL CHALLENGE' : 'LESSON ' + (index + 1) + ' OF 6';
     $('learn-concept').textContent = lesson.concept; $('learn-skill').textContent = lesson.skill;

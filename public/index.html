@@ -30,8 +30,8 @@
   <meta name="twitter:description" content="Explore full-range and concentrated liquidity, import pool and position snapshots, and experiment with virtual swaps in Passiko.">
   <meta name="twitter:image" content="https://provatidis.github.io/passiko/assets/social-preview.png">
   <meta name="twitter:image:alt" content="Passiko. Learn and experiment with DeFi, with a liquidity range scenario.">
-  <link rel="stylesheet" href="styles.css?v=1.15.0">
-  <script type="module" src="main.js?v=1.15.0"></script>
+  <link rel="stylesheet" href="styles.css?v=1.15.1">
+  <script type="module" src="main.js?v=1.15.1"></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
@@ -51,11 +51,11 @@
     <div id="experiment-workspace" class="app-workspace">
     <div id="liquidity-labs" class="lab-group">
     <div class="lab-switch" role="tablist" aria-label="Liquidity experiments">
-      <button id="lab-full-tab" type="button" role="tab" aria-selected="true" aria-controls="lp-lab" tabindex="0">Full-range 50/50</button>
-      <button id="lab-range-tab" type="button" role="tab" aria-selected="false" aria-controls="range-lab" tabindex="-1">Concentrated liquidity</button>
+      <button id="lab-full-tab" type="button" role="tab" aria-selected="true" aria-controls="lp-lab" tabindex="0">Full range · V2-style</button>
+      <button id="lab-range-tab" type="button" role="tab" aria-selected="false" aria-controls="range-lab" tabindex="-1">Price range · V3-style</button>
     </div>
     <section id="lp-lab" class="scenario-section" role="tabpanel" aria-labelledby="lab-full-tab">
-      <div class="lab-heading"><div><p class="eyebrow">FULL-RANGE LIQUIDITY</p><h2 id="scenario-heading">Provide liquidity, or hold?</h2><p class="body-copy">Compare a liquidity provider (LP) position with holding the same starting ETH and USDC.</p></div><span class="small-badge">Constant-product model · v1</span></div>
+      <div class="lab-heading"><div><p class="eyebrow">FULL-RANGE LIQUIDITY</p><h2 id="scenario-heading">Provide liquidity, or hold?</h2><p class="body-copy">Compare a liquidity provider (LP) position with holding the same starting ETH and USDC.</p></div><span class="small-badge">Uniswap v2-style · Full range</span></div>
       <details class="quick-changes"><summary>Try a quick change</summary>
       <div class="guided-experiments" aria-label="Quick changes">
         <button type="button" class="experiment-card" data-experiment="double"><span class="eyebrow">PRICE INCREASE</span><strong>ETH price doubles</strong><span>Start with zero fees and see how the tokens rebalance.</span></button>
@@ -101,12 +101,12 @@
           <p id="scenario-link-status" class="fine-print" role="status"></p>
       </section>
       <div id="scenario-comparison-card" class="card comparison-card"><div class="card-heading"><div><h3>Compare outcomes</h3><p class="body-copy">Select a price to explore it. Investment and assumed fee income stay the same in every row.</p></div></div><p class="fine-print table-scroll-hint">Swipe or scroll sideways to see every column.</p><div class="table-scroll" tabindex="0" role="region" aria-label="Scenario comparison table"><table role="table" class="scenario-table"><caption class="sr-only">Holding and liquidity outcomes under different future ETH prices, with the same assumed fees</caption><thead><tr role="row"><th scope="col">Future ETH price</th><th scope="col">Holding</th><th scope="col">LP + fees</th><th scope="col">LP minus holding</th><th scope="col">IL before fees</th></tr></thead><tbody id="scenario-comparisons"></tbody></table></div><p class="fine-print">Values are hypothetical outcomes, not probabilities or recommendations.</p></div>
-      <details class="model-details"><summary>How this model works</summary><div><p>A full-range constant-product position starts with 50% ETH and 50% USDC by dollar value. USDC stays at $1. Ideal, frictionless arbitrage brings the pool price to the future market price.</p><p>For an initial investment V and price ratio r = future price / starting price, holding is worth V × (1 + r) / 2. The LP assets are worth V × √r before fee income. Initial ETH = V / (2 × starting price); after rebalancing, LP ETH = initial ETH / √r and LP USDC = initial USDC × √r.</p><p>Fee income is your assumed total for this position, added as separate USD cash at the end. It is held fixed across the comparison, does not compound, and is not inferred from market prices or trading volume. The model excludes gas, incentives, depegging, and concentrated liquidity. It shows endpoints, not a trading path.</p><p>Model version: cp50-v1. Shared links and CSV exports include the assumptions and model version so another person can reproduce the calculation.</p></div></details>
+      <details class="model-details"><summary>How this model works</summary><div><p>This Uniswap v2-style full-range model starts with 50% ETH and 50% USDC by dollar value. USDC stays at $1. Ideal, frictionless arbitrage brings the pool price to the future market price.</p><p>For an initial investment V and price ratio r = future price / starting price, holding is worth V × (1 + r) / 2. The LP assets are worth V × √r before fee income. Initial ETH = V / (2 × starting price); after rebalancing, LP ETH = initial ETH / √r and LP USDC = initial USDC × √r.</p><p>Fee income is your assumed total for this position, added as separate USD cash at the end. It is held fixed across the comparison, does not compound, and is not inferred from market prices or trading volume. The model excludes gas, incentives, depegging, and concentrated liquidity. It shows endpoints, not a trading path.</p><p>Passiko calculation revision: cp50-v1. The v1 identifies this model revision, not Uniswap v1. Shared links and CSV exports include the assumptions and model version so another person can reproduce the calculation.</p></div></details>
     </section>
     <section id="range-lab" class="scenario-section" role="tabpanel" aria-labelledby="lab-range-tab" hidden>
       <div class="lab-heading">
         <div><p class="eyebrow">CONCENTRATED LIQUIDITY</p><h2>Test a liquidity price range</h2><p class="body-copy">Choose price bounds and compare the position’s tokens and value at different ETH prices.</p></div>
-        <span class="small-badge">Continuous range model · v1</span>
+        <span class="small-badge">Uniswap v3-style · Price range</span>
       </div>
       <p id="cl-link-status" class="fine-print cl-link-status" role="status" hidden></p>
       <p id="cl-origin" class="fine-print cl-origin" hidden></p>
@@ -151,7 +151,7 @@
             <p id="cl-state-note" class="cl-state-note"></p>
             <div class="cl-totals">
               <div class="cl-total"><span class="label">Hold your starting mix</span><strong id="cl-hold-value">—</strong><span id="cl-hold-return" class="stat-note"></span><p id="cl-held-note"></p></div>
-              <div class="cl-total"><span class="label">Full-range 50/50 LP</span><strong id="cl-full-value">—</strong><span id="cl-full-return" class="stat-note"></span><p id="cl-full-note"></p></div>
+              <div class="cl-total"><span class="label">V2-style 50/50 LP</span><strong id="cl-full-value">—</strong><span id="cl-full-return" class="stat-note"></span><p id="cl-full-note"></p></div>
               <div class="cl-total cl-total-range"><span class="label">Your range LP</span><strong id="cl-value">—</strong><span id="cl-return" class="stat-note"></span><p id="cl-fees-note"></p></div>
             </div>
             <div class="cl-price-explorer">
@@ -171,7 +171,7 @@
               <p id="cl-final-allocation" class="fine-print"></p>
             </div>
             <figure class="cl-figure">
-              <div class="cl-chart-heading"><h3>Values across future ETH prices</h3><div class="cl-chart-legend"><span><i class="cl-legend-hold"></i>Hold starting mix</span><span><i class="cl-legend-full"></i>50/50 LP</span><span><i class="cl-legend-range"></i>Your range LP</span></div></div>
+              <div class="cl-chart-heading"><h3>Values across future ETH prices</h3><div class="cl-chart-legend"><span><i class="cl-legend-hold"></i>Hold starting mix</span><span><i class="cl-legend-full"></i>V2-style 50/50 LP</span><span><i class="cl-legend-range"></i>Your range LP</span></div></div>
               <svg id="cl-chart" viewBox="0 0 720 300" role="img" aria-labelledby="cl-chart-title cl-chart-desc">
                 <title id="cl-chart-title">Concentrated liquidity compared with holding and full-range liquidity</title><desc id="cl-chart-desc">The shaded band is the chosen range. Use the price slider to explore outcomes.</desc>
                 <rect id="cl-chart-band" class="cl-chart-band" y="26" height="220"/>
@@ -196,12 +196,12 @@
           <details id="cl-card-preview" class="card result-card-preview cl-card-preview" hidden><summary>Your range result card</summary><img id="cl-card-image" alt="Range result card with price boundaries, starting allocation, assumptions and the three strategy outcomes."><a id="cl-image-download" class="button secondary" download="passiko-range-cl-range-v1.png">Download PNG</a></details>
         </div>
       </div>
-      <details id="cl-comparison-card" class="card cl-comparisons"><summary>Compare prices at the edges</summary><p class="body-copy">Select a row to explore it. Each row keeps the same range, investment and separate fee assumptions.</p><p class="fine-print table-scroll-hint">Swipe or scroll sideways to see every column.</p><div class="table-scroll" tabindex="0" role="region" aria-label="Range comparison table"><table role="table" class="scenario-table cl-table"><caption class="sr-only">Concentrated range outcomes at key future prices</caption><thead><tr role="row"><th scope="col">Future ETH price</th><th scope="col">Range status</th><th scope="col">Hold starting mix</th><th scope="col">50/50 LP</th><th scope="col">Your range LP</th><th scope="col">Range LP minus holding</th></tr></thead><tbody id="cl-comparisons"></tbody></table></div></details>
+      <details id="cl-comparison-card" class="card cl-comparisons"><summary>Compare prices at the edges</summary><p class="body-copy">Select a row to explore it. Each row keeps the same range, investment and separate fee assumptions.</p><p class="fine-print table-scroll-hint">Swipe or scroll sideways to see every column.</p><div class="table-scroll" tabindex="0" role="region" aria-label="Range comparison table"><table role="table" class="scenario-table cl-table"><caption class="sr-only">Concentrated range outcomes at key future prices</caption><thead><tr role="row"><th scope="col">Future ETH price</th><th scope="col">Range status</th><th scope="col">Hold starting mix</th><th scope="col">V2-style 50/50 LP</th><th scope="col">Your range LP</th><th scope="col">Range LP minus holding</th></tr></thead><tbody id="cl-comparisons"></tbody></table></div></details>
       <details class="model-details"><summary>How this range model works</summary><div>
         <p>Prices are USD per ETH, with USDC fixed at $1. The starting range determines your token mix; concentrated positions do not always begin 50/50. Holding keeps those exact starting tokens. The full-range LP invests the same amount in a separate 50/50 position.</p>
         <p>For liquidity L and lower/upper prices a and b, clamp the current price p to the range. The position holds ETH = L × (1/√p − 1/√b) and USDC = L × (√p − √a). L is sized so those assets equal your investment at the starting price. Below a the position is all ETH; above b it is all USDC.</p>
-        <p>This continuous model uses arbitrary price bounds. It does not apply Uniswap tick spacing or on-chain rounding, and does not estimate fees, gas, incentives or trading paths. Each fee input is assumed total USD cash, added separately without compounding.</p>
-        <p>Model: cl-range-v1. Shared links, CSV exports and result cards include the range and assumptions. <a href="https://blog.uniswap.org/uniswap-v3-math-primer-2" target="_blank" rel="noopener noreferrer">Read the Uniswap liquidity math →</a></p>
+        <p>This simplified Uniswap v3-style model allows any valid price bounds; real v3 positions use tick-aligned bounds. It does not apply Uniswap tick spacing or on-chain rounding, and does not estimate fees, gas, incentives or trading paths. Each fee input is assumed total USD cash, added separately without compounding.</p>
+        <p>Passiko calculation revision: cl-range-v1. The v1 identifies this model revision, not Uniswap v1. Shared links, CSV exports and result cards include the range and assumptions. <a href="https://blog.uniswap.org/uniswap-v3-math-primer-2" target="_blank" rel="noopener noreferrer">Read the Uniswap liquidity math →</a></p>
       </div></details>
     </section>
     </div>
@@ -223,7 +223,7 @@
       <p id="experiments-status" class="fine-print" role="status"></p>
       <div id="experiments-undo-row" class="experiment-undo" hidden><span id="experiments-undo-copy"></span> <button id="experiments-undo" class="text-button" type="button">Undo remove</button></div>
       <div id="experiments-empty" class="experiment-empty"><h3>No saved experiments yet</h3><p class="body-copy">Set up either liquidity lab and choose “Save experiment”.</p><div class="experiment-empty-links"><a href="#lp-lab">Open full-range lab →</a><a href="#range-lab">Open range lab →</a></div></div>
-      <div id="experiments-controls" class="experiment-library-controls" hidden><div><label for="experiments-search">Find an experiment</label><input id="experiments-search" type="search" placeholder="Search names or notes" maxlength="100"></div><div><label for="experiments-model">Model</label><select id="experiments-model"><option value="all">All models</option><option value="cp50-v1">Full-range 50/50</option><option value="cl-range-v1">Concentrated range</option></select></div></div>
+      <div id="experiments-controls" class="experiment-library-controls" hidden><div><label for="experiments-search">Find an experiment</label><input id="experiments-search" type="search" placeholder="Search names or notes" maxlength="100"></div><div><label for="experiments-model">Model</label><select id="experiments-model"><option value="all">All models</option><option value="cp50-v1">V2-style full range</option><option value="cl-range-v1">V3-style price range</option></select></div></div>
       <p id="experiments-no-match" class="fine-print" hidden>No experiments match this search.</p>
       <ul id="experiments-list" class="experiment-library-list" aria-label="Saved experiments"></ul>
       <div id="experiments-comparison-controls" class="experiment-comparison-controls" hidden><p id="experiments-selection">Select two or three experiments to compare.</p><button id="experiments-compare" class="button secondary" type="button" disabled>Compare selected</button><button id="experiments-clear-selection" class="text-button" type="button" hidden>Clear selection</button></div>
@@ -364,7 +364,7 @@
     <div id="mechanics-workspace" class="app-workspace" hidden>
     <a class="workspace-back" href="#experiment">← Back to experiments</a>
     <div class="notice"><span class="notice-icon">i</span><p>All experiments use virtual funds. Pool imports read public blockchain data. No wallet connection or transactions. <span id="storage-status" role="status">Your sandbox is saved in this browser. Reset clears the saved session.</span></p></div>
-    <div id="swap-sandbox" class="lab-heading sandbox-heading"><div><p class="eyebrow">VIRTUAL POOL</p><h2>Swap sandbox</h2><p class="body-copy">Explore pool mechanics with your own virtual balances.</p></div><button class="button secondary" id="reset">↻ Reset sandbox</button></div>
+    <div id="swap-sandbox" class="lab-heading sandbox-heading"><div><p class="eyebrow">UNISWAP V2-STYLE · VIRTUAL POOL</p><h2>Swap sandbox</h2><p class="body-copy">Explore pool mechanics with your own virtual balances.</p></div><button class="button secondary" id="reset">↻ Reset sandbox</button></div>
     <section class="stats" aria-label="Sandbox overview">
       <article class="stat"><span class="label">Your virtual portfolio</span><strong id="portfolio">$40,000.00</strong><span class="stat-note">Valued at $2,000/ETH, including your LP share</span></article>
       <article class="stat"><span class="label">Pool price · USDC per ETH</span><strong id="price">$2,000.00</strong><span class="stat-note">Changes with each swap</span></article>
@@ -410,7 +410,7 @@
       <section id="historical-case" class="card period-card" aria-labelledby="period-title" aria-busy="false">
         <div class="period-case-picker"><label for="period-case">Recorded cases</label><select id="period-case" aria-describedby="period-case-detail"></select></div>
         <p id="period-case-detail" class="body-copy"></p>
-        <p class="eyebrow">FIXED-POSITION HISTORICAL REPLAY</p><h2 id="period-title">Choose a recorded case</h2>
+        <p class="eyebrow">UNISWAP V3 · VERIFIED HISTORICAL CASE</p><h2 id="period-title">Choose a recorded case</h2>
         <p id="period-description" class="body-copy">Follow principal, earned fee tokens and holding through an unchanged position’s recorded period.</p>
         <p id="period-status" class="fine-print" role="status"></p><button id="period-retry" class="button secondary" type="button" hidden>Try opening the case again</button>
         <div id="period-result" hidden>
